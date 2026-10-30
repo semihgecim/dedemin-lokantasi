@@ -96,7 +96,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 @keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
 @keyframes spawn{0%{transform:scale(.2);opacity:0}100%{transform:scale(1);opacity:1}}
 @keyframes wig{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
-.c-f{background:#f7ebcf} .c-s{background:#edf2f4} .c-b{background:#f8e4da}
+.c-f{background:#f7ebcf} .c-s{background:#edf2f4} .c-b{background:#f8e4da} .c-k{background:#f7ebcf} .c-p{background:#e9f1dc} .c-m{background:#f8e0d8}
 .ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:30px;box-shadow:0 8px 18px rgba(0,0,0,.45)}
 .info{font-size:.82rem;color:var(--muted);min-height:1.3em;padding:6px 2px 0;text-align:center}
 .info b{color:var(--cream)}
@@ -241,9 +241,106 @@ const PAGES=[
   {title:"Mektup",date:"Bugün",
    note:"Fotoğrafı asmak için çekmeceyi açınca zarfı buluyorsun. Pul Gaziantep'ten. Mühür hiç kırılmamış. Zarfın üstünde, dedemin titreyen yazısı:",
    hand:"Torunum, sen aç.\nBen cesaret edemedim.",
-   after:"1. bölüm burada bitiyor. 2. bölüm: Antep Yolu. Yakında."}
+   after:"1. bölüm bitti. Zarfı cebine koyup Antep otobüsüne biniyorsun."}
 ];
-const MAXE=50, REGEN=8000, N=49;
+// ---------- chapter 2 data (inserted)
+const CH2={
+  k:{name:"Kiler",items:[["","Un"],["","Yufka"],["","Kat kat yufka"],["","Şöbiyet"],["","Baklava"],["","Baklava tepsisi"]]},
+  p:{name:"Fıstık",items:[["","Kabuklu fıstık"],["","Fıstık içi"],["","Dövülmüş fıstık"],["","Fıstık ezmesi"],["","Katmer"]]},
+  m:{name:"Mangal",items:[["","Et"],["","Kıyma"],["","Lahmacun"],["","Ali Nazik"],["","Beyran"]]}
+};
+Object.assign(CH,CH2);
+function diagLines(cx,cy,r,step){let d="";const s=Math.SQRT1_2;
+  for(const [dx,dy,nx,ny] of [[s,s,s,-s],[s,-s,s,s]]){
+    for(let k=-2;k<=2;k++){const o=k*step;if(Math.abs(o)>=r)continue;const h=Math.sqrt(r*r-o*o);
+      const px=cx+nx*o,py=cy+ny*o;d+=`M${(px-dx*h).toFixed(1)} ${(py-dy*h).toFixed(1)}L${(px+dx*h).toFixed(1)} ${(py+dy*h).toFixed(1)}`;}}
+  return d;}
+Object.assign(ART,{
+ k1:sv(`<ellipse cx="32" cy="48" rx="27" ry="8" fill="#b77a45" ${O}/><path d="M11 46Q16 21 32 17Q48 21 53 46Q32 52 11 46Z" fill="#fbf7ee" ${O}/><path d="M21 33q6-7 13-5" stroke="#e4dccb" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="40" cy="38" r="1.4" fill="#e4dccb"/>`),
+ k2:ART.f2,
+ k3:sv([0,1,2,3].map(i=>`<ellipse cx="${32+(i%2?2:-2)}" cy="${46-i*7}" rx="26" ry="9" fill="${i%2?"#f1d595":"#f7e6b8"}" ${O}/>`).join("")+`<path d="M18 22q8-4 16-2" stroke="#fff6dc" stroke-width="3" fill="none" stroke-linecap="round"/>`),
+ k4:sv(`<path d="M9 47L32 12L55 47Q32 53 9 47Z" fill="#e9b04f" ${O}/><path d="M20 42L32 23L44 42Q32 45 20 42Z" fill="#fff4dc" stroke="#3b2a1e" stroke-width="1.6" stroke-linejoin="round"/><ellipse cx="32" cy="36" rx="5" ry="3.5" fill="#7cb342" stroke="#3b2a1e" stroke-width="1.4"/><circle cx="25" cy="44" r="1.3" fill="#7cb342"/><circle cx="40" cy="44" r="1.3" fill="#7cb342"/>`),
+ k5:sv(`<path d="M6 36L21 21L36 36L21 51Z" fill="#e3a43e" ${O}/><path d="M28 36L43 21L58 36L43 51Z" fill="#eab25e" ${O}/><path d="M12 36L21 27L30 36M34 36L43 27L52 36" stroke="#f6d38d" stroke-width="2" fill="none"/><path d="M21 31L25 36L21 41L17 36Z" fill="#6aa84f" stroke="#3b2a1e" stroke-width="1.4"/><path d="M43 31L47 36L43 41L39 36Z" fill="#6aa84f" stroke="#3b2a1e" stroke-width="1.4"/>`),
+ k6:sv(`<circle cx="32" cy="34" r="27" fill="#c8743a" ${O}/><circle cx="32" cy="34" r="21" fill="#e3a43e" stroke="#9c5426" stroke-width="2"/><path d="${diagLines(32,34,20.5,9)}" stroke="#b5772a" stroke-width="1.6"/>${[[32,21],[19,34],[45,34],[32,47],[32,34],[25.5,27.5],[38.5,27.5],[25.5,40.5],[38.5,40.5]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.1" fill="#6aa84f"/>`).join("")}<path d="M14 20q6-6 14-8" stroke="#f0a66f" stroke-width="3" fill="none" stroke-linecap="round"/>`),
+ p1:sv([[21,38,-25],[42,37,22],[31,23,0]].map(([x,y,r])=>`<g transform="rotate(${r} ${x} ${y})"><ellipse cx="${x}" cy="${y}" rx="9" ry="12" fill="#ecd2b4" ${O}/><ellipse cx="${x}" cy="${y-1}" rx="4" ry="9" fill="#9cc65b" stroke="#b5666a" stroke-width="2"/></g>`).join("")),
+ p2:sv([[20,44,-20],[32,46,10],[44,43,30],[26,34,40],[38,33,-30],[32,24,5]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="9" transform="rotate(${r} ${x} ${y})" fill="#8fbf4d" ${O}/><path d="M${x-2} ${y-4}q2 3 0 6" stroke="#b5666a" stroke-width="2" fill="none" stroke-linecap="round"/>`).join("")),
+ p3:sv(`<path d="M42 28L55 7" stroke="#3b2a1e" stroke-width="8" stroke-linecap="round"/><path d="M42 28L55 7" stroke="#d8a645" stroke-width="4.5" stroke-linecap="round"/><path d="M12 30H52L45 54H19Z" fill="#d8a645" ${O}/><path d="M18 40H46" stroke="#b5862f" stroke-width="2"/><ellipse cx="32" cy="30" rx="20" ry="6" fill="#98c457" ${O}/><circle cx="26" cy="29" r="1.2" fill="#5f8f2c"/><circle cx="36" cy="31" r="1.2" fill="#5f8f2c"/>`),
+ p4:sv(`<rect x="15" y="18" width="34" height="39" rx="7" fill="#a7cf66" ${O}/><rect x="13" y="9" width="38" height="11" rx="3" fill="#c8743a" ${O}/><rect x="20" y="30" width="24" height="15" rx="2" fill="#fff6dc" stroke="#3b2a1e" stroke-width="1.6"/><ellipse cx="32" cy="37.5" rx="5" ry="3.5" fill="#7cb342"/><path d="M19 24v6" stroke="#d4ebb0" stroke-width="3" stroke-linecap="round"/>`),
+ p5:sv(`<path d="M32 8L56 32L32 56L8 32Z" fill="#e7b257" ${O}/><path d="M32 18L46 32L32 46L18 32Z" fill="#fff3d6" stroke="#c98a3e" stroke-width="2"/>${[[30,28],[35,31],[29,35],[33,37],[37,27],[26,32]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.7" fill="#6aa84f"/>`).join("")}<path d="M15 25L25 15" stroke="#f6d38d" stroke-width="3" stroke-linecap="round"/>`),
+ m1:sv(`<path d="M10 31Q12 15 32 15Q53 15 55 32Q55 49 34 50Q12 50 10 31Z" fill="#c9473c" ${O}/><path d="M17 36Q28 26 46 30" stroke="#f5e1d6" stroke-width="4.5" fill="none" stroke-linecap="round"/><path d="M22 23q6-3 12-2" stroke="#e57a6c" stroke-width="3" fill="none" stroke-linecap="round"/>`),
+ m2:sv(`<ellipse cx="32" cy="46" rx="27" ry="9" fill="#ffffff" ${O}/><ellipse cx="32" cy="46" rx="20" ry="5.5" fill="none" stroke="#2f6aa8" stroke-width="2"/><path d="M14 44Q16 24 32 22Q48 24 50 44Q32 49 14 44Z" fill="#c24a3e" ${O}/>${[[24,34],[30,29],[38,32],[34,39],[42,40],[22,41],[28,38]].map(([x,y])=>`<path d="M${x} ${y}q2-2 4 0" stroke="#e7867a" stroke-width="1.8" fill="none" stroke-linecap="round"/>`).join("")}`),
+ m3:sv(`<circle cx="31" cy="33" r="24" fill="#e9c27d" ${O}/><circle cx="31" cy="33" r="19" fill="#c2412f"/>${[[24,27],[36,25],[40,36],[27,40],[33,33],[21,34]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2" fill="#4c9a3f"/>`).join("")}<path d="M44 46l12-2-3 12z" fill="#f6d84a" ${O}/>`),
+ m4:sv(`<ellipse cx="32" cy="40" rx="28" ry="14" fill="#ffffff" ${O}/><ellipse cx="32" cy="39" rx="21" ry="9" fill="#d9c9a3" stroke="#3b2a1e" stroke-width="1.6"/>${[[24,35],[33,33],[41,37],[28,41],[37,42]].map(([x,y])=>`<rect x="${x-3.5}" y="${y-3.5}" width="7" height="7" rx="2" fill="#8a3a22" stroke="#3b2a1e" stroke-width="1.3"/>`).join("")}<path d="M15 38q8 6 17 2t17 0" stroke="#d2462a" stroke-width="2" fill="none"/><path d="M45 30q3-3 6-1" stroke="#4c9a3f" stroke-width="2.5" fill="none" stroke-linecap="round"/>`),
+ m5:sv(`<path d="M24 14q-4-5 0-9M33 13q-4-5 0-9M42 14q-4-5 0-9" stroke="#c9d6d2" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M7 30H57Q55 55 32 55Q9 55 7 30Z" fill="#c8743a" ${O}/><path d="M14 40H50" stroke="#e8a06a" stroke-width="2.2"/><ellipse cx="32" cy="30" rx="25" ry="7.5" fill="#b8361f" ${O}/>${[[20,29],[26,31],[31,28],[37,31],[43,29],[34,33],[24,27]].map(([x,y])=>`<ellipse cx="${x}" cy="${y}" rx="2" ry="1.1" fill="#fbf0d0"/>`).join("")}<rect x="38" y="26" width="5" height="4" rx="1" fill="#6b2a17"/>`),
+ gk:ART.gf,
+ gp:sv(`${[[22,24,"#ecd2b4"],[32,20,"#9cc65b"],[42,24,"#ecd2b4"],[27,29,"#9cc65b"],[37,29,"#ecd2b4"]].map(([x,y,c])=>`<ellipse cx="${x}" cy="${y}" rx="6" ry="7.5" fill="${c}" stroke="#3b2a1e" stroke-width="2"/>`).join("")}<path d="M7 31H57L51 55Q32 59 13 55Z" fill="#c49152" ${O}/><path d="M10 39H54M12 47H52" stroke="#9c6b34" stroke-width="2.2"/><path d="M20 31L22 56M32 31V58M44 31L42 56" stroke="#9c6b34" stroke-width="2"/>`),
+ gm:sv(`<path d="M18 12q-3-4 1-8M30 11q-3-4 1-8" stroke="#c9d6d2" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M6 20L58 16" stroke="#9aa8b2" stroke-width="3" stroke-linecap="round"/>${[16,26,36,46].map((x,k)=>`<rect x="${x-4}" y="${14-k*0.8}" width="8" height="8" rx="2" fill="#8a3a22" stroke="#3b2a1e" stroke-width="1.4"/>`).join("")}<path d="M8 30H56L52 44H12Z" fill="#c8743a" ${O}/>${[16,24,32,40,48].map((x,k)=>`<circle cx="${x}" cy="30" r="4.2" fill="${k%2?"#ff7b39":"#e2492f"}" stroke="#3b2a1e" stroke-width="1.4"/>`).join("")}<path d="M16 44L12 58M48 44L52 58M32 44V58" stroke="#3b2a1e" stroke-width="3" stroke-linecap="round"/>`)
+});
+Object.assign(GEN_OF,{k:"Un çuvalı",p:"Fıstık sepeti",m:"Mangal"});
+Object.assign(PEOPLE,{
+  torun:{name:"Halil'in torunu",init:"HT",col:"#f2c3a0",likes:["k","p"],
+    ask:["Dedemin tepsilerini parlatmaya kıyamıyorum. Bir dilim baklava yapabilir miyiz?","Hastanede dedeme götüreceğim, sabah fıstıklı bir şey istedi.","Sen Mehmet Usta'nın torunusun, değil mi? Dedem adını sayıklıyor."],
+    thanks:["Dedem bunu görse gülümserdi. Belki de gülümser, götüreceğim.","Fırın yeniden kokuyor... Bu kokuyu çok özlemişim.","Kepenk açık kalsın diye her gün dua ediyordum. Teşekkür ederim."]},
+  kebapci:{name:"Kebapçı usta",init:"KU",col:"#e8a28c",likes:["m","k"],
+    ask:["Benim mangal kırk yıldır sönmedi, Halil'in fırını sönmesin. Ne pişirdin?","Yan dükkân komşusu olarak tadına bakmam şart!","Akşam misafirim var, Antepliye Antep yemeği lazım."],
+    thanks:["Elin Antep eli olmuş, maşallah.","Halil'e söyleyeceğim, 'Bursalı bizi geçti' diyeceğim.","Bunun hakkı ödenmez. Yarın sana kendi kebabımı yediririm."]},
+  cirak:{name:"Bakırcı çırağı",init:"BÇ",col:"#b9d3e8",likes:["m","p"],
+    ask:["Ustam tepsileri dövmemi istedi, karnım boşken çekiç kalkmıyor.","Lahmacun var mı abi? Ayakta yerim, işe yetişeceğim.","Ustam 'Halil'in dükkânı açılırsa ilk tepsiyi biz döveriz' dedi."],
+    thanks:["Sağ ol abi! Tepsileri pırıl pırıl yapacağım.","Bunu ustama anlatırsam inanmaz.","Çarşıda herkes buradan bahsediyor artık."]},
+  nine:{name:"Komşu nine",init:"KN",col:"#d6c3ea",likes:["p","k"],
+    ask:["Halil'le aynı sokakta büyüdük yavrum. Bir katmer yapsana, eskisi gibi.","Torunlarım geldi, eli boş dönmesinler.","Dişim yok ama tatlıya gönlüm var, yumuşak bir şey olsun."],
+    thanks:["Ağzına sağlık. Halil gençken tam böyle yapardı.","Allah ocağını söndürmesin evladım.","Mehmet'i hatırlıyorum ben, Bursalı Mehmet. Çok gülerdi."]},
+  kopek:{name:"Sokak köpeği",init:"SK",col:"#e3d2b8",likes:["m"],pet:true,
+    ask:["(Kuyruğunu sallayarak kapıda bekliyor.)","(Burnunu mangalın kokusuna doğru uzatmış.)","(Ayaklarının dibine kıvrılıp sana bakıyor.)"],
+    thanks:["(Mutluluktan etrafında dönüyor. Enerjin tazelendi.)","(Dükkânın önünde nöbete oturdu. Artık bekçin var.)","(Elini yaladı ve güneşe uzandı.)"]},
+  halil:{name:"Halil Usta",init:"HU",col:"#f6d48b",likes:["k","p"],
+    ask:["Oklavamı ver bakayım... Yok, sen aç. Ben izleyeyim.","Mehmet bu şöbiyeti benden iyi yapardı. Söyleme kimseye.","Ellerin dedenin elleri. Hadi, bir tepsi daha."],
+    thanks:["Otuz yıl geç kaldım ama tadı yerinde.","Mehmet görseydi... Görüyor, biliyorum.","Bu fırın şimdi ikimizin oldu evladım. Üçümüzün."]}
+});
+PEOPLE.pamuk.pet=true;
+const PAGES2=[
+  {title:"Halil'in mektubu",date:"Ekim 2015",
+   note:"Zarfı açıyorsun. Kâğıt sararmış, mürekkep yer yer dağılmış:",
+   hand:"Mehmet, kardeşim.\nO tepsiyi ben sattım, biliyorsun.\nYarışmaya senin baklavanı kendi adımla götürdüm.\nMadalyayı otuz yıl duvarıma astım,\nher baktığımda yüzüm yandı.\nGel. Fırını birlikte yakalım.\nBu sefer tabelaya iki isim yazalım.",
+   after:"Antep'te, Zincirli Bedesten'in arkasındaki dükkânı buluyorsun. Kepenk inik. Komşular Halil Usta'nın hastanede olduğunu, dükkânı torununun ayakta tutmaya çalıştığını söylüyor. Torunu sana dedesinin eski defterini uzatıyor. Burada tezgâh değişti: un çuvalı, fıstık sepeti ve mangal. Zincirler daha uzun, onarımlar daha pahalı."},
+  {title:"Kepenk",date:"Nisan 1979",
+   hand:"Bursa'dan döndüğüm gün kepengi kendim boyadım.\nMehmet'in ocağında öğrendiğim her şeyi\nbu dükkâna taşıdım.\nAma içimde bir taş vardı. Taşı da taşıdım."},
+  {title:"Tezgâh",date:"Haziran 1981",
+   hand:"Yarışma Ankara'daydı.\nMehmet'in tarifiyle, Mehmet'in tepsisiyle gittim.\n'Usta kim?' dediler. 'Benim' dedim.\nBir kelime. Otuz yıl sürdü."},
+  {title:"Fırın",date:"Temmuz 1981",
+   hand:"Madalyayı fırının üstüne astım.\nFırın her yandığında parlıyordu.\nBen her baktığımda söndüm."},
+  {title:"Oklavalar",date:"Ocak 1982",
+   hand:"Oklavaların biri Mehmet'indi.\nKüsmeden önce bana bırakmıştı,\nsapına adının ilk harfini kazımış.\nHâlâ en düz o açar.",
+   after:"Rafta, sapında M harfi kazınmış bir oklava buluyorsun. Eline alınca sıcak geliyor."},
+  {title:"Tepsiler",date:"Mayıs 2003",
+   hand:"Torunum doğdu.\nİlk baklavasını Mehmet'in tepsisinde yedi.\nBir gün ona her şeyi anlatacağım dedim.\nAnlatamadım.",
+   after:"Haber geldi: Halil Usta hastaneden çıktı! Artık o da dükkâna uğrayabilir."},
+  {title:"Vitrin",date:"Kasım 2015",
+   hand:"Mektubu yazdım. Cevap gelmedi.\nBelki adresi değişmiştir dedim.\nBelki de 'Halil hiç değişmedi' diye düşündü.\nVitrini o gün kapattım."},
+  {title:"Tabela",date:"Bugün",
+   note:"Yeni tabelayı Halil Usta'nın isteğiyle yaptırıyorsun. Ustanın elleri titriyor ama harfleri kendisi seçiyor:",
+   hand:"HALİL & MEHMET\nBAKLAVA · 1979"},
+  {title:"İki isim",date:"Bugün",
+   note:"Halil Usta fırının önünde, M harfli oklavayı eline alıyor. Uzun süre hiçbir şey söylemiyor. Sonra madalyayı duvardan indirip sana uzatıyor:",
+   hand:"Bunu Bursa'ya götür, dedenin duvarına as.\nBir de... sana söylemem gereken bir şey var.\nMehmet'in hiç bahsetmediği bir kız kardeşi vardı.\nİzmir'de. Ona verilmiş bir söz yarım kaldı.",
+   after:"2. bölüm burada bitiyor. 3. bölüm: İzmir'e Söz. Yakında."}
+];
+const REPAIRS2=[
+  {name:"Kepengi yağla",cost:60},
+  {name:"Tezgâhı temizle",cost:90},
+  {name:"Odun fırınını yak",cost:120},
+  {name:"Oklavaları topla",cost:160},
+  {name:"Bakır tepsileri parlat",cost:200},
+  {name:"Vitrini tak",cost:240},
+  {name:"Tabelayı yenile",cost:290},
+  {name:"Halil Usta'yı dükkâna getir",cost:350}
+];
+
+const CHAPTERS={
+  1:{people:["nuri","elif","hasan","aynur","pamuk"],repairs:REPAIRS,pages:PAGES,place:"Bursa",book:"Mehmet Usta'nın defteri"},
+  2:{people:["torun","kebapci","cirak","nine","kopek"],repairs:REPAIRS2,pages:PAGES2,place:"Antep",book:"Halil Usta'nın defteri"}
+};
+const MAXE=60, REGEN=6000, N=49;
 
 // ---------- helpers
 const $=id=>document.getElementById(id);
@@ -251,7 +348,7 @@ const max=c=>CH[c].items.length;
 const icon=(c,l)=>ART[c+l];
 const nm=(c,l)=>CH[c].items[l-1][1];
 const val=l=>Math.pow(2,l);
-function withReward(o){const sum=o.items.reduce((a,x)=>a+val(x.l),0);o.reward=PEOPLE[o.p].cat?3:Math.round(sum*1.5)+2;return o;}
+function withReward(o,c){const sum=o.items.reduce((a,x)=>a+val(x.l),0);o.reward=PEOPLE[o.p].pet?3:(c===2?Math.round(sum*1.6)+3:Math.round(sum*1.5)+2);return o;}
 let toastT; function toast(t){let el=document.querySelector(".toast");if(!el){el=document.createElement("div");el.className="toast";document.body.appendChild(el);}
   el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2200);}
 function say(p,line){const P=PEOPLE[p];$("speech").innerHTML=`<b>${P.name}:</b> ${line}`;}
@@ -262,12 +359,24 @@ const KEY="dedemin-lokantasi.v3";
 function fresh(){
   const b=Array(N).fill(null);
   [[37,"b",1],[38,"b",1],[30,"f",1],[31,"f",1],[39,"s",1]].forEach(([i,c,l])=>b[i]={c,l});b[44]={g:"f"};b[45]={g:"s"};b[46]={g:"b"};
-  return {board:b,coins:0,energy:MAXE,eAt:Date.now(),restored:0,found:{},served:0,seenIntro:false,
+  return {chapter:1,board:b,coins:0,energy:MAXE,eAt:Date.now(),restored:0,found:{},served:0,seenIntro:false,
     orders:[{p:"nuri",items:[{c:"b",l:2}]},{p:"hasan",items:[{c:"f",l:2}]},{p:"pamuk",items:[{c:"s",l:1}]}].map(withReward)};
 }
 let S;
 try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
 if(!S||!Array.isArray(S.board)||S.board.length!==N) S=fresh();
+if(!S.chapter) S.chapter=1;
+const chap=()=>CHAPTERS[S.chapter];
+const seen=c=>c===1?S.seenIntro:!!S["intro"+c];
+function setSeen(c){if(c===1)S.seenIntro=true;else S["intro"+c]=true;}
+function startChapter(n){
+  S.chapter=n; S.restored=0; S["intro"+n]=false; S.energy=MAXE; S.eAt=Date.now(); sel=-1;
+  const b=Array(N).fill(null);
+  [[37,"k",1],[38,"k",1],[30,"p",1],[31,"p",1],[39,"m",1]].forEach(([i,c,l])=>b[i]={c,l});b[44]={g:"k"};b[45]={g:"p"};b[46]={g:"m"};
+  S.board=b;
+  S.orders=[{p:"torun",items:[{c:"k",l:2}]},{p:"kebapci",items:[{c:"m",l:2}]},{p:"kopek",items:[{c:"m",l:1}]}].map(o=>withReward(o,2));
+  save(); renderAll(); openPage(2,0);
+}
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
 
 // ---------- energy
@@ -283,19 +392,20 @@ setInterval(()=>{tickEnergy();},1000);
 // ---------- orders
 function newOrder(){
   const busy=S.orders.filter(Boolean).map(o=>o.p);
-  const free=Object.keys(PEOPLE).filter(k=>!busy.includes(k));
+  const pool=chap().people.concat(S.chapter===2&&S.restored>=5?["halil"]:[]);
+  const free=pool.filter(k=>!busy.includes(k));
   const p=pick(free), P=PEOPLE[p];
-  const cap=2+S.restored;
+  const cap=S.chapter===1?2+S.restored:3+Math.floor(S.restored/2);
   const items=[];
-  const count=P.cat?1:(S.restored>=1&&Math.random()<0.45?2:1);
+  const count=P.pet?1:(S.chapter===2?(Math.random()<0.55?2:1):(S.restored>=1&&Math.random()<0.45?2:1));
   for(let k=0;k<count;k++){
     const c=pick(P.likes);
-    const top=P.cat?2:Math.min(max(c),cap);
+    const top=P.pet?2:Math.min(max(c),cap);
     let l=1+Math.floor(Math.random()*top);
-    if(!P.cat&&l<2&&Math.random()<0.7)l=Math.min(2,top);
+    if(!P.pet&&l<2&&Math.random()<0.7)l=Math.min(2,top);
     items.push({c,l});
   }
-  return withReward({p,items});
+  return withReward({p,items},S.chapter);
 }
 function boardCounts(){const m={};S.board.forEach(x=>{if(x&&x.c){const k=x.c+x.l;m[k]=(m[k]||0)+1;}});return m;}
 function orderStatus(o){const m=boardCounts();const used={};return o.items.map(x=>{const k=x.c+x.l;used[k]=(used[k]||0)+1;return (m[k]||0)>=used[k];});}
@@ -304,7 +414,7 @@ function serve(i){
   o.items.forEach(x=>{const j=S.board.findIndex(y=>y&&y.c===x.c&&y.l===x.l);if(j>-1)S.board[j]=null;});
   S.coins+=o.reward; S.served++;
   const P=PEOPLE[o.p];
-  if(P.cat){S.energy=Math.min(MAXE,S.energy+6);}
+  if(P.pet){S.energy=Math.min(MAXE,S.energy+(S.chapter===2?8:6));}
   say(o.p,pick(P.thanks));
   const card=document.querySelector(`.order[data-i="${i}"]`); if(card)card.classList.add("leaving");
   S.orders[i]=null; save(); renderBoard(); renderTop(); renderRepair();
@@ -386,7 +496,7 @@ boardEl.addEventListener("click",e=>{ // tap empty cell to move selected item th
 function produce(gi){
   tickEnergy();
   const c=S.board[gi].g;
-  if(S.energy<1){toast("Enerjin bitti. Biraz bekle ya da Pamuk'u doyur.");return;}
+  if(S.energy<1){toast("Enerjin bitti. Biraz bekle ya da kapıdaki dostunu doyur.");return;}
   const empty=[];S.board.forEach((x,i)=>{if(!x)empty.push(i);});
   if(!empty.length){toast("Tezgâh dolu! Birleştir ya da bir şey sat.");return;}
   const gx=gi%7, gy=Math.floor(gi/7); let best=Infinity, cands=[];
@@ -402,22 +512,53 @@ function produce(gi){
 // ---------- repairs & scene
 function renderTop(){$("coins").textContent=S.coins;tickEnergy();}
 function renderRepair(){
-  const r=REPAIRS[S.restored];
-  if(!r){$("rLbl").textContent="1. bölüm tamam";$("rName").textContent="Lokanta yeniden açıldı";$("rBar").style.width="100%";$("rBtn").textContent="Mektup";$("rBtn").disabled=false;return;}
-  $("rLbl").textContent=`Onarım ${S.restored+1}/${REPAIRS.length}`;
+  const C=chap(), r=C.repairs[S.restored];
+  if(!r){const one=S.chapter===1;
+    $("rLbl").textContent=`${S.chapter}. bölüm tamam`;$("rName").textContent=one?"Antep yolu açıldı":"Halil & Mehmet yeniden açıldı";
+    $("rBar").style.width="100%";$("rBtn").textContent=one?"Yola çık":"Son sayfa";$("rBtn").disabled=false;return;}
+  $("rLbl").textContent=`${C.place} · Onarım ${S.restored+1}/${C.repairs.length}`;
   $("rName").textContent=r.name;
   $("rBar").style.width=Math.min(100,S.coins/r.cost*100)+"%";
   $("rBtn").innerHTML=`Onar · ${r.cost}`;
   $("rBtn").disabled=S.coins<r.cost;
 }
 $("rBtn").addEventListener("click",()=>{
-  const r=REPAIRS[S.restored];
-  if(!r){openPage(5);return;}
+  const C=chap(), r=C.repairs[S.restored];
+  if(!r){openPage(S.chapter,C.pages.length-1);return;}
   if(S.coins<r.cost)return;
   S.coins-=r.cost; S.restored++; save();
-  renderTop(); renderRepair(); renderScene(); openPage(S.restored);
+  renderTop(); renderRepair(); renderScene(); renderOrders(); openPage(S.chapter,S.restored);
 });
+function renderScene2(){
+  const r=S.restored, st="#ead6a7", ba="#3d3a36";
+  const arch=(x,w,top,bot)=>`M${x} ${bot}V${top+w*0.32}Q${x+w/2} ${top-w*0.05} ${x+w} ${top+w*0.32}V${bot}Z`;
+  const win=(x)=>`<path d="${arch(x,80,52,104)}" fill="${r>=6?"#f7d58f":"#2f3a3c"}" stroke="${ba}" stroke-width="4"/>
+     ${r<1?[66,74,82,90,98].map(y=>`<path d="M${x+2} ${y}h76" stroke="#8b8f93" stroke-width="5"/>`).join(""):""}
+     ${r>=1&&r<6?`<path d="M${x+6} 70l68 28M${x+6} 98l68-28" stroke="#8a6440" stroke-width="5" stroke-linecap="round" opacity=".8"/>`:""}`;
+  $("scene").innerHTML=`
+    <rect width="360" height="128" fill="#1f3e4a"/>
+    <circle cx="322" cy="16" r="7" fill="#f6e7b0" opacity=".85"/>
+    <rect x="0" y="112" width="360" height="16" fill="#13262d"/>
+    <rect x="30" y="14" width="300" height="100" rx="3" fill="${st}"/>
+    <rect x="30" y="14" width="300" height="7" fill="${ba}"/>
+    <rect x="30" y="106" width="300" height="8" fill="${ba}"/>
+    ${win(44)}${win(236)}
+    ${r>=2?`<rect x="54" y="90" width="60" height="10" fill="#7a5233"/><rect x="246" y="90" width="60" height="10" fill="#7a5233"/>`:""}
+    ${r>=6?`<circle cx="84" cy="84" r="8" fill="#c8743a" stroke="#3b2a1e" stroke-width="1.5"/><path d="M78 84h12M84 78v12" stroke="#e3a43e" stroke-width="2"/>`:""}
+    ${r>=4?`<path d="M254 80l50-6M254 86l50-6" stroke="#b77a45" stroke-width="3.5" stroke-linecap="round"/>`:""}
+    <path d="${arch(150,60,58,114)}" fill="${r>=1?"#3a2a1c":"#8b8f93"}" stroke="${ba}" stroke-width="4"/>
+    ${r<1?[74,82,90,98,106].map(y=>`<path d="M152 ${y}h56" stroke="#6f7478" stroke-width="2"/>`).join(""):""}
+    ${r>=3?`<ellipse cx="180" cy="100" rx="20" ry="9" fill="#f4a259" opacity=".85"/><path d="M172 104q8-20 16 0" fill="#ff7b39"/><circle cx="180" cy="100" r="4" fill="#ffd166"/>`:""}
+    ${r>=5?[60,84,108,252,276,300].map(x=>`<circle cx="${x}" cy="36" r="7" fill="#d0793c" stroke="#8e4320" stroke-width="1.5"/><circle cx="${x-2}" cy="34" r="2" fill="#f3b17d"/>`).join(""):""}
+    ${r>=7?`<rect x="118" y="25" width="124" height="18" rx="3" fill="#d0793c"/><rect x="121" y="28" width="118" height="12" rx="2" fill="none" stroke="#f3b17d" stroke-width="1"/>
+      <text x="180" y="38" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="9.5" fill="#2a1a10" letter-spacing="1">HALİL &amp; MEHMET</text>`
+      :`<rect x="118" y="25" width="124" height="18" rx="3" fill="none" stroke="#b9a273" stroke-dasharray="4 4"/>`}
+    ${r>=8?`<path d="M36 22 Q 106 34 176 22 T 324 22" fill="none" stroke="#6b4a2f" stroke-width="1"/>${[52,82,112,142,218,248,278,308].map((x,k)=>`<circle cx="${x}" cy="${26+Math.sin(k*1.4)*3}" r="2.6" fill="#ffd166"/>`).join("")}`:""}
+    ${r<8?`<rect x="30" y="14" width="300" height="100" fill="#5d5242" opacity="${((8-r)*0.055).toFixed(2)}"/>`:""}
+  `;
+}
 function renderScene(){
+  if(S.chapter===2){renderScene2();return;}
   const r=S.restored;
   const win=(x)=>r>=4
     ? `<rect x="${x}" y="56" width="74" height="44" rx="3" fill="${r>=3?"#f7d58f":"#9cc9d6"}" opacity="${r>=3?.9:.6}"/>
@@ -456,7 +597,7 @@ function renderOrders(){
     return `<div class="order${ok?" ready":""}" data-i="${i}">
       <div class="who"><span class="av" style="background:${P.col}">${P.init}</span><span class="n">${P.name}</span></div>
       <div class="needs">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}</div>
-      <button class="btn" type="button" data-serve="${i}" ${ok?"":"disabled"}>${P.cat?"Ver · ⚡":"Ver · "+o.reward}</button>
+      <button class="btn" type="button" data-serve="${i}" ${ok?"":"disabled"}>${P.pet?"Ver · ⚡":"Ver · "+o.reward}</button>
     </div>`;}).join("");
 }
 $("orders").addEventListener("click",e=>{
@@ -466,45 +607,53 @@ $("orders").addEventListener("click",e=>{
 });
 
 // ---------- notebook
-function openPage(n){
-  const p=PAGES[n];
+function openPage(c,n){
+  const p=CHAPTERS[c].pages[n];
+  const first=n===0&&!seen(c);
+  const go=c===1&&n===CHAPTERS[1].pages.length-1&&S.chapter===1&&S.restored>=REPAIRS.length;
   $("paper").innerHTML=`
     <div class="date">${p.date}</div>
     <h3>${p.title}</h3>
     ${p.note?`<div class="note">${p.note}</div>`:""}
     <div class="hand">${p.hand}</div>
     ${p.after?`<div class="note"><i>${p.after}</i></div>`:""}
-    <button class="btn" type="button" id="closePage">${n===0&&!S.seenIntro?"Kepengi kaldır":"Defteri kapat"}</button>`;
+    <button class="btn" type="button" id="closePage">${first?"Kepengi kaldır":go?"Antep'e yola çık":"Defteri kapat"}</button>`;
   $("sheet").hidden=false;
-  $("closePage").onclick=()=>{$("sheet").hidden=true;if(n===0&&!S.seenIntro){S.seenIntro=true;save();say("nuri","Kepenk mi açılıyor? Yıllardır bu anı bekledim evladım!");}};
+  $("closePage").onclick=()=>{$("sheet").hidden=true;
+    if(go){startChapter(2);return;}
+    if(first){setSeen(c);save();
+      if(c===1)say("nuri","Kepenk mi açılıyor? Yıllardır bu anı bekledim evladım!");
+      else say("torun","Sen Mehmet Usta'nın torunu musun? Gel, dedemin dükkânını birlikte açalım.");}};
 }
 function openBook(){
-  const unlocked=S.restored+1;
-  $("paper").innerHTML=`
-    <div class="date">Mehmet Usta'nın defteri</div><h3>Sayfalar</h3>
-    <div class="pages">${PAGES.map((p,i)=>i<unlocked
-      ?`<button type="button" data-p="${i}">${p.title}<span>${p.date}</span></button>`
-      :`<button type="button" class="locked" disabled>Kilitli sayfa<span>${REPAIRS[i-1]?REPAIRS[i-1].name+" ile açılır":""}</span></button>`).join("")}</div>
+  let h="";
+  for(let c=1;c<=S.chapter;c++){
+    const C=CHAPTERS[c], unlocked=c<S.chapter?C.pages.length:S.restored+1;
+    h+=`<div class="date">${c}. bölüm · ${C.book}</div><div class="pages">${C.pages.map((p,i)=>i<unlocked
+      ?`<button type="button" data-c="${c}" data-p="${i}">${p.title}<span>${p.date}</span></button>`
+      :`<button type="button" class="locked" disabled>Kilitli sayfa<span>${C.repairs[i-1]?C.repairs[i-1].name+" ile açılır":""}</span></button>`).join("")}</div>`;
+  }
+  $("paper").innerHTML=`<h3>Defterler</h3>${h}
     <div class="note">Hizmet verilen misafir: <b>${S.served}</b></div>
     <button class="danger" type="button" id="resetBtn">Baştan başla</button>
     <button class="btn" type="button" id="closeBook">Kapat</button>`;
   $("sheet").hidden=false;
-  $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.p));
+  $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.c,+b.dataset.p));
   $("closeBook").onclick=()=>$("sheet").hidden=true;
   $("resetBtn").onclick=function(){
-    if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(0);}
+    if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(1,0);}
     else{this.dataset.armed="1";this.textContent="Emin misin? Tüm ilerleme silinir. Tekrar dokun.";}
   };
 }
 $("bookBtn").addEventListener("click",openBook);
-$("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&S.seenIntro)$("sheet").hidden=true;});
+$("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&seen(S.chapter))$("sheet").hidden=true;});
 
 // ---------- boot
 function renderAll(){renderTop();renderRepair();renderScene();renderBoard();
   const o=S.orders.find(Boolean); if(o) say(o.p,PEOPLE[o.p].ask[0]);}
 S.orders=S.orders.map(o=>o||newOrder());
 renderAll();
-if(!S.seenIntro) openPage(0);
+if(!seen(S.chapter)) openPage(S.chapter,0);
 })();
 </script>
 
