@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dedemin Lokantası">
+<meta name="theme-color" content="#10302a">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Dedemin Lokantası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: one-column phone game. Bursa palette: Yeşil Türbe tile green ground, Bakırcılar copper accent, cream tiles.
+   Top: shopfront scene + next repair; middle: customers; bottom: 6x6 merge board and producers. */
+:root{
+  --ground:#10302a;
+  --panel:#18423a;
+  --panel2:#215248;
+  --tile:#f3ead6;
+  --copper:#d0793c;
+  --turq:#45c1a8;
+  --ink:#1d2a26;
+  --cream:#f6f0e3;
+  --muted:#a6c4bb;
+  --wheat:#f2d48a; --milk:#dfeaf3; --garden:#f4c4ae;
+  --display:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+  --body:"Nunito","Segoe UI",system-ui,sans-serif;
+  --hand:"Caveat","Segoe Print","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+html,body{min-height:100%}
+body{background:var(--ground);color:var(--cream);font-family:var(--body);-webkit-tap-highlight-color:transparent;overscroll-behavior:none}
+button{font-family:inherit}
+button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
+.app{box-sizing:border-box;max-width:460px;margin:0 auto;display:flex;flex-direction:column;gap:10px;
+  padding-block:10px 22px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));user-select:none;-webkit-user-select:none}
+@media (min-width:380px){.app{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
+
+/* top bar */
+.top{display:flex;align-items:center;gap:8px}
+.top h1{font:700 1.3rem/1 var(--display);margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip{background:var(--panel);border-radius:999px;padding:6px 10px;font:700 .9rem var(--display);display:flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.chip small{font:600 .68rem var(--body);color:var(--muted)}
+.coin{width:14px;height:14px;border-radius:50%;background:var(--copper);box-shadow:inset 0 0 0 2px #f0a66f;display:inline-block}
+.bolt{color:#ffd166}
+
+/* scene */
+.scene{background:var(--panel);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.scene svg{display:block;width:100%;height:auto;max-width:100%}
+.repair{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.repair .txt{flex:1;min-width:0}
+.repair .lbl{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.repair .name{font:600 1rem var(--display)}
+.bar{height:6px;background:var(--ground);border-radius:4px;margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--copper);border-radius:4px;transition:width .3s}
+.btn{border:0;border-radius:12px;padding:9px 14px;font:700 .95rem var(--display);cursor:pointer;background:var(--copper);color:var(--ink)}
+.btn:disabled{background:var(--panel2);color:var(--muted);cursor:default}
+.btn.ghost{background:var(--panel2);color:var(--cream)}
+
+/* speech */
+.speech{background:var(--tile);color:var(--ink);border-radius:14px;padding:9px 12px;font-size:.9rem;line-height:1.35;position:relative;min-height:2.7em}
+.speech b{font-family:var(--display);font-weight:600}
+.speech:after{content:"";position:absolute;left:28px;bottom:-7px;border:7px solid transparent;border-top-color:var(--tile);border-bottom:0}
+
+/* orders */
+.orders{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.order{background:var(--panel);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px;min-width:0;border:2px solid transparent;transition:transform .25s,opacity .25s}
+.order.ready{border-color:var(--turq)}
+.order.leaving{opacity:0;transform:translateY(-8px)}
+.who{display:flex;align-items:center;gap:6px;min-width:0}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 .72rem var(--display);color:var(--ink);flex:none}
+.who .n{font:600 .82rem var(--display);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.needs{display:flex;gap:4px;flex-wrap:wrap}
+.need{position:relative;width:36px;height:36px;border-radius:9px;display:grid;place-items:center}
+.need.ok:after{content:"✓";position:absolute;right:-4px;bottom:-4px;width:15px;height:15px;border-radius:50%;background:var(--turq);color:var(--ink);font:800 10px/15px var(--body);text-align:center}
+.order .btn{padding:6px 8px;font-size:.85rem;display:flex;justify-content:center;gap:4px;align-items:center}
+
+/* board */
+.boardwrap{background:var(--panel);border-radius:16px;padding:8px}
+.board{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;touch-action:none}
+.cell{aspect-ratio:1;border-radius:8px;background:rgba(243,234,214,.13);box-shadow:inset 0 0 0 1px rgba(243,234,214,.12);display:grid;place-items:center;position:relative;min-width:0}
+.cell.target{background:rgba(69,193,168,.35)}
+.item{width:92%;height:92%;border-radius:10px;display:grid;place-items:center;font-size:clamp(18px,5.8vw,26px);position:relative;cursor:grab;box-shadow:0 2px 0 rgba(0,0,0,.25)}
+.item .lv{position:absolute;right:3px;bottom:2px;font:700 .62rem var(--display);color:var(--ink);opacity:.7}
+.item.sel{outline:3px solid var(--turq);outline-offset:1px}
+.item.dragging{opacity:.25}
+.item.pop{animation:pop .35s ease-out}
+.item.spawn{animation:spawn .3s ease-out}
+.item.hint{animation:wig 1s ease-in-out infinite}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes spawn{0%{transform:scale(.2);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes wig{0%,100%{transform:rotate(0)}25%{transform:rotate(-6deg)}75%{transform:rotate(6deg)}}
+.c-f{background:#f7ebcf} .c-s{background:#edf2f4} .c-b{background:#f8e4da}
+.ghost{position:fixed;left:0;top:0;pointer-events:none;z-index:50;width:56px;height:56px;border-radius:12px;display:grid;place-items:center;font-size:30px;box-shadow:0 8px 18px rgba(0,0,0,.45)}
+.info{font-size:.82rem;color:var(--muted);min-height:1.3em;padding:6px 2px 0;text-align:center}
+.info b{color:var(--cream)}
+
+.under{display:flex;align-items:center;gap:8px;padding-top:7px}
+.under .info{flex:1;min-width:0;text-align:left;padding:0 2px}
+.sell{width:54px;height:44px;flex:none;border:2px dashed var(--panel2);border-radius:10px;display:grid;place-items:center;font:600 .78rem var(--display);color:var(--muted)}
+.sell.target{border-color:var(--copper);color:var(--cream);background:rgba(208,121,60,.2)}
+.item svg,.ghost svg,.need svg{width:86%;height:86%;display:block;pointer-events:none}
+.item.gen{background:linear-gradient(#efc59c,#d0793c);box-shadow:0 2px 0 rgba(0,0,0,.3),inset 0 0 0 2px #f6d2ae;cursor:pointer}
+.item.gen .lv{display:none}
+.item.bump{animation:pop .25s ease-out}
+.ghost.gen-g{background:linear-gradient(#efc59c,#d0793c)}
+.foot{display:flex;justify-content:center;gap:8px}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tile);color:var(--ink);padding:10px 14px;border-radius:12px;font:600 .9rem var(--display);z-index:60;max-width:calc(100% - 40px);box-shadow:0 6px 18px rgba(0,0,0,.35);text-align:center}
+
+/* notebook */
+.sheet{position:fixed;inset:0;background:rgba(6,20,17,.78);display:grid;place-items:center;z-index:40;padding:18px}
+.paper{background:#f7f0dc;color:#2a2620;border-radius:6px;width:min(100%,380px);max-height:86vh;overflow:auto;padding:22px 20px 18px;box-shadow:0 18px 40px rgba(0,0,0,.5);
+  background-image:repeating-linear-gradient(#f7f0dc 0 27px,#d9e3ea 27px 28px);display:flex;flex-direction:column;gap:10px}
+.paper .date{font:600 .75rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:#8a6a4a}
+.paper h3{font:700 1.3rem var(--display);margin:0;color:#2a2620}
+.paper .hand{font:600 1.35rem/28px var(--hand);white-space:pre-line;color:#203a6a}
+.paper .note{font-size:.88rem;line-height:1.45;color:#4b4339}
+.paper .btn{align-self:flex-end}
+.pages{display:flex;flex-direction:column;gap:6px}
+.pages button{text-align:left;background:rgba(255,255,255,.6);border:1px solid #d8cdb2;border-radius:8px;padding:9px 10px;font:600 .95rem var(--display);color:#2a2620;cursor:pointer}
+.pages button span{display:block;font:500 .75rem var(--body);color:#8a6a4a}
+.pages .locked{opacity:.45;cursor:default}
+.danger{background:transparent;border:0;color:#a0442a;font:700 .8rem var(--body);cursor:pointer;align-self:flex-start;padding:4px 0}
+@media (prefers-reduced-motion:reduce){.item.pop,.item.spawn,.item.hint{animation:none}.order{transition:none}}
+</style>
+
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <h1>Dedemin Lokantası</h1>
+    <div class="chip" title="Para"><span class="coin"></span><span id="coins">0</span></div>
+    <div class="chip" title="Enerji"><span class="bolt">⚡</span><span id="energy">50</span><small id="etimer"></small></div>
+  </div>
+
+  <section class="scene">
+    <svg id="scene" viewBox="0 0 360 128" role="img" aria-label="Lokantanın ön cephesi"></svg>
+    <div class="repair">
+      <div class="txt">
+        <div class="lbl" id="rLbl">Sıradaki onarım</div>
+        <div class="name" id="rName"></div>
+        <div class="bar"><i id="rBar"></i></div>
+      </div>
+      <button class="btn" id="rBtn" type="button">Onar</button>
+    </div>
+  </section>
+
+  <div class="speech" id="speech"></div>
+  <div class="orders" id="orders"></div>
+
+  <section class="boardwrap">
+    <div class="board" id="board"></div>
+    <div class="under"><div class="info" id="info">Tahtadaki çuvala, güğüme ve kasaya dokun; malzeme çıksın.</div><div class="sell" id="sell">Sat</div></div>
+  </section>
+
+  <div class="foot"><button class="btn ghost" id="bookBtn" type="button">Dedemin defteri</button></div>
+</div>
+
+<div class="sheet" id="sheet" hidden><div class="paper" id="paper"></div></div>
+
+<script>
+(function(){
+"use strict";
+// ---------- data
+const CH={
+  f:{name:"Ambar",items:[["🌾","Buğday"],["🫓","Yufka"],["🥯","Simit"],["🥐","Poğaça"],["🥧","Börek"]]},
+  s:{name:"Ahır",items:[["🥛","Süt"],["🧈","Kaymak"],["🧀","Peynir"],["🍮","Sütlaç"]]},
+  b:{name:"Bahçe",items:[["🍅","Domates"],["🥗","Çoban salata"],["🍲","Mercimek çorbası"],["🥘","Kuru fasulye"]]}
+};
+
+// hand-drawn icons, 64x64, shared outline
+const O='stroke="#3b2a1e" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
+const sv=b=>`<svg viewBox="0 0 64 64" aria-hidden="true">${b}</svg>`;
+const grains=()=>[16,25,34,43].map(y=>`<ellipse cx="25.5" cy="${y}" rx="4.2" ry="7" transform="rotate(-32 25.5 ${y})" fill="#e9b949" ${O}/><ellipse cx="38.5" cy="${y}" rx="4.2" ry="7" transform="rotate(32 38.5 ${y})" fill="#e9b949" ${O}/>`).join("");
+const ART={
+ f1:sv(`<path d="M32 60V14" fill="none" stroke="#8a6a2a" stroke-width="3" stroke-linecap="round"/>${grains()}<ellipse cx="32" cy="10" rx="4" ry="6.5" fill="#f0c95a" ${O}/>`),
+ f2:sv(`<ellipse cx="32" cy="36" rx="27" ry="15" fill="#f3dca6" ${O}/><ellipse cx="32" cy="34.5" rx="19" ry="8.5" fill="none" stroke="#dcb56b" stroke-width="2" stroke-dasharray="3 4"/><circle cx="22" cy="38" r="1.8" fill="#c99245"/><circle cx="40" cy="31" r="1.6" fill="#c99245"/><circle cx="44" cy="40" r="1.9" fill="#c99245"/><circle cx="29" cy="30" r="1.3" fill="#c99245"/>`),
+ f3:sv(`<circle cx="32" cy="33" r="19" fill="none" stroke="#3b2a1e" stroke-width="17"/><circle cx="32" cy="33" r="19" fill="none" stroke="#c0712f" stroke-width="12.6"/><path d="M19 25q4-6 10-7" stroke="#e39a52" stroke-width="3" fill="none" stroke-linecap="round"/>${[[16,30,20],[22,46,-30],[34,51,0],[47,44,35],[50,30,-20],[41,17,10],[25,17,-15],[45,21,60],[18,40,40]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="2.2" ry="1.2" transform="rotate(${r} ${x} ${y})" fill="#fbf0d0"/>`).join("")}`),
+ f4:sv(`<path d="M9 44Q10 17 32 15Q54 17 55 44Q32 51 9 44Z" fill="#e7a84c" ${O}/><path d="M17 27Q24 19 33 19" stroke="#f6cf8a" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="27" cy="31" r="1.4" fill="#3b2a1e"/><circle cx="35" cy="27" r="1.4" fill="#3b2a1e"/><circle cx="41" cy="33" r="1.4" fill="#3b2a1e"/><circle cx="31" cy="37" r="1.4" fill="#3b2a1e"/><circle cx="45" cy="26" r="1.2" fill="#3b2a1e"/>`),
+ f5:sv(`<path d="M8 26L20 16H56L44 26Z" fill="#f1c071" ${O}/><path d="M44 26L56 16V40L44 52Z" fill="#c98a3e" ${O}/><rect x="8" y="26" width="36" height="26" fill="#eab25e" ${O}/><path d="M10 33h32M10 39h32M10 45h32" stroke="#f8dfa6" stroke-width="2.4"/><path d="M28 18l6-1M38 20l5-1M18 22l5-1" stroke="#b56b2a" stroke-width="2" stroke-linecap="round"/>`),
+ s1:sv(`<path d="M18 9H46L42 56Q32 59 22 56Z" fill="#dfeaf2" ${O}/><path d="M19.6 22H44.4L42 56Q32 59 22 56Z" fill="#ffffff"/><path d="M18 9H46L42 56Q32 59 22 56Z" fill="none" ${O}/><path d="M25 27L27 50" stroke="#e6eef4" stroke-width="3" stroke-linecap="round"/>`),
+ s2:sv(`<path d="M13 33Q17 18 32 18Q47 18 51 33Z" fill="#fff6dc" ${O}/><path d="M24 27q8-6 16 0" stroke="#f0dfb2" stroke-width="2.5" fill="none" stroke-linecap="round"/><path d="M8 33H56Q54 55 32 55Q10 55 8 33Z" fill="#2f6aa8" ${O}/><path d="M16 41q4 4 8 0t8 0 8 0 8 0" stroke="#9cc6ea" stroke-width="2.2" fill="none"/>`),
+ s3:sv(`<ellipse cx="32" cy="49" rx="27" ry="8" fill="#2f6aa8" ${O}/><path d="M12 24L24 16H52L40 24Z" fill="#ffffff" ${O}/><path d="M40 24L52 16V36L40 46Z" fill="#e8e2cf" ${O}/><rect x="12" y="24" width="28" height="22" fill="#f8f4e6" ${O}/><circle cx="20" cy="31" r="1.5" fill="#dcd4bb"/><circle cx="31" cy="38" r="1.8" fill="#dcd4bb"/><circle cx="25" cy="41" r="1.2" fill="#dcd4bb"/>`),
+ s4:sv(`<path d="M10 28H54L49 52Q32 58 15 52Z" fill="#b45a2c" ${O}/><path d="M16 44Q32 49 48 44" stroke="#8e4320" stroke-width="2" fill="none"/><ellipse cx="32" cy="28" rx="22" ry="8" fill="#f4e4c3" ${O}/><path d="M18 27q6-4 12-1M34 25q7-3 12 1M26 31q6 2 12 0" stroke="#c4843a" stroke-width="3.2" fill="none" stroke-linecap="round"/>`),
+ b1:sv(`<circle cx="32" cy="37" r="21" fill="#e2492f" ${O}/><path d="M18 31q3-8 11-10" stroke="#f68a72" stroke-width="3.5" fill="none" stroke-linecap="round"/><path d="M32 22L26 14L31 18L32 10L35 18L41 14L36 21L44 23L35 24Z" fill="#4c9a3f" ${O}/>`),
+ b2:sv(`<path d="M8 32H56Q54 55 32 55Q10 55 8 32Z" fill="#ffffff" ${O}/><path d="M12 38q5 3 10 0t10 0 10 0 10 0" stroke="#2f6aa8" stroke-width="2.2" fill="none"/><rect x="15" y="23" width="9" height="9" rx="2" fill="#e2492f" ${O}/><rect x="36" y="22" width="9" height="9" rx="2" fill="#e2492f" ${O}/><rect x="26" y="19" width="9" height="9" rx="2" fill="#7fbf5a" ${O}/><path d="M45 28a6 6 0 0 1 8 2" stroke="#3b2a1e" stroke-width="2.4" fill="#f6f0f7"/><path d="M22 20q4-8 8-6" stroke="#3f8a35" stroke-width="3" fill="none" stroke-linecap="round"/>`),
+ b3:sv(`<path d="M7 30H57Q55 55 32 55Q9 55 7 30Z" fill="#c8743a" ${O}/><path d="M14 40H50" stroke="#e8a06a" stroke-width="2.2"/><ellipse cx="32" cy="30" rx="25" ry="7.5" fill="#ec8b2c" ${O}/><path d="M38 28l10-6 2 7z" fill="#f6d84a" ${O}/><circle cx="22" cy="29" r="1.3" fill="#a3221a"/><circle cx="28" cy="32" r="1.2" fill="#a3221a"/><circle cx="33" cy="27" r="1.2" fill="#a3221a"/><circle cx="17" cy="31" r="1" fill="#4c9a3f"/>`),
+ b4:sv(`<path d="M5 30h6M53 30h6" stroke="#3b2a1e" stroke-width="5" stroke-linecap="round" fill="none"/><path d="M10 28H54L50 52Q32 58 14 52Z" fill="#9c4a24" ${O}/><path d="M17 44Q32 49 47 44" stroke="#7a3618" stroke-width="2" fill="none"/><ellipse cx="32" cy="28" rx="22" ry="8" fill="#b8361f" ${O}/>${[[20,27,20],[27,25,-10],[34,28,30],[41,26,-25],[45,29,15],[26,30,5],[37,23,0]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="3.4" ry="2" transform="rotate(${r} ${x} ${y})" fill="#f3e3c4" stroke="#3b2a1e" stroke-width="1.2"/>`).join("")}`),
+ gf:sv(`<path d="M24 14l-3-8M30 13V4M36 14l4-8" stroke="#8a6a2a" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="21" cy="6" rx="2.6" ry="4" fill="#e9b949" stroke="#3b2a1e" stroke-width="1.6"/><ellipse cx="30" cy="4" rx="2.6" ry="4" fill="#e9b949" stroke="#3b2a1e" stroke-width="1.6"/><ellipse cx="40" cy="6" rx="2.6" ry="4" fill="#e9b949" stroke="#3b2a1e" stroke-width="1.6"/><path d="M20 20Q14 18 18 14Q32 10 46 14Q50 18 44 20Q56 34 52 52Q32 60 12 52Q8 34 20 20Z" fill="#d9b77c" ${O}/><path d="M20 20Q32 24 44 20" stroke="#8a6a2a" stroke-width="3" fill="none"/><text x="32" y="45" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="11" fill="#7a5a2a">UN</text>`),
+ gs:sv(`<rect x="24" y="5" width="16" height="6" rx="2" fill="#9aa8b2" ${O}/><path d="M26 11h12l4 10H22Z" fill="#c9d4dc" ${O}/><rect x="16" y="21" width="32" height="36" rx="6" fill="#d7e0e6" ${O}/><path d="M16 32h32M16 47h32" stroke="#9aa8b2" stroke-width="3"/><path d="M16 28q-7 2-6 9M48 28q7 2 6 9" stroke="#3b2a1e" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M22 36v8" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>`),
+ gb:sv(`<circle cx="22" cy="24" r="9" fill="#e2492f" ${O}/><circle cx="38" cy="21" r="9" fill="#e2492f" ${O}/><circle cx="30" cy="27" r="8" fill="#f06a45" ${O}/><path d="M38 12l-2 4 4-1z" fill="#4c9a3f" stroke="#3b2a1e" stroke-width="1.4"/><rect x="8" y="30" width="48" height="26" rx="3" fill="#b77a45" ${O}/><path d="M8 39h48M8 48h48" stroke="#8a5530" stroke-width="2.4"/><path d="M14 30v26M50 30v26" stroke="#8a5530" stroke-width="2.4"/>`)
+};
+const art=x=>x.g?ART["g"+x.g]:ART[x.c+x.l];
+const GEN_OF={f:"Ambar çuvalı",s:"Süt güğümü",b:"Bahçe kasası"};
+const PEOPLE={
+  nuri:{name:"İsmail Hoca",init:"İH",col:"#9fd3c7",likes:["b","f"],
+    ask:["Mehmet'in çorbasını kırk yıl içtim evladım. Bakalım torunu nasıl pişiriyor?","Emekli adamın tek işi var: iyi yemek. Ne pişirdin bugün?","Masam hâlâ pencere kenarında mı? Oraya otururum."],
+    thanks:["Tadı aynı değil... ama yolu doğru. Sen öğrenirsin.","Deden bu masada bana hep borçlu kalırdı. Şimdi ben sana borçluyum.","Ellerine sağlık. Yarın gazetemi burada okuyacağım."]},
+  elif:{name:"Sema",init:"S",col:"#f6b8c8",likes:["b","s"],
+    ask:["Annem hasta. Ona sıcak bir şey götürebilir miyim?","Annem küçükken buraya gelirmiş! Sütlacı çok severmiş.","Okuldan çıktım, çok acıktım. Bir şey var mı?"],
+    thanks:["Annem gülümsedi! Yarın yine gelirim.","Annem 'Mehmet Dede'nin kokusu bu' dedi. Mehmet Dede kim?","Bunu annemle paylaşacağım. Teşekkürler abi!"]},
+  hasan:{name:"Gürkan Usta",init:"GU",col:"#f0b483",likes:["f","s"],
+    ask:["Çekiç sesinden kulağım gitti, karnım kaldı. Ne var ne yok?","Deden her sabah bana simitle peynir verirdi. Usul bozulmasın.","Çırak da aç, ben de açım. İki kişilik koy!"],
+    thanks:["Eline sağlık. Ocağın için bakır bir cezve dövüyorum, haberin olsun.","İşte bu! Çarşıya haber salacağım, lokanta açıldı diye.","Babam bu dükkânın tabelasını dövmüştü, biliyor muydun?"]},
+  aynur:{name:"Asena Teyze",init:"AT",col:"#c9b6f2",likes:["f","b"],
+    ask:["Dükkânı yalnız bırakamam, paket yapar mısın?","Gelin geldi, misafir var! Bana bir şeyler lazım.","Dedene çok benziyorsun, sana söyleyen oldu mu?"],
+    thanks:["Allah bereket versin evladım.","Kızlara anlatacağım, akşama kalabalık gelirler.","Mehmet Usta da böyle sarardı paketi. Aynı el."]},
+  pamuk:{name:"Pamuk",init:"P",col:"#e9e4da",likes:["s"],cat:true,
+    ask:["Miyav. (Kapının önünde oturmuş, gözünü sana dikmiş.)","(Patisiyle kapıyı tırmalıyor.)","(Tezgâhın altından minik bir miyav.)"],
+    thanks:["(Mırlıyor, ayağına sürtünüyor. Enerjin tazelendi.)","(Karnı doydu, güneşte uyuya kaldı. İçin ısındı.)","(Kuyruğunu dikip dükkânı turladı. Sanki burası onun.)"]}
+};
+const REPAIRS=[
+  {name:"Tabelayı as",cost:30},
+  {name:"Masaları onar",cost:60},
+  {name:"Ocağı yak",cost:100},
+  {name:"Camları tak",cost:160},
+  {name:"Dedemin fotoğrafını as",cost:240}
+];
+const PAGES=[
+  {title:"Anahtar",date:"Bugün",
+   note:"Avukat anahtarı uzatırken \"On bir yıldır kimse açmadı\" dedi. Kayhan Çarşısı'nda, bakırcıların arasında, kepengi paslanmış küçük bir dükkân: Mehmet Usta Lokantası. Tezgâhın üstünde tozlu bir defter duruyor. İlk sayfada dedemin eğri büğrü yazısı:",
+   hand:"Bu kapıyı açan torunumsa:\nönce ocağı değil, kapıyı aç.\nOcağı insanlar yakar.",
+   after:"Tahtadaki çuvala, güğüme ve kasaya dokunup malzeme üret. Aynı iki şeyi üst üste sürükle ya da sırayla dokun, birleşsinler. Kapına gelenlerin istediğini hazırla, kazandığınla dükkânı onar."},
+  {title:"Tabela",date:"12 Mayıs 1974",
+   hand:"Tabelayı Gürkan'ın babası dövdü, bakırdan.\nİlk müşterim İsmail oldu. Daha öğretmen değil, öğrenci.\nParası yoktu, yerine bir kitap bıraktı.\nKitap hâlâ arka rafta. Hesabı hiç kapatmadım."},
+  {title:"Masalar",date:"Eylül 1988",
+   hand:"Her masanın bir sahibi vardı.\nKöşedeki masa Celile'nindi. Okuldan çıkınca gelir,\nsütlacını kaşıklarken ödevini yapardı.\nBir gün kızı olursa, ona da aynı kaseden vereceğim.",
+   after:"Celile... Sema'nın annesinin adı değil miydi?"},
+  {title:"Ocak",date:"Mart 1979",
+   hand:"Bu ocağı Halil'le birlikte kurduk.\nAntep'ten gelmişti; elinde bir tepsi baklava, cebinde iki kuruş.\nYıllarca yan yana pişirdik. Sonra bir tepsi yüzünden küstük.\nHangi tepsi, onu bile hatırlamıyorum artık.\nGurur hatırlatmıyor."},
+  {title:"Camlar",date:"Kasım 2015",
+   hand:"Gözlerim tuzu ölçemez oldu.\nBir de Halil'den mektup geldi.\nZarfı tezgâhın çekmecesine koydum.\nAçarsam ya affeder ya affetmez diye korktum.\nKepengi o gün indirdim."},
+  {title:"Mektup",date:"Bugün",
+   note:"Fotoğrafı asmak için çekmeceyi açınca zarfı buluyorsun. Pul Gaziantep'ten. Mühür hiç kırılmamış. Zarfın üstünde, dedemin titreyen yazısı:",
+   hand:"Torunum, sen aç.\nBen cesaret edemedim.",
+   after:"1. bölüm burada bitiyor. 2. bölüm: Antep Yolu. Yakında."}
+];
+const MAXE=50, REGEN=8000, N=49;
+
+// ---------- helpers
+const $=id=>document.getElementById(id);
+const max=c=>CH[c].items.length;
+const icon=(c,l)=>ART[c+l];
+const nm=(c,l)=>CH[c].items[l-1][1];
+const val=l=>Math.pow(2,l);
+function withReward(o){const sum=o.items.reduce((a,x)=>a+val(x.l),0);o.reward=PEOPLE[o.p].cat?3:Math.round(sum*1.5)+2;return o;}
+let toastT; function toast(t){let el=document.querySelector(".toast");if(!el){el=document.createElement("div");el.className="toast";document.body.appendChild(el);}
+  el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2200);}
+function say(p,line){const P=PEOPLE[p];$("speech").innerHTML=`<b>${P.name}:</b> ${line}`;}
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+
+// ---------- state
+const KEY="dedemin-lokantasi.v3";
+function fresh(){
+  const b=Array(N).fill(null);
+  [[37,"b",1],[38,"b",1],[30,"f",1],[31,"f",1],[39,"s",1]].forEach(([i,c,l])=>b[i]={c,l});b[44]={g:"f"};b[45]={g:"s"};b[46]={g:"b"};
+  return {board:b,coins:0,energy:MAXE,eAt:Date.now(),restored:0,found:{},served:0,seenIntro:false,
+    orders:[{p:"nuri",items:[{c:"b",l:2}]},{p:"hasan",items:[{c:"f",l:2}]},{p:"pamuk",items:[{c:"s",l:1}]}].map(withReward)};
+}
+let S;
+try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
+if(!S||!Array.isArray(S.board)||S.board.length!==N) S=fresh();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+
+// ---------- energy
+function tickEnergy(){
+  const now=Date.now();
+  if(S.energy>=MAXE){S.eAt=now;}
+  else{const g=Math.floor((now-S.eAt)/REGEN);if(g>0){S.energy=Math.min(MAXE,S.energy+g);S.eAt+=g*REGEN;if(S.energy>=MAXE)S.eAt=now;}}
+  $("energy").textContent=S.energy;
+  $("etimer").textContent=S.energy<MAXE?Math.ceil((REGEN-(now-S.eAt))/1000)+"sn":"";
+}
+setInterval(()=>{tickEnergy();},1000);
+
+// ---------- orders
+function newOrder(){
+  const busy=S.orders.filter(Boolean).map(o=>o.p);
+  const free=Object.keys(PEOPLE).filter(k=>!busy.includes(k));
+  const p=pick(free), P=PEOPLE[p];
+  const cap=2+S.restored;
+  const items=[];
+  const count=P.cat?1:(S.restored>=1&&Math.random()<0.45?2:1);
+  for(let k=0;k<count;k++){
+    const c=pick(P.likes);
+    const top=P.cat?2:Math.min(max(c),cap);
+    let l=1+Math.floor(Math.random()*top);
+    if(!P.cat&&l<2&&Math.random()<0.7)l=Math.min(2,top);
+    items.push({c,l});
+  }
+  return withReward({p,items});
+}
+function boardCounts(){const m={};S.board.forEach(x=>{if(x&&x.c){const k=x.c+x.l;m[k]=(m[k]||0)+1;}});return m;}
+function orderStatus(o){const m=boardCounts();const used={};return o.items.map(x=>{const k=x.c+x.l;used[k]=(used[k]||0)+1;return (m[k]||0)>=used[k];});}
+function serve(i){
+  const o=S.orders[i]; if(!orderStatus(o).every(Boolean)) return;
+  o.items.forEach(x=>{const j=S.board.findIndex(y=>y&&y.c===x.c&&y.l===x.l);if(j>-1)S.board[j]=null;});
+  S.coins+=o.reward; S.served++;
+  const P=PEOPLE[o.p];
+  if(P.cat){S.energy=Math.min(MAXE,S.energy+6);}
+  say(o.p,pick(P.thanks));
+  const card=document.querySelector(`.order[data-i="${i}"]`); if(card)card.classList.add("leaving");
+  S.orders[i]=null; save(); renderBoard(); renderTop(); renderRepair();
+  setTimeout(()=>{S.orders[i]=newOrder();save();renderOrders();},650);
+}
+
+// ---------- board / drag
+let sel=-1, drag=null, fx={};
+function renderBoard(){
+  const b=$("board"); let h="";
+  for(let i=0;i<N;i++){
+    const x=S.board[i];
+    h+=`<div class="cell" data-i="${i}">${x?`<div class="item ${x.g?"gen":"c-"+x.c}${i===sel?" sel":""}${fx[i]?" "+fx[i]:""}" data-i="${i}">${art(x)}${x.g?"":`<span class="lv">${x.l}</span>`}</div>`:""}</div>`;
+  }
+  b.innerHTML=h; fx={};
+  renderOrders();
+}
+function cellAt(x,y){const el=document.elementFromPoint(x,y);if(!el)return null;if(el.closest("#sell"))return "sell";const c=el.closest(".cell");return c?+c.dataset.i:null;}
+function showInfo(i){
+  const x=S.board[i]; if(!x){$("info").textContent="";return;}
+  if(x.g){$("info").innerHTML=`<b>${GEN_OF[x.g]}</b> · dokun, ${nm(x.g,1)} çıksın (1 ⚡)`;return;}
+  const next=x.l<max(x.c)?`İki tanesi birleşince: <b>${nm(x.c,x.l+1)}</b>`:"Zincirin sonu. Bunu isteyen birini bekle.";
+  $("info").innerHTML=`<b>${nm(x.c,x.l)}</b> · ${x.l}. seviye · ${next}`;
+}
+function drop(from,to){
+  const a=S.board[from];
+  if(to==="sell"&&a.g){toast("Üreteçler satılamaz.");return false;}
+  if(to==="sell"){const g=Math.max(1,val(a.l)/2);S.coins+=g;S.board[from]=null;toast(`${nm(a.c,a.l)} satıldı: +${g}`);sel=-1;$("info").textContent="";}
+  else if(to===null||to===from){return false;}
+  else{
+    const b=S.board[to];
+    if(!b){S.board[to]=a;S.board[from]=null;sel=to;}
+    else if(!a.g&&!b.g&&b.c===a.c&&b.l===a.l&&a.l<max(a.c)){
+      const nl=a.l+1;S.board[to]={c:a.c,l:nl};S.board[from]=null;fx[to]="pop";sel=to;
+      const key=a.c+nl; if(!S.found[key]){S.found[key]=1;toast(`Yeni tarif: ${nm(a.c,nl)}!`);}
+    } else {S.board[to]=a;S.board[from]=b;sel=to;}
+    showInfo(sel); sel=-1;
+  }
+  save(); renderBoard(); renderTop(); renderRepair(); return true;
+}
+const boardEl=$("board");
+boardEl.addEventListener("pointerdown",e=>{
+  const it=e.target.closest(".item"); if(!it)return;
+  e.preventDefault();
+  drag={from:+it.dataset.i,x:e.clientX,y:e.clientY,moving:false,ghost:null,el:it,over:null};
+});
+document.addEventListener("pointermove",e=>{
+  if(!drag)return;
+  if(!drag.moving){if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)<7)return;
+    drag.moving=true;const x=S.board[drag.from];const g=document.createElement("div");g.className=`ghost ${x.g?"gen-g":"c-"+x.c}`;g.innerHTML=art(x);document.body.appendChild(g);drag.ghost=g;drag.el.classList.add("dragging");}
+  drag.ghost.style.transform=`translate(${e.clientX-28}px,${e.clientY-28}px)`;
+  const t=cellAt(e.clientX,e.clientY);
+  if(t!==drag.over){
+    document.querySelectorAll(".target").forEach(n=>n.classList.remove("target"));
+    if(t==="sell")$("sell").classList.add("target");
+    else if(t!==null&&t!==drag.from){const c=boardEl.children[t];if(c)c.classList.add("target");}
+    drag.over=t;
+  }
+});
+document.addEventListener("pointerup",e=>{
+  if(!drag)return; const d=drag; drag=null;
+  document.querySelectorAll(".target").forEach(n=>n.classList.remove("target"));
+  if(d.ghost)d.ghost.remove();
+  if(d.moving){const t=cellAt(e.clientX,e.clientY);if(!drop(d.from,t))renderBoard();}
+  else{ // tap: produce, select, or merge/move into a previously selected item
+    if(S.board[d.from]&&S.board[d.from].g){produce(d.from);return;}
+    const A=S.board[sel], B=S.board[d.from];
+    if(sel>-1&&sel!==d.from&&A&&!A.g&&B&&B.c===A.c&&B.l===A.l&&A.l<max(A.c)){drop(sel,d.from);}
+    else{sel=d.from;showInfo(sel);renderBoard();}
+  }
+});
+document.addEventListener("pointercancel",()=>{if(drag){if(drag.ghost)drag.ghost.remove();drag=null;renderBoard();}});
+boardEl.addEventListener("click",e=>{ // tap empty cell to move selected item there
+  if(e.target.closest(".item"))return; const c=e.target.closest(".cell");
+  if(c&&sel>-1&&S.board[sel])drop(sel,+c.dataset.i);
+});
+
+// ---------- producers (on the board)
+function produce(gi){
+  tickEnergy();
+  const c=S.board[gi].g;
+  if(S.energy<1){toast("Enerjin bitti. Biraz bekle ya da Pamuk'u doyur.");return;}
+  const empty=[];S.board.forEach((x,i)=>{if(!x)empty.push(i);});
+  if(!empty.length){toast("Tezgâh dolu! Birleştir ya da bir şey sat.");return;}
+  const gx=gi%7, gy=Math.floor(gi/7); let best=Infinity, cands=[];
+  empty.forEach(i=>{const d=Math.hypot(i%7-gx,Math.floor(i/7)-gy);
+    if(d<best-1e-6){best=d;cands=[i];}else if(Math.abs(d-best)<1e-6)cands.push(i);});
+  if(S.energy===MAXE)S.eAt=Date.now();
+  S.energy--;
+  const i=pick(cands);
+  S.board[i]={c,l:Math.random()<0.12?2:1}; fx[i]="spawn"; fx[gi]="bump";
+  showInfo(gi); save(); renderBoard(); tickEnergy();
+}
+
+// ---------- repairs & scene
+function renderTop(){$("coins").textContent=S.coins;tickEnergy();}
+function renderRepair(){
+  const r=REPAIRS[S.restored];
+  if(!r){$("rLbl").textContent="1. bölüm tamam";$("rName").textContent="Lokanta yeniden açıldı";$("rBar").style.width="100%";$("rBtn").textContent="Mektup";$("rBtn").disabled=false;return;}
+  $("rLbl").textContent=`Onarım ${S.restored+1}/${REPAIRS.length}`;
+  $("rName").textContent=r.name;
+  $("rBar").style.width=Math.min(100,S.coins/r.cost*100)+"%";
+  $("rBtn").innerHTML=`Onar · ${r.cost}`;
+  $("rBtn").disabled=S.coins<r.cost;
+}
+$("rBtn").addEventListener("click",()=>{
+  const r=REPAIRS[S.restored];
+  if(!r){openPage(5);return;}
+  if(S.coins<r.cost)return;
+  S.coins-=r.cost; S.restored++; save();
+  renderTop(); renderRepair(); renderScene(); openPage(S.restored);
+});
+function renderScene(){
+  const r=S.restored;
+  const win=(x)=>r>=4
+    ? `<rect x="${x}" y="56" width="74" height="44" rx="3" fill="${r>=3?"#f7d58f":"#9cc9d6"}" opacity="${r>=3?.9:.6}"/>
+       ${r>=2?`<rect x="${x+12}" y="82" width="22" height="4" fill="#6b4a2f"/><rect x="${x+40}" y="82" width="22" height="4" fill="#6b4a2f"/><rect x="${x+16}" y="86" width="3" height="12" fill="#6b4a2f"/><rect x="${x+55}" y="86" width="3" height="12" fill="#6b4a2f"/>`:""}
+       <path d="M${x+37} 56v44" stroke="#2c5a50" stroke-width="3"/>`
+    : `<rect x="${x}" y="56" width="74" height="44" rx="3" fill="#2a3b37"/>
+       ${r>=2?`<rect x="${x+12}" y="82" width="22" height="4" fill="#6b4a2f" opacity=".7"/><rect x="${x+40}" y="82" width="22" height="4" fill="#6b4a2f" opacity=".7"/>`:""}
+       <path d="M${x-2} 62l78 30M${x-2} 92l78-30" stroke="#8a6440" stroke-width="7" stroke-linecap="round"/>`;
+  $("scene").innerHTML=`
+    <rect width="360" height="128" fill="#1b4a40"/>
+    <rect x="0" y="112" width="360" height="16" fill="#0c2520"/>
+    <rect x="30" y="18" width="300" height="96" rx="4" fill="#e9dcc0"/>
+    <rect x="30" y="18" width="300" height="10" fill="#c7b693"/>
+    ${r>=1?`<rect x="78" y="30" width="204" height="20" rx="4" fill="#d0793c"/><rect x="81" y="33" width="198" height="14" rx="3" fill="none" stroke="#f3b17d" stroke-width="1"/>
+      <text x="180" y="44.5" text-anchor="middle" font-family="Fredoka,sans-serif" font-weight="700" font-size="11" fill="#2a1a10" letter-spacing="1">MEHMET USTA LOKANTASI</text>`
+      :`<rect x="78" y="30" width="204" height="20" rx="4" fill="none" stroke="#b5a37f" stroke-dasharray="4 4"/>`}
+    ${win(44)}${win(242)}
+    <rect x="148" y="56" width="64" height="58" rx="3" fill="${r>=3?"#6b4a2f":"#4b3a2c"}"/>
+    <rect x="156" y="62" width="48" height="26" rx="2" fill="${r>=3?"#f4a259":"#2a3b37"}"/>
+    ${r>=3?`<circle cx="180" cy="80" r="6" fill="#ffd166"/><path d="M174 80q6-14 12 0" fill="#ff7b39"/>`:""}
+    <circle cx="203" cy="90" r="2.2" fill="#d0793c"/>
+    ${r>=5?`<rect x="166" y="22" width="28" height="4" rx="2" fill="#6b4a2f" opacity="0"/>
+      <path d="M36 22 Q 106 36 176 22 T 324 22" fill="none" stroke="#6b4a2f" stroke-width="1"/>
+      ${[50,80,110,140,212,242,272,302].map((x,k)=>`<circle cx="${x}" cy="${27+Math.sin(k*1.4)*3}" r="2.6" fill="#ffd166"/>`).join("")}`:""}
+    ${r<5?`<rect x="30" y="18" width="300" height="96" fill="#5d5242" opacity="${(5-r)*0.09}"/>`:""}
+    ${r>=1?"":`<path d="M60 112h20M280 112h24" stroke="#8a7a60" stroke-width="2"/>`}
+  `;
+}
+
+// ---------- orders render
+function renderOrders(){
+  const box=$("orders");
+  box.innerHTML=S.orders.map((o,i)=>{
+    if(!o)return `<div class="order leaving" data-i="${i}"></div>`;
+    const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
+    return `<div class="order${ok?" ready":""}" data-i="${i}">
+      <div class="who"><span class="av" style="background:${P.col}">${P.init}</span><span class="n">${P.name}</span></div>
+      <div class="needs">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}</div>
+      <button class="btn" type="button" data-serve="${i}" ${ok?"":"disabled"}>${P.cat?"Ver · ⚡":"Ver · "+o.reward}</button>
+    </div>`;}).join("");
+}
+$("orders").addEventListener("click",e=>{
+  const b=e.target.closest("[data-serve]"); if(b){serve(+b.dataset.serve);return;}
+  const c=e.target.closest(".order"); if(c){const o=S.orders[+c.dataset.i]; if(o){say(o.p,pick(PEOPLE[o.p].ask));
+    const names=o.items.map(x=>nm(x.c,x.l)).join(" ve ");$("info").innerHTML=`${PEOPLE[o.p].name} istiyor: <b>${names}</b>`;}}
+});
+
+// ---------- notebook
+function openPage(n){
+  const p=PAGES[n];
+  $("paper").innerHTML=`
+    <div class="date">${p.date}</div>
+    <h3>${p.title}</h3>
+    ${p.note?`<div class="note">${p.note}</div>`:""}
+    <div class="hand">${p.hand}</div>
+    ${p.after?`<div class="note"><i>${p.after}</i></div>`:""}
+    <button class="btn" type="button" id="closePage">${n===0&&!S.seenIntro?"Kepengi kaldır":"Defteri kapat"}</button>`;
+  $("sheet").hidden=false;
+  $("closePage").onclick=()=>{$("sheet").hidden=true;if(n===0&&!S.seenIntro){S.seenIntro=true;save();say("nuri","Kepenk mi açılıyor? Yıllardır bu anı bekledim evladım!");}};
+}
+function openBook(){
+  const unlocked=S.restored+1;
+  $("paper").innerHTML=`
+    <div class="date">Mehmet Usta'nın defteri</div><h3>Sayfalar</h3>
+    <div class="pages">${PAGES.map((p,i)=>i<unlocked
+      ?`<button type="button" data-p="${i}">${p.title}<span>${p.date}</span></button>`
+      :`<button type="button" class="locked" disabled>Kilitli sayfa<span>${REPAIRS[i-1]?REPAIRS[i-1].name+" ile açılır":""}</span></button>`).join("")}</div>
+    <div class="note">Hizmet verilen misafir: <b>${S.served}</b></div>
+    <button class="danger" type="button" id="resetBtn">Baştan başla</button>
+    <button class="btn" type="button" id="closeBook">Kapat</button>`;
+  $("sheet").hidden=false;
+  $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.p));
+  $("closeBook").onclick=()=>$("sheet").hidden=true;
+  $("resetBtn").onclick=function(){
+    if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(0);}
+    else{this.dataset.armed="1";this.textContent="Emin misin? Tüm ilerleme silinir. Tekrar dokun.";}
+  };
+}
+$("bookBtn").addEventListener("click",openBook);
+$("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&S.seenIntro)$("sheet").hidden=true;});
+
+// ---------- boot
+function renderAll(){renderTop();renderRepair();renderScene();renderBoard();
+  const o=S.orders.find(Boolean); if(o) say(o.p,PEOPLE[o.p].ask[0]);}
+S.orders=S.orders.map(o=>o||newOrder());
+renderAll();
+if(!S.seenIntro) openPage(0);
+})();
+</script>
+
+</body>
+</html>
