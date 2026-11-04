@@ -135,6 +135,44 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .pages .locked{opacity:.45;cursor:default}
 .danger{background:transparent;border:0;color:#a0442a;font:700 .8rem var(--body);cursor:pointer;align-self:flex-start;padding:4px 0}
 @media (prefers-reduced-motion:reduce){.item.pop,.item.spawn,.item.hint{animation:none}.order{transition:none}}
+
+/* compact layout: keep the whole board on screen */
+.app{gap:7px}
+.top h1{font-size:1.12rem}
+.chip{padding:5px 9px;font-size:.84rem}
+.bookchip{border:0;color:var(--cream);cursor:pointer;background:var(--copper);color:var(--ink)}
+.scenebox .photo{aspect-ratio:auto;height:clamp(92px,17dvh,190px)}
+.repair{padding:7px 11px;gap:8px}
+.repair .lbl{font-size:.62rem}
+.repair .name{font-size:.92rem}
+.repair .btn{padding:7px 11px;font-size:.88rem}
+.speech{font-size:.82rem;line-height:1.3;padding:7px 11px;min-height:0;height:calc(2.6em + 14px);box-sizing:border-box;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.speech:after{display:none}
+.order{padding:6px;gap:5px}
+.av{width:24px;height:24px;font-size:.64rem}
+.who .n{font-size:.76rem}
+.need{width:32px;height:32px}
+.order .btn{padding:5px 6px;font-size:.8rem}
+.boardwrap{padding:6px}
+.board{margin:0 auto}
+.under{padding-top:5px}
+.info{font-size:.76rem}
+.sell{height:38px}
+
+/* compact v2 */
+.scenewrap{position:relative}
+.scenebox .photo{height:clamp(84px,14dvh,170px)}
+.scenewrap .speech{position:absolute;left:8px;right:8px;top:8px;height:auto;max-height:calc(100% - 16px);z-index:2;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.scenewrap .speech.show{opacity:.97;transform:none}
+.repair{padding:6px 10px}
+.rline{display:flex;align-items:baseline;gap:7px;min-width:0;white-space:nowrap;overflow:hidden}
+.rline .lbl{flex:none}
+.rline .name{overflow:hidden;text-overflow:ellipsis;min-width:0}
+.bar{margin-top:4px;height:5px}
+.needs{align-items:center;flex-wrap:nowrap}
+.needs .av{margin-right:2px}
+.order{gap:5px}
+@media (prefers-reduced-motion:reduce){.scenewrap .speech{transition:none}}
 </style>
 
 </head>
@@ -144,29 +182,27 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
     <h1>Dedemin Lokantası</h1>
     <div class="chip" title="Para"><span class="coin"></span><span id="coins">0</span></div>
     <div class="chip" title="Enerji"><span class="bolt">⚡</span><span id="energy">50</span><small id="etimer"></small></div>
+    <button class="chip bookchip" id="bookBtn" type="button" aria-label="Defter">Defter</button>
   </div>
 
   <section class="scene">
-    <div id="scene" class="scenebox" role="img" aria-label="Lokantanın ön cephesi"></div>
+    <div class="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Lokantanın ön cephesi"></div><div class="speech" id="speech" aria-live="polite"></div></div>
     <div class="repair">
       <div class="txt">
-        <div class="lbl" id="rLbl">Sıradaki onarım</div>
-        <div class="name" id="rName"></div>
+        <div class="rline"><span class="lbl" id="rLbl">Sıradaki onarım</span><span class="name" id="rName"></span></div>
         <div class="bar"><i id="rBar"></i></div>
       </div>
       <button class="btn" id="rBtn" type="button">Onar</button>
     </div>
   </section>
 
-  <div class="speech" id="speech"></div>
   <div class="orders" id="orders"></div>
 
   <section class="boardwrap">
     <div class="board" id="board"></div>
-    <div class="under"><div class="info" id="info">Tahtadaki çuvala, güğüme ve kasaya dokun; malzeme çıksın.</div><div class="sell" id="sell">Sat</div></div>
+    <div class="under"><div class="info" id="info">Tahtadaki bakır karelere dokun, malzeme çıksın.</div><div class="sell" id="sell">Sat</div></div>
   </section>
 
-  <div class="foot"><button class="btn ghost" id="bookBtn" type="button">Dedemin defteri</button></div>
 </div>
 
 <div class="sheet" id="sheet" hidden><div class="paper" id="paper"></div></div>
@@ -358,7 +394,7 @@ const val=l=>Math.pow(2,l);
 function withReward(o,c){const sum=o.items.reduce((a,x)=>a+val(x.l),0);o.reward=PEOPLE[o.p].pet?3:(c===2?Math.round(sum*1.6)+3:Math.round(sum*1.5)+2);return o;}
 let toastT; function toast(t){let el=document.querySelector(".toast");if(!el){el=document.createElement("div");el.className="toast";document.body.appendChild(el);}
   el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,2200);}
-function say(p,line){const P=PEOPLE[p];$("speech").innerHTML=`<b>${P.name}:</b> ${line}`;}
+let sayT;function say(p,line){const P=PEOPLE[p],el=$("speech");el.innerHTML=`<b>${P.name}:</b> ${line}`;el.classList.add("show");clearTimeout(sayT);sayT=setTimeout(()=>el.classList.remove("show"),5200);}
 const pick=a=>a[Math.floor(Math.random()*a.length)];
 
 // ---------- state
@@ -592,8 +628,7 @@ function renderOrders(){
     if(!o)return `<div class="order leaving" data-i="${i}"></div>`;
     const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
     return `<div class="order${ok?" ready":""}" data-i="${i}">
-      <div class="who"><span class="av" style="background:${P.col}">${P.init}</span><span class="n">${P.name}</span></div>
-      <div class="needs">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}</div>
+      <div class="needs"><span class="av" style="background:${P.col}" title="${P.name}">${P.init}</span>${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}</div>
       <button class="btn" type="button" data-serve="${i}" ${ok?"":"disabled"}>${P.pet?"Ver · ⚡":"Ver · "+o.reward}</button>
     </div>`;}).join("");
 }
@@ -646,11 +681,28 @@ $("bookBtn").addEventListener("click",openBook);
 $("sell").addEventListener("click",()=>{if(sel>-1&&S.board[sel])drop(sel,"sell");else toast("Satmak için önce bir eşyaya dokun ya da eşyayı buraya sürükle.");});
 $("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&seen(S.chapter))$("sheet").hidden=true;});
 
+// ---------- fit the board to the visible screen
+function fitBoard(){
+  const bd=$("board"); if(!bd)return;
+  bd.style.maxWidth="";
+  const standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;
+  const vh=(window.visualViewport?visualViewport.height:innerHeight);
+  const top=bd.getBoundingClientRect().top+window.scrollY;
+  const under=document.querySelector(".under"); const uh=under?under.getBoundingClientRect().height:40;
+  const reserve=standalone?12:78; // Safari floating bottom bar
+  const avail=Math.floor(vh-top-uh-reserve-14);
+  bd.style.maxWidth=Math.max(250,Math.min(avail,bd.parentElement.clientWidth))+"px";
+}
+window.addEventListener("resize",fitBoard);
+if(window.visualViewport)visualViewport.addEventListener("resize",fitBoard);
+
 // ---------- boot
 function renderAll(){renderTop();renderRepair();renderScene();renderBoard();
   const o=S.orders.find(Boolean); if(o) say(o.p,PEOPLE[o.p].ask[0]);}
-S.orders=S.orders.map(o=>o||newOrder());
+for(let i=0;i<S.orders.length;i++){if(!S.orders[i])S.orders[i]=newOrder();}
+{const seenP={};S.orders.forEach((o,i)=>{if(seenP[o.p]){S.orders[i]=null;S.orders[i]=newOrder();}seenP[S.orders[i].p]=1;});}
 renderAll();
+requestAnimationFrame(fitBoard);setTimeout(fitBoard,400);
 if(!seen(S.chapter)) openPage(S.chapter,0);
 })();
 </script>
