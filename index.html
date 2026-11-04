@@ -262,13 +262,28 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .pface{width:38px;height:38px}
 .signin{animation:signIn .9s cubic-bezier(.2,1.4,.4,1) both}
 @keyframes signIn{0%{transform:translateY(-30px);opacity:0}100%{transform:none;opacity:1}}
+
+/* per-task scene changes */
+.fxnew{animation:newIn .9s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes newIn{0%{opacity:0;transform:scale(.2)}70%{opacity:1;transform:scale(1.15)}100%{transform:scale(1)}}
+.fxgone{animation:goneOut 1.1s ease-in forwards}
+@keyframes goneOut{0%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+.smoke{animation:smoke 3.3s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes smoke{0%{transform:translate(0,30px) scale(.5);opacity:0}20%{opacity:.6}100%{transform:translate(46px,-20px) scale(1.5);opacity:0}}
+.fx.small{align-items:end;padding-bottom:14px;pointer-events:none}
+.sparkat{position:absolute;left:50%;top:50%;width:0;height:0}
+@media (prefers-reduced-motion:reduce){.smoke{animation:none;opacity:.4}}
+
+/* HUD as its own slim row so the roof stays visible */
+.hud{position:static;background:none;padding:0;z-index:auto}
+.hud .chip{background:var(--panel)}
+.lvl{background:var(--panel)}
 </style>
 
 </head>
 <body>
 <div class="app" id="app">
 
-  <section class="scene">
   <div class="top hud">
     <h1>Dedemin Lokantası</h1>
     <div class="lvl" id="lvl" title="Dükkân seviyesi"><span id="lvlTxt">Dükkân</span><i><b id="lvlBar"></b></i></div>
@@ -276,6 +291,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
     <div class="chip" title="Enerji"><span class="bolt">⚡</span><span id="energy">50</span><small id="etimer"></small></div>
     <button class="chip bookchip" id="bookBtn" type="button" aria-label="Defter">Defter</button>
   </div>
+  <section class="scene">
     <div class="scenewrap" id="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Lokantanın ön cephesi"></div><div class="custs" id="orders"></div></div>
     <div class="repair">
       <div class="txt">
@@ -470,21 +486,21 @@ const REPAIRS2=[
 ];
 
 const LV1=[
- {need:30,tasks:["Kepengin pasını sil","Kepengi kaldır","Tabelayı as"]},
- {need:40,tasks:["Yerleri süpür","Örümcek ağlarını al","Masaları onar","AÇIK levhasını as"]},
- {need:60,tasks:["Kömürü taşı","Bacayı temizle","Bakır tencereleri ov","Rafları onar","Çaydanlığı koy","Ocağı yak"]},
- {need:90,tasks:["Kırık camları topla","Çerçeveleri zımparala","Camcıyı çağır","Camları tak","Perdeleri as","Kapıyı yağla","Kapıya saksı koy","Fenerleri sil","Vitrini düzenle"]},
- {need:130,tasks:["Dedemin fotoğrafını bul","Çerçeveyi parlat","Fotoğrafı as","Masa örtülerini ser","Menü tahtasını yaz","Tuzluk biberlik koy","Bankı boya","Pamuk'a yatak koy","Süs ışıklarını getir","Işıkları çatıya as","Kapıya çiçek koy","Mahalleyi davet et","Açılış çayını demle"]}
+ {need:30,tasks:[{n:"Kapıdaki örümcek ağını al",r:"web1"},{n:"Kepengin pasını sil",r:"rust"},{n:"Kepengi kaldır, tabelayı as",big:1}]},
+ {need:40,tasks:[{n:"Köşedeki ağı temizle",r:"web2"},{n:"Fenerin ağını al",r:"web3"},{n:"Sarmaşığı buda",r:"ivy"},{n:"AÇIK levhasını as",big:1}]},
+ {need:60,tasks:[{n:"Kırık kiremidi değiştir",r:"tile1"},{n:"İkinci kiremidi değiştir",r:"tile2"},{n:"Son kiremidi değiştir",r:"tile3"},{n:"Bacayı ör",a:"chim"},{n:"Fenerlerin camını sil",r:"ldirt"},{n:"Ocağı yak",big:1}]},
+ {need:90,tasks:[{n:"Sol duvar çatlağını sıva",r:"crackL"},{n:"Sağ duvar çatlağını sıva",r:"crackR"},{n:"Eski ilanları sök",r:"posters"},{n:"Tente tak",a:"awning"},{n:"Tabelaya lamba tak",a:"slamps"},{n:"Çatıya saksı diz",a:"pots"},{n:"Sardunyaları dik",a:"flowers"},{n:"Güvercinlere yem koy",a:"pigeons"},{n:"Camları tak",big:1}]},
+ {need:130,tasks:[{n:"Dedemin fotoğrafını as",a:"frame"},{n:"Fotoğrafın altına çiçek koy",a:"frameflw"},{n:"Bayrak süsünü sola as",a:"bunL"},{n:"Bayrak süsünü sağa as",a:"bunR"},{n:"Pamuk'a minder koy",a:"cushion"},{n:"Pamuk'u minderine yatır",a:"cat"},{n:"Komşu pencereye perde as",a:"curt"},{n:"Komşu pencereye çiçeklik koy",a:"wbox"},{n:"Sarmaşığa çiçek ekle",a:"ivyflw"},{n:"İkinci saksı sırasını diz",a:"pots2"},{n:"Süs ışıklarının telini çek",a:"wire"},{n:"Hoş geldiniz pankartı as",a:"banner"},{n:"Lokantayı aç",big:1}]}
 ];
 const LV2=[
- {need:30,tasks:["Kepengin kilidini aç","Kepengi yağla","Kepengi kaldır"]},
- {need:30,tasks:["Tezgâhın tozunu al","Mermer tezgâhı sil","Terazileri düzelt"]},
- {need:40,tasks:["Odun taşı","Fırının külünü al","Kürekleri onar","Fırını yak"]},
- {need:40,tasks:["Oklavaları topla","Oklavaları zımparala","M harfli oklavayı bul","Oklava rafını as"]},
- {need:50,tasks:["Tepsileri indir","Kararmış tepsileri ov","Tepsileri kalayla","Tepsileri parlat","Tepsileri duvara as"]},
- {need:60,tasks:["Vitrin camını ölç","Camcıya git","Çerçeveyi boya","Vitrin camını tak","Tahtaları sök","Vitrine tepsi diz"]},
- {need:70,tasks:["Eski tabelayı indir","Tahtayı zımparala","Harfleri seç","Harfleri oy","Tabelayı boya","Zincirleri tak","Tabelayı as"]},
- {need:80,tasks:["Halil Usta'yı ara","Hastaneye çiçek götür","Taksiyi ayarla","Kapıya rampa yap","Ustanın sandalyesini koy","Komşuları topla","Süs ışıklarını as","Halil Usta'yı dükkâna getir"]}
+ {need:30,tasks:[{n:"Kemerdeki örümcek ağını al",r:"aweb"},{n:"Kepengin pasını sil",r:"arust"},{n:"Kepengi kaldır",big:1}]},
+ {need:30,tasks:[{n:"Tabelanın tozunu al",r:"adust"},{n:"Kemer taşlarını sil",r:"archd"},{n:"Tezgâhı temizle",big:1}]},
+ {need:40,tasks:[{n:"Bacayı ör",a:"achim"},{n:"Fenerlerin camını sil",r:"aldirt"},{n:"Kırık kiremidi değiştir",r:"atile1"},{n:"Fırını yak",big:1}]},
+ {need:40,tasks:[{n:"İkinci kiremidi değiştir",r:"atile2"},{n:"Sarmaşığı buda",r:"aivy"},{n:"Duvar çatlağını sıva",r:"acrack"},{n:"Oklava rafını kur",big:1}]},
+ {need:50,tasks:[{n:"Sol üst tepsiyi parlat",r:"tTL"},{n:"Sağ üst tepsiyi parlat",r:"tTR"},{n:"Sol tepsileri parlat",r:"tL"},{n:"Sağ tepsileri parlat",r:"tR"},{n:"Tepsileri kalayla",big:1}]},
+ {need:60,tasks:[{n:"Eski ilanları sök",r:"aposters"},{n:"Çatıya saksı diz",a:"apots"},{n:"Saksılara fesleğen dik",a:"aplants"},{n:"Güvercinlere yem koy",a:"apig"},{n:"Vitrinin ilk tahtasını sök",r:"aplank"},{n:"Vitrin camını tak",big:1}]},
+ {need:70,tasks:[{n:"Tabelaya yeni zincir tak",a:"achain"},{n:"Tabelayı zımparala",r:"ascratch"},{n:"Harfleri tabelaya çiz",a:"apencil"},{n:"Bayrak süsünü sola as",a:"abunL"},{n:"Bayrak süsünü sağa as",a:"abunR"},{n:"Tabelaya lamba tak",a:"aslamps"},{n:"Harfleri boya",big:1}]},
+ {need:80,tasks:[{n:"Komşu pencereye perde as",a:"acurt"},{n:"Komşu pencereye çiçeklik koy",a:"awbox"},{n:"Sarmaşığa çiçek ekle",a:"aivyflw"},{n:"Kapıya nazarlık as",a:"anazar"},{n:"Balonları as",a:"aball"},{n:"Hoş geldin pankartı as",a:"abanner"},{n:"Süs ışıklarının telini çek",a:"awire"},{n:"Halil Usta'yı dükkâna getir",big:1}]}
 ];
 const TASK_COST=10;
 const CHAINS={1:["f","s","b"],2:["k","p","m"]};
@@ -533,6 +549,56 @@ function startChapter(n){
   save(); renderAll(); openPage(2,0);
 }
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+
+// ---------- per-task visuals: damage that tasks remove, decor that tasks add (960x540 scene space)
+const POS={web1:[300,148],rust:[480,350],web2:[662,148],web3:[238,222],ivy:[680,150],tile1:[330,42],tile2:[470,32],tile3:[610,46],chim:[670,30],ldirt:[480,240],
+ crackL:[222,165],crackR:[712,170],posters:[830,180],awning:[480,200],slamps:[480,128],pots:[260,62],flowers:[260,52],pigeons:[470,22],
+ frame:[248,168],frameflw:[248,205],bunL:[330,104],bunR:[630,104],cushion:[628,134],cat:[628,126],curt:[862,40],wbox:[862,84],ivyflw:[120,220],pots2:[700,62],wire:[480,82],banner:[480,104],
+ aweb:[365,222],arust:[365,380],adust:[480,156],archd:[480,222],achim:[670,30],aldirt:[480,238],atile1:[330,42],atile2:[610,46],aivy:[140,200],acrack:[222,165],
+ tTL:[291,160],tTR:[672,163],tL:[240,383],tR:[722,365],aposters:[165,190],apots:[260,62],aplants:[260,52],apig:[470,22],aplank:[560,342],
+ achain:[480,112],ascratch:[480,156],apencil:[480,156],abunL:[330,100],abunR:[630,100],aslamps:[480,118],acurt:[862,40],awbox:[862,84],aivyflw:[120,220],anazar:[365,240],aball:[480,200],abanner:[480,96],awire:[480,82]};
+function doneOps(){const C=chap(),add=new Set(),rm=new Set();
+  C.levels.forEach((L,li)=>L.tasks.forEach((t,ti)=>{if(li<S.restored||(li===S.restored&&ti<S.tdone)){if(t.a)add.add(t.a);if(t.r)rm.add(t.r);}}));return {add,rm};}
+let JUST=null;
+function mkScene(){const {add,rm}=doneOps();
+  const dmg=(k,svg)=>rm.has(k)?(JUST===k?`<g class="fxgone">${svg}</g>`:""):svg;
+  const dec=(k,svg)=>add.has(k)?`<g class="${JUST===k?"fxnew":""}" style="transform-origin:${(POS[k]||[480,270]).join("px ")}px">${svg}</g>`:"";
+  return {dmg,dec,has:k=>add.has(k)};}
+// primitives
+const P_={
+ web:(x,y,r,fl)=>{const s=fl?-1:1;let d="";for(let k=0;k<=4;k++){const a=k/4*Math.PI/2;d+=`M${x} ${y}L${x+s*Math.cos(a)*r} ${y+Math.sin(a)*r}`;}
+   for(const f of [.35,.65,.95]){let q="";for(let k=0;k<=4;k++){const a=k/4*Math.PI/2;q+=(k?"L":"M")+(x+s*Math.cos(a)*r*f)+" "+(y+Math.sin(a)*r*f);}d+=q;}
+   return `<path d="${d}" fill="none" stroke="#f2f2f2" stroke-width="1.6" opacity=".75"/>`;},
+ webC:(x,y,r)=>{let d="";for(let k=0;k<8;k++){const a=k/8*6.283;d+=`M${x} ${y}L${x+Math.cos(a)*r} ${y+Math.sin(a)*r}`;}for(const f of [.4,.75,1]){let q="";for(let k=0;k<=8;k++){const a=k/8*6.283;q+=(k?"L":"M")+(x+Math.cos(a)*r*f)+" "+(y+Math.sin(a)*r*f);}d+=q;}
+   return `<path d="${d}" fill="none" stroke="#f2f2f2" stroke-width="1.5" opacity=".7"/>`;},
+ crack:(x,y)=>`<path d="M${x} ${y}l8 14-7 10 9 13-6 12 7 14" fill="none" stroke="#2b2521" stroke-width="3.5" stroke-linecap="round" opacity=".8"/>`,
+ tile:(x,y)=>`<path d="M${x-30} ${y-10}l22-6 20 9 18-5 4 18-24 8-26-4z" fill="#3e3a36" opacity=".9"/><path d="M${x-22} ${y-4}l16 12M${x+2} ${y-6}l-6 18" stroke="#1f1c1a" stroke-width="2"/>`,
+ posters:(x,y)=>`<g transform="rotate(-6 ${x} ${y})"><rect x="${x-28}" y="${y-30}" width="40" height="52" fill="#d9cfb2" opacity=".92"/><path d="M${x-22} ${y-20}h28M${x-22} ${y-12}h22M${x-22} ${y-4}h26" stroke="#8c7d60" stroke-width="3"/></g><g transform="rotate(8 ${x+20} ${y})"><rect x="${x+4}" y="${y-22}" width="34" height="44" fill="#e6b9a6" opacity=".9"/><path d="M${x+4} ${y+12}l10 10 8-8 8 10 8-6v8h-34z" fill="#c9a08f"/></g>`,
+ ivyBlob:(x,y)=>[[0,0,22],[18,10,18],[-14,16,17],[6,30,16],[26,34,13],[-6,46,12]].map(([dx,dy,r])=>`<circle cx="${x+dx}" cy="${y+dy}" r="${r}" fill="${dy%20?"#2f4a24":"#3c5a2b"}"/>`).join(""),
+ rust:()=>[[330,230,30],[400,300,24],[560,260,34],[610,380,26],[470,430,30]].map(([x,y,h])=>`<path d="M${x} ${y}q4 ${h} 0 ${h*2}" stroke="#8a4b20" stroke-width="9" stroke-linecap="round" opacity=".7"/>`).join(""),
+ ldirt:(pts)=>pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="21" fill="#2a2420" opacity=".6"/>`).join(""),
+ chim:(x)=>`<rect x="${x-20}" y="4" width="40" height="56" fill="#a5523a" stroke="#5a2a1a" stroke-width="3"/><rect x="${x-26}" y="0" width="52" height="10" fill="#7a3a26"/><path d="M${x-20} 22h40M${x-20} 40h40M${x} 4v18M${x-10} 22v18M${x+10} 40v20" stroke="#6b3020" stroke-width="2"/>`,
+ smoke:(x)=>[0,1,2].map(k=>`<circle class="smoke" cx="${x+k*6}" cy="0" r="${10+k*4}" fill="#e8e2da" opacity=".55" style="animation-delay:${k*1.1}s"/>`).join(""),
+ awning:(x1,x2,y)=>{const n=10,w=(x2-x1)/n;let s="";for(let k=0;k<n;k++){s+=`<path d="M${x1+k*w} ${y}h${w}v20q${-w/2} 14 ${-w} 0z" fill="${k%2?"#f4ede0":"#2f7d6b"}" stroke="#1f4f44" stroke-width="1.5"/>`;}return s+`<rect x="${x1-4}" y="${y-6}" width="${x2-x1+8}" height="8" rx="3" fill="#1f4f44"/>`;},
+ slamps:(xs,y)=>xs.map(x=>`<path d="M${x} ${y-14}q0-10 12-8" stroke="#3b2414" stroke-width="3" fill="none"/><path d="M${x+6} ${y-8}l12 0 4 9h-20z" fill="#3b2414"/><path d="M${x+2} ${y+1}l-20 46h56l-20-46z" fill="#ffe3a0" opacity=".22"/>`).join(""),
+ pots:(xs,y)=>xs.map(x=>`<path d="M${x-12} ${y-12}h24l-4 20h-16z" fill="#c8693a" stroke="#6b3018" stroke-width="2"/><rect x="${x-14}" y="${y-15}" width="28" height="5" rx="2" fill="#a8532a"/>`).join(""),
+ flowers:(xs,y)=>xs.map(x=>`<path d="M${x} ${y-14}v-10M${x-6} ${y-14}l-3-8M${x+6} ${y-14}l3-8" stroke="#3f7a2e" stroke-width="2.5"/>`+[[0,-28],[-9,-24],[9,-24]].map(([dx,dy])=>`<circle cx="${x+dx}" cy="${y+dy}" r="5.5" fill="#e2492f" stroke="#a3221a" stroke-width="1"/>`).join("")).join(""),
+ plants:(xs,y)=>xs.map(x=>[[-7,-22],[0,-28],[7,-22],[-3,-18],[4,-17]].map(([dx,dy])=>`<ellipse cx="${x+dx}" cy="${y+dy}" rx="6" ry="4" fill="#5aa040" stroke="#2f6a20" stroke-width="1" transform="rotate(${dx*4} ${x+dx} ${y+dy})"/>`).join("")).join(""),
+ pigeons:(pts)=>pts.map(([x,y,f])=>`<g transform="translate(${x} ${y}) scale(${f||1} 1)"><ellipse cx="0" cy="0" rx="14" ry="9" fill="#9aa3ad" stroke="#4a525a" stroke-width="1.5"/><circle cx="12" cy="-7" r="6" fill="#aab3bd" stroke="#4a525a" stroke-width="1.5"/><path d="M17 -7l5 1-5 2z" fill="#d89a3a"/><circle cx="13" cy="-8" r="1.2" fill="#222"/><path d="M-12 -2l-8 4 8 2z" fill="#7d8690"/></g>`).join(""),
+ frame:(x,y)=>`<rect x="${x-21}" y="${y-27}" width="42" height="52" rx="3" fill="#8a5a2a" stroke="#3b2414" stroke-width="2.5"/><rect x="${x-15}" y="${y-21}" width="30" height="40" fill="#e9dcc0"/><circle cx="${x}" cy="${y-6}" r="7" fill="#7a6a5a"/><path d="M${x-11} ${y+19}q11-20 22 0z" fill="#7a6a5a"/><path d="M${x-7} ${y-14}q7-5 14 0" stroke="#4a3a2a" stroke-width="3"/>`,
+ frameflw:(x,y)=>`<rect x="${x-14}" y="${y}" width="28" height="12" rx="3" fill="#c8693a" stroke="#6b3018" stroke-width="2"/>`+[-8,0,8].map(dx=>`<circle cx="${x+dx}" cy="${y-4}" r="5" fill="#f6b8c8" stroke="#c0607a" stroke-width="1"/>`).join(""),
+ bunting:(x1,x2,y)=>{const n=8,w=(x2-x1)/n,cols=["#e2492f","#ffd166","#45c1a8","#f6f0e3","#2f6aa8"];let s=`<path d="M${x1} ${y}Q${(x1+x2)/2} ${y+18} ${x2} ${y}" fill="none" stroke="#5a3a22" stroke-width="2"/>`;
+   for(let k=0;k<n;k++){const cx=x1+w*(k+.5),cy=y+Math.sin((k+.5)/n*Math.PI)*16;s+=`<path d="M${cx-9} ${cy}h18l-9 18z" fill="${cols[k%5]}" stroke="#3b2414" stroke-width="1"/>`;}return s;},
+ cushion:(x,y)=>`<ellipse cx="${x}" cy="${y}" rx="30" ry="9" fill="#c0392b" stroke="#6b1a12" stroke-width="2"/><path d="M${x-22} ${y-2}q22 6 44 0" stroke="#e8705e" stroke-width="2" fill="none"/>`,
+ cat:(x,y)=>`<ellipse cx="${x}" cy="${y-6}" rx="24" ry="12" fill="#f4f1ea" stroke="#5a5048" stroke-width="2"/><circle cx="${x+18}" cy="${y-15}" r="10" fill="#f4f1ea" stroke="#5a5048" stroke-width="2"/><path d="M${x+11} ${y-22}l2-8 5 5M${x+21} ${y-24}l5-6 1 8" fill="#f4f1ea" stroke="#5a5048" stroke-width="2" stroke-linejoin="round"/><path d="M${x+14} ${y-15}q2 2 4 0M${x+20} ${y-15}q2 2 4 0" stroke="#5a5048" stroke-width="1.6" fill="none"/><path d="M${x-22} ${y-2}q-10 4-4 10" stroke="#5a5048" stroke-width="5" stroke-linecap="round" fill="none"/>`,
+ curt:(x1,x2,y1,y2)=>`<path d="M${x1} ${y1}h26q-8 ${(y2-y1)/2} 0 ${y2-y1}h-26z" fill="#e88aa0" opacity=".92"/><path d="M${x2} ${y1}h-26q8 ${(y2-y1)/2} 0 ${y2-y1}h26z" fill="#e88aa0" opacity=".92"/><rect x="${x1-4}" y="${y1-4}" width="${x2-x1+8}" height="6" fill="#7a4a2a"/>`,
+ wbox:(x1,x2,y)=>`<rect x="${x1}" y="${y}" width="${x2-x1}" height="14" rx="3" fill="#8a5a2a" stroke="#3b2414" stroke-width="2"/>`+Array.from({length:6},(_,k)=>`<circle cx="${x1+8+k*(x2-x1-16)/5}" cy="${y-3}" r="5.5" fill="${k%2?"#ffd166":"#e2492f"}" stroke="#7a3a1a" stroke-width="1"/>`).join(""),
+ ivyflw:(pts)=>pts.map(([x,y],k)=>`<circle cx="${x}" cy="${y}" r="4.5" fill="${k%2?"#f6f0f7":"#f6b8c8"}" stroke="#a06080" stroke-width="1"/>`).join(""),
+ wire:(x1,x2,y)=>`<path d="M${x1} ${y}Q${(x1+x2)/2} ${y+30} ${x2} ${y}" fill="none" stroke="#4a3020" stroke-width="2.5"/>`+Array.from({length:12},(_,k)=>{const t=(k+.5)/12,xx=x1+(x2-x1)*t,yy=y+Math.sin(t*Math.PI)*15;return `<circle cx="${xx}" cy="${yy+6}" r="6" fill="#9a9488" stroke="#5a5448" stroke-width="1.5"/>`;}).join(""),
+ banner:(x,y,txt,w)=>`<path d="M${x-w/2} ${y-12}h${w}l-10 12 10 12h-${w}l10-12z" fill="#c0392b" stroke="#6b1a12" stroke-width="2"/><text x="${x}" y="${y+5}" text-anchor="middle" font-family="Fredoka,'Trebuchet MS',sans-serif" font-weight="700" font-size="15" fill="#fff4c9" letter-spacing="1.5">${txt}</text>`,
+ nazar:(x,y)=>`<path d="M${x} ${y-14}v8" stroke="#3b2414" stroke-width="2"/><circle cx="${x}" cy="${y+4}" r="11" fill="#1f5fbf" stroke="#0f2f6b" stroke-width="1.5"/><circle cx="${x}" cy="${y+4}" r="7" fill="#fff"/><circle cx="${x}" cy="${y+4}" r="4.5" fill="#6fb4ef"/><circle cx="${x}" cy="${y+4}" r="2.2" fill="#111"/>`,
+ balloons:(pts)=>pts.map(([x,y,c])=>`<path d="M${x} ${y+16}q-4 18 2 34" stroke="#5a4a3a" stroke-width="1.5" fill="none"/><ellipse cx="${x}" cy="${y}" rx="12" ry="15" fill="${c}" stroke="#3b2a1e" stroke-width="1.5"/><path d="M${x-5} ${y-7}q3-4 7-3" stroke="#fff" stroke-width="2.5" opacity=".6" fill="none"/>`).join(""),
+};
 
 // ---------- energy
 function tickEnergy(){
@@ -704,7 +770,7 @@ function renderRepair(){
     $("rLbl").textContent=one?"1. bölüm tamam":"2. bölüm bitti";$("rName").textContent=one?"Antep yolu açıldı":"3. bölüm yakında";
     $("rBar").style.width="100%";$("rBtn").textContent=one?"Yola çık":"Defter";$("rBtn").disabled=false;return;}
   $("rLbl").textContent=`Görev ${S.tdone+1}/${L.tasks.length}`;
-  $("rName").textContent=L.tasks[S.tdone];
+  $("rName").textContent=L.tasks[S.tdone].n;
   $("rBar").style.width=Math.min(100,S.stars/TASK_COST*100)+"%";
   $("rBtn").innerHTML=`Onar · ★${TASK_COST}`;
   $("rBtn").disabled=S.stars<TASK_COST||busy;
@@ -713,9 +779,12 @@ let busy=false;
 const wait=ms=>new Promise(r=>setTimeout(r,window.__FAST?0:ms));
 function sparks(host,n){for(let k=0;k<n;k++){const sp=document.createElement("i");sp.className="spark";const a=Math.random()*6.283,d=50+Math.random()*90;
   sp.style.setProperty("--dx",Math.cos(a)*d+"px");sp.style.setProperty("--dy",Math.sin(a)*d*.7+"px");sp.style.animationDelay=(Math.random()*.15)+"s";host.appendChild(sp);}}
-async function playSmall(name,rew){
-  const fx=document.createElement("div");fx.className="fx";
-  fx.innerHTML=`<div class="fxcard"><b>✓ ${name}</b><span>${rew}</span></div>`;sparks(fx,14);
+async function playSmall(name,rew,pos){
+  const fx=document.createElement("div");fx.className="fx small";
+  fx.innerHTML=`<div class="fxcard"><b>✓ ${name}</b><span>${rew}</span></div>`;
+  const sp=document.createElement("div");sp.className="sparkat";
+  if(pos){sp.style.left=(pos[0]/9.6)+"%";sp.style.top=(pos[1]/5.4)+"%";}
+  fx.appendChild(sp);sparks(sp,14);
   $("scenewrap").appendChild(fx);await wait(1500);fx.remove();
 }
 async function playBig(oldHtml,lvl){
@@ -730,12 +799,13 @@ async function doTask(){
   const C=chap(),L=C.levels[S.restored];
   if(busy||!L||S.stars<TASK_COST)return;
   busy=true;$("rBtn").disabled=true;
-  S.stars-=TASK_COST;const name=L.tasks[S.tdone];S.tdone++;
+  S.stars-=TASK_COST;const T=L.tasks[S.tdone],name=T.n;S.tdone++;
   let rew;
   if(S.tdone%2){S.energy+=5;rew="+5 ⚡";}
   else{const c=pick(CHAINS[S.chapter]);rew=placeItem({c,l:2})?`Hediye: ${nm(c,2)}`:(S.energy+=5,"+5 ⚡");}
   save();renderTop();renderBoard();
-  await playSmall(name,rew);
+  JUST=T.a||T.r||null;if(JUST)renderScene();
+  await playSmall(name,rew,JUST?POS[JUST]:null);JUST=null;
   if(S.tdone>=L.tasks.length){
     const old=$("scene").innerHTML;
     S.restored++;S.tdone=0;S.energy+=25;placeItem({x:"box"});save();
@@ -763,8 +833,30 @@ function renderScene2(){
       <clipPath id="win"><path d="M462 438V300Q462 208 560 208Q658 208 658 300V438Z"/></clipPath></defs>
     ${r<3?`<rect x="300" y="210" width="130" height="316" fill="#1b1612" opacity=".7" clip-path="url(#door)"/><rect x="460" y="205" width="200" height="236" fill="#1b1612" opacity="${r<2?.82:.6}" clip-path="url(#win)"/>`:""}
     ${r<1?`<rect x="296" y="210" width="138" height="316" fill="url(#sh2)" clip-path="url(#door)"/><rect x="296" y="508" width="138" height="16" fill="#4a4e53"/>`:""}
-    ${r<6?`<path d="M478 262l166 160M478 422l166-160" stroke="#7a5233" stroke-width="15" stroke-linecap="round"/><path d="M478 262l166 160M478 422l166-160" stroke="#9c6b45" stroke-width="8" stroke-linecap="round"/>`:""}
-    ${r<5?trays.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="29" fill="#3a3530" opacity=".55"/>`).join(""):trays.map(([x,y])=>`<path d="M${x-14} ${y-12}q6-8 16-9" stroke="#ffe3b0" stroke-width="4" fill="none" stroke-linecap="round" opacity=".85"/>`).join("")}
+    ${(()=>{const {dmg,dec}=mkScene();
+      const plank=(d)=>`<path d="${d}" stroke="#7a5233" stroke-width="15" stroke-linecap="round"/><path d="${d}" stroke="#9c6b45" stroke-width="8" stroke-linecap="round"/>`;
+      const dim=(pts)=>pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="29" fill="#3a3530" opacity=".58"/>`).join("");
+      return [
+      r>=4?`<g>${[256,266,276].map((y,k)=>`<path d="M${492+k*6} ${y}h${130-k*12}" stroke="#c9955a" stroke-width="6" stroke-linecap="round"/><path d="M${492+k*6} ${y}h${130-k*12}" stroke="#8a5a2a" stroke-width="1.5" stroke-linecap="round" opacity=".6"/>`).join("")}<rect x="484" y="247" width="152" height="5" rx="2" fill="#5a3a22"/></g>`:"",
+      r<6?dmg("aplank",plank("M478 262l166 160")):"", r<6?plank("M478 422l166-160"):"",
+      dmg("tTL",dim([[291,160]])),dmg("tTR",dim([[672,163]])),dmg("tL",dim([[240,348],[240,418]])),dmg("tR",dim([[722,325],[722,405]])),
+      r>=5?trays.map(([x,y])=>`<path d="M${x-14} ${y-12}q6-8 16-9" stroke="#ffe3b0" stroke-width="4" fill="none" stroke-linecap="round" opacity=".85"/>`).join(""):"",
+      r<1?dmg("arust",[[330,280],[362,340],[398,300],[378,420],[340,450]].map(([x,y])=>`<path d="M${x} ${y}q4 30 0 60" stroke="#8a4b20" stroke-width="9" stroke-linecap="round" opacity=".7"/>`).join("")):"",
+      dmg("aweb",P_.webC(365,230,34)),
+      dmg("adust",`<rect x="364" y="127" width="232" height="58" rx="6" fill="#4a3c30" opacity=".55"/>`+[[390,140],[450,170],[520,145],[575,168]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9" fill="#3a2e24" opacity=".5"/>`).join("")),
+      dmg("archd",`<path d="M300 282Q300 214 365 214Q430 214 430 282M462 302Q462 208 560 208Q658 208 658 302" fill="none" stroke="#2e2a26" stroke-width="20" opacity=".5"/>`),
+      dec("achim",P_.chim(670)+(r>=3?P_.smoke(676):"")),dmg("aldirt",P_.ldirt([[238,248],[727,230],[118,248]])),
+      dmg("atile1",P_.tile(330,42)),dmg("atile2",P_.tile(610,46)),dmg("aivy",P_.ivyBlob(130,165)),dmg("acrack",P_.crack(80,64)),
+      dmg("aposters",P_.posters(160,205)),dec("apots",P_.pots([220,262,304],74)),dec("aplants",P_.plants([220,262,304],74)),dec("apig",P_.pigeons([[440,26],[480,20,-1],[516,28]])),
+      dec("achain",`<path d="M392 98v28M568 98v28" stroke="#ffd166" stroke-width="4" stroke-dasharray="6 3"/>`),
+      dmg("ascratch",`<path d="M380 140l60 8M420 172l70-10M500 136l50 14M530 176l45-6" stroke="#2a1a10" stroke-width="2.5" opacity=".65"/>`),
+      r<7?dec("apencil",`<text x="480" y="160" text-anchor="middle" font-family="${F}" font-weight="700" font-size="31" fill="none" stroke="#f6efe2" stroke-width="1.2" stroke-dasharray="3 2" textLength="210" lengthAdjust="spacingAndGlyphs">HALİL &amp; MEHMET</text>`):"",
+      dec("abunL",P_.bunting(196,480,90)),dec("abunR",P_.bunting(480,775,90)),dec("aslamps",P_.slamps([382,562],118)),
+      dec("acurt",P_.curt(822,902,4,76)),dec("awbox",P_.wbox(818,906,80)),
+      dec("aivyflw",P_.ivyflw([[70,190],[100,215],[130,180],[150,240],[90,262],[172,204],[800,40],[842,100],[900,112],[930,60],[782,122]])),
+      dec("anazar",P_.nazar(365,236)),dec("aball",P_.balloons([[196,186,"#e2492f"],[176,204,"#ffd166"],[768,172,"#45c1a8"],[790,190,"#e2492f"]])),
+      r<8?dec("awire",P_.wire(195,775,74)):"",dec("abanner",P_.banner(480,106,"HOŞ GELDİN HALİL USTA",270))
+    ].join("")})()}
     ${r>=3?glow(585,330,120)+glow(238,248,80)+glow(727,230,80)+glow(118,248,55)+glow(365,400,90,.7):""}
     ${r>=7?`<g class="signin"><text x="480" y="160" text-anchor="middle" font-family="${F}" font-weight="700" font-size="31" fill="url(#gold2)" stroke="#2a170b" stroke-width="3" paint-order="stroke" textLength="210" lengthAdjust="spacingAndGlyphs">HALİL &amp; MEHMET</text>
       <path d="M392 168h176" stroke="#ffd166" stroke-width="1.6" opacity=".8"/><circle cx="480" cy="168" r="3" fill="#ffd166"/>
@@ -795,6 +887,23 @@ function renderScene(){
       <text x="481" y="135" text-anchor="middle" font-family="${F}" font-weight="600" font-size="12" fill="#f6e3c0" stroke="#2a1a10" stroke-width="2" paint-order="stroke" letter-spacing="3">ESNAF LOKANTASI · 1974</text></g>`:""}
     ${r>=2?`<rect x="696" y="316" width="50" height="66" fill="#5a3a22" opacity=".0"/><text x="720" y="358" text-anchor="middle" font-family="${F}" font-weight="700" font-size="17" fill="#f6efe2" transform="rotate(-4 720 358)">AÇIK</text>`:""}
     ${r>=3?glow(238,252,90)+glow(727,234,90)+glow(120,256,60)+glow(545,340,170):""}
+    ${(()=>{const {dmg,dec,has}=mkScene();return [
+      r<1?dmg("rust",P_.rust()):"",
+      dmg("web1",P_.web(296,142,46,false)),dmg("web2",P_.web(666,142,46,true)),dmg("web3",P_.webC(238,222,30)),
+      dmg("ivy",P_.ivyBlob(660,110)),dmg("tile1",P_.tile(330,42)),dmg("tile2",P_.tile(470,32)),dmg("tile3",P_.tile(610,46)),
+      dec("chim",P_.chim(670)+(r>=3?P_.smoke(676):"")),dmg("ldirt",P_.ldirt([[238,252],[727,234],[120,256]])),
+      dmg("crackL",P_.crack(215,125)),dmg("crackR",P_.crack(705,130)),dmg("posters",P_.posters(830,180)),
+      dec("awning",P_.awning(292,670,186)),dec("slamps",P_.slamps([322,604],130)),
+      dec("pots",P_.pots([220,262,304],74)),dec("flowers",P_.flowers([220,262,304],74)),dec("pigeons",P_.pigeons([[440,26],[480,20,-1],[516,28]])),
+      dec("frame",P_.frame(248,168)),dec("frameflw",P_.frameflw(248,198)),
+      dec("bunL",P_.bunting(196,480,94)),dec("bunR",P_.bunting(480,775,94)),
+      dec("curt",P_.curt(822,902,4,76)),dec("wbox",P_.wbox(818,906,80)),
+      dec("ivyflw",P_.ivyflw([[70,190],[100,215],[130,180],[150,240],[90,262],[172,204],[800,40],[842,100],[900,112],[930,60],[782,122]])),
+      dec("pots2",P_.pots([660,702,744],74)+P_.flowers([660,702,744],74)),
+      r<5?dec("wire",P_.wire(195,775,74)):"",
+      dec("banner",P_.banner(480,108,"HOŞ GELDİNİZ",200)),
+      dec("cushion",P_.cushion(628,136)),dec("cat",P_.cat(628,136))
+    ].join("")})()}
     ${r>=5?`<path d="M195 74Q340 104 482 74T775 74" fill="none" stroke="#4a3020" stroke-width="2.5"/>${[220,262,304,346,388,430,534,576,618,660,702,744].map((x,k)=>`<circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="6.5" fill="#ffd166" stroke="#c98a2a" stroke-width="1.5"/><circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="16" fill="url(#lg)"/>`).join("")}`:""}
   </svg>`;
 
@@ -874,7 +983,7 @@ function fitBoard(){
   const under=document.querySelector(".under"); const uh=under?under.getBoundingClientRect().height:40;
   const reserve=standalone?12:78; // Safari floating bottom bar
   const avail=Math.floor(vh-top-uh-reserve-14);
-  bd.style.maxWidth="";
+  bd.style.maxWidth=Math.max(318,Math.min(avail,bd.parentElement.clientWidth))+"px";
 }
 window.addEventListener("resize",fitBoard);
 if(window.visualViewport)visualViewport.addEventListener("resize",fitBoard);
