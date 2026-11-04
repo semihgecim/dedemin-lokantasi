@@ -173,20 +173,43 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .needs .av{margin-right:2px}
 .order{gap:5px}
 @media (prefers-reduced-motion:reduce){.scenewrap .speech{transition:none}}
+
+/* scene as hero: full image with HUD + repair laid over it */
+.scene{position:relative}
+.scenebox .photo{height:auto;aspect-ratio:16/9}
+.hud{position:absolute;top:0;left:0;right:0;z-index:3;padding:8px 10px 18px;background:linear-gradient(rgba(9,26,22,.88),rgba(9,26,22,.55) 60%,rgba(9,26,22,0))}
+.hud h1{text-shadow:0 2px 6px rgba(0,0,0,.6)}
+.hud .chip{background:rgba(16,48,42,.82);backdrop-filter:blur(2px)}
+.hud .bookchip{background:var(--copper)}
+.scene .repair{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:18px 10px 8px;background:linear-gradient(rgba(9,26,22,0),rgba(9,26,22,.82) 45%,rgba(9,26,22,.92))}
+.scene .repair .name{text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.scenewrap .speech{top:auto;bottom:62px}
+#scene>svg{display:block;width:100%;height:auto}
+
+/* lighter overlays so the shop stays visible */
+.hud{padding:8px 10px 6px;background:linear-gradient(rgba(9,26,22,.6),rgba(9,26,22,0))}
+.scene .repair{padding:6px 8px;background:none}
+.scene .repair .txt{background:rgba(9,26,22,.74);border-radius:10px;padding:5px 9px;backdrop-filter:blur(2px)}
+.boardwrap{position:relative}
+.boardwrap .speech{position:absolute;left:10px;right:10px;top:10px;height:auto;z-index:4;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .3s;pointer-events:none;box-shadow:0 6px 16px rgba(0,0,0,.4)}
+.boardwrap .speech.show{opacity:.97;transform:none}
+
+@media (max-width:440px){.hud h1{font-size:0;flex:1}}
+.hud{gap:6px}
 </style>
 
 </head>
 <body>
 <div class="app" id="app">
-  <div class="top">
+
+  <section class="scene">
+  <div class="top hud">
     <h1>Dedemin Lokantası</h1>
     <div class="chip" title="Para"><span class="coin"></span><span id="coins">0</span></div>
     <div class="chip" title="Enerji"><span class="bolt">⚡</span><span id="energy">50</span><small id="etimer"></small></div>
     <button class="chip bookchip" id="bookBtn" type="button" aria-label="Defter">Defter</button>
   </div>
-
-  <section class="scene">
-    <div class="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Lokantanın ön cephesi"></div><div class="speech" id="speech" aria-live="polite"></div></div>
+    <div class="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Lokantanın ön cephesi"></div></div>
     <div class="repair">
       <div class="txt">
         <div class="rline"><span class="lbl" id="rLbl">Sıradaki onarım</span><span class="name" id="rName"></span></div>
@@ -199,6 +222,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
   <div class="orders" id="orders"></div>
 
   <section class="boardwrap">
+    <div class="speech" id="speech" aria-live="polite"></div>
     <div class="board" id="board"></div>
     <div class="under"><div class="info" id="info">Tahtadaki bakır karelere dokun, malzeme çıksın.</div><div class="sell" id="sell">Sat</div></div>
   </section>
@@ -507,6 +531,7 @@ function drop(from,to){
 }
 const boardEl=$("board");
 boardEl.addEventListener("pointerdown",e=>{
+  $("speech").classList.remove("show");
   const it=e.target.closest(".item"); if(!it)return;
   e.preventDefault();
   drag={from:+it.dataset.i,x:e.clientX,y:e.clientY,moving:false,ghost:null,el:it,over:null};
@@ -564,8 +589,8 @@ function renderTop(){$("coins").textContent=S.coins;tickEnergy();}
 function renderRepair(){
   const C=chap(), r=C.repairs[S.restored];
   if(!r){const one=S.chapter===1;
-    $("rLbl").textContent=one?"1. bölüm tamam":"2. bölüm tamam · 3. bölüm yakında";$("rName").textContent=one?"Antep yolu açıldı":"İzmir'e Söz geliyor";
-    $("rBar").style.width="100%";$("rBtn").textContent=one?"Yola çık":"Defteri oku";$("rBtn").disabled=false;return;}
+    $("rLbl").textContent=one?"1. bölüm tamam":"2. bölüm bitti";$("rName").textContent=one?"Antep yolu açıldı":"3. bölüm yakında";
+    $("rBar").style.width="100%";$("rBtn").textContent=one?"Yola çık":"Defter";$("rBtn").disabled=false;return;}
   $("rLbl").textContent=`${C.place} · Onarım ${S.restored+1}/${C.repairs.length}`;
   $("rName").textContent=r.name;
   $("rBar").style.width=Math.min(100,S.coins/r.cost*100)+"%";
