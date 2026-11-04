@@ -401,7 +401,14 @@ function newOrder(){
   const cap=S.chapter===1?2+S.restored:3+Math.floor(S.restored/2);
   const items=[];
   const count=P.pet?1:(S.chapter===2?(Math.random()<0.55?2:1):(S.restored>=1&&Math.random()<0.45?2:1));
-  for(let k=0;k<count;k++){
+  // smart order: sometimes ask for something already sitting on the board
+  if(!P.pet&&Math.random()<0.5){
+    const taken={};S.orders.filter(Boolean).forEach(o=>o.items.forEach(x=>{const k=x.c+x.l;taken[k]=(taken[k]||0)+1;}));
+    const cand=[];S.board.forEach(x=>{if(x&&x.c&&x.l>=2&&P.likes.includes(x.c))cand.push(x);});
+    const m=boardCounts();const free=cand.filter(x=>(m[x.c+x.l]||0)>(taken[x.c+x.l]||0));
+    if(free.length){free.sort((a,b)=>b.l-a.l);const x=free[Math.floor(Math.random()*Math.min(3,free.length))];items.push({c:x.c,l:x.l});}
+  }
+  for(let k=items.length;k<count;k++){
     const c=pick(P.likes);
     const top=P.pet?2:Math.min(max(c),cap);
     let l=1+Math.floor(Math.random()*top);
@@ -649,6 +656,7 @@ function openBook(){
   };
 }
 $("bookBtn").addEventListener("click",openBook);
+$("sell").addEventListener("click",()=>{if(sel>-1&&S.board[sel])drop(sel,"sell");else toast("Satmak için önce bir eşyaya dokun ya da eşyayı buraya sürükle.");});
 $("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&seen(S.chapter))$("sheet").hidden=true;});
 
 // ---------- boot
