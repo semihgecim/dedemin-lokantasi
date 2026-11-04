@@ -1547,7 +1547,9 @@ for(let i=0;i<S.orders.length;i++){if(!S.orders[i])S.orders[i]=newOrder();}
 {const seenP={};S.orders.forEach((o,i)=>{if(seenP[o.p]){S.orders[i]=null;S.orders[i]=newOrder();}seenP[S.orders[i].p]=1;});}
 renderAll();
 requestAnimationFrame(fitBoard);setTimeout(fitBoard,400);
-if(!seen(S.chapter)) openPage(S.chapter,0); else setTimeout(dailyCheck,900);
+const JUMP=KEY.endsWith("beta")?+(new URLSearchParams(location.search).get("bolum")||0):0;
+if(JUMP>=2&&JUMP<=MAXCH){try{history.replaceState(null,"",location.pathname);}catch(e){}S.stars=Math.max(S.stars,20);startChapter(JUMP);}
+else if(!seen(S.chapter)) openPage(S.chapter,0); else setTimeout(dailyCheck,900);
 })();
 </script>
 
