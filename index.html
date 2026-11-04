@@ -233,6 +233,35 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 @keyframes conf{to{transform:translateY(260px) rotate(540deg);opacity:.2}}
 .item.box{background:linear-gradient(#ffe7a8,#e5a53c)}
 @media (prefers-reduced-motion:reduce){.cust.ready .bub{animation:none}}
+
+/* v4: bright checkered board with large items */
+.boardwrap{background:#f4f0e4;padding:6px;border-radius:16px;box-shadow:inset 0 0 0 3px #d9cfb4}
+.board{gap:0;border-radius:10px;overflow:hidden}
+.cell{border-radius:0;background:#efe9d8;box-shadow:none}
+.cell.alt{background:#e4ddc8}
+.cell.target{background:#bfe8dc}
+.item{width:100%;height:100%;border-radius:0;background:none!important;box-shadow:none}
+.item img{width:96%;height:96%;filter:drop-shadow(0 3px 2px rgba(60,40,20,.28))}
+.item svg{width:90%;height:90%;filter:drop-shadow(0 2px 2px rgba(60,40,20,.22))}
+.item .lv{right:2px;bottom:1px;min-width:13px;height:13px;border-radius:7px;background:rgba(40,30,20,.62);color:#fff;font:700 .58rem/13px var(--display);text-align:center;opacity:1;padding:0 2px}
+.item.gen{background:radial-gradient(circle,rgba(255,206,120,.75) 0,rgba(255,206,120,.25) 55%,rgba(255,206,120,0) 72%)!important;box-shadow:none}
+.item.box{background:radial-gradient(circle,rgba(255,230,140,.9) 0,rgba(255,230,140,0) 70%)!important}
+.item.sel{outline:3px solid var(--turq);outline-offset:-3px;border-radius:8px}
+.dragghost{background:none!important;box-shadow:none;width:64px;height:64px}
+.dragghost img,.dragghost svg{filter:drop-shadow(0 8px 8px rgba(0,0,0,.35))}
+.under .info{color:#6b5a3e}
+.under .info b{color:#2a2620}
+.sell{border-color:#c9bc98;color:#8a7650}
+.sell.target{border-color:var(--copper);color:#2a2620;background:rgba(208,121,60,.18)}
+.bub{padding:4px 6px 4px 5px;gap:4px;border-radius:13px}
+.bub .need{width:38px;height:38px;border-radius:9px;background:none!important}
+.bub .need img{width:100%;height:100%}
+.bub .need.ok:after{right:-3px;bottom:-3px}
+.bub .st{position:absolute;top:-9px;right:-7px;background:#2a2620;color:#ffd166;border-radius:9px;padding:1px 6px;font:700 .66rem/1.4 var(--display);box-shadow:0 2px 5px rgba(0,0,0,.3)}
+.cust.ready .bub .st{background:var(--turq);color:#08302a}
+.pface{width:38px;height:38px}
+.signin{animation:signIn .9s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes signIn{0%{transform:translateY(-30px);opacity:0}100%{transform:none;opacity:1}}
 </style>
 
 </head>
@@ -521,20 +550,22 @@ function newOrder(){
   const pool=chap().people.concat(S.chapter===2&&S.restored>=5?["halil"]:[]);
   const free=pool.filter(k=>!busy.includes(k));
   const p=pick(free), P=PEOPLE[p];
-  const cap=S.chapter===1?2+S.restored:3+Math.floor(S.restored/2);
+  const C0=chap(), prog=C0.levels.slice(0,S.restored).reduce((a,L)=>a+L.tasks.length,0)+S.tdone;
+  const cap=S.chapter===1?2+Math.floor(prog/4):3+Math.floor(prog/6);
+  const minL=S.chapter===1?1+Math.floor(prog/7):1+Math.floor(prog/8);
   const items=[];
-  const count=P.pet?1:(S.chapter===2?(Math.random()<0.55?2:1):(S.restored>=1&&Math.random()<0.45?2:1));
+  const count=P.pet?1:(Math.random()<Math.min(0.7,0.2+prog*0.02)?2:1);
   // smart order: sometimes ask for something already sitting on the board
   if(!P.pet&&Math.random()<0.5){
     const taken={};S.orders.filter(Boolean).forEach(o=>o.items.forEach(x=>{const k=x.c+x.l;taken[k]=(taken[k]||0)+1;}));
-    const cand=[];S.board.forEach(x=>{if(x&&x.c&&x.l>=2&&P.likes.includes(x.c))cand.push(x);});
+    const cand=[];S.board.forEach(x=>{if(x&&x.c&&x.l>=Math.max(2,minL)&&P.likes.includes(x.c))cand.push(x);});
     const m=boardCounts();const free=cand.filter(x=>(m[x.c+x.l]||0)>(taken[x.c+x.l]||0));
     if(free.length){free.sort((a,b)=>b.l-a.l);const x=free[Math.floor(Math.random()*Math.min(3,free.length))];items.push({c:x.c,l:x.l});}
   }
   for(let k=items.length;k<count;k++){
     const c=pick(P.likes);
-    const top=P.pet?2:Math.min(max(c),cap);
-    let l=1+Math.floor(Math.random()*top);
+    const top=P.pet?2:Math.min(max(c),cap), lo=P.pet?1:Math.min(top,minL);
+    let l=lo+Math.floor(Math.random()*(top-lo+1));
     if(!P.pet&&l<2&&Math.random()<0.7)l=Math.min(2,top);
     items.push({c,l});
   }
@@ -560,7 +591,7 @@ function renderBoard(){
   const b=$("board"); let h="";
   for(let i=0;i<N;i++){
     const x=S.board[i];
-    h+=`<div class="cell" data-i="${i}">${x?`<div class="item ${x.x?"gen box":x.g?"gen":"c-"+x.c}${i===sel?" sel":""}${fx[i]?" "+fx[i]:""}" data-i="${i}">${art(x)}${(x.g||x.x)?"":`<span class="lv">${x.l}</span>`}</div>`:""}</div>`;
+    h+=`<div class="cell${(i%7+Math.floor(i/7))%2?" alt":""}" data-i="${i}">${x?`<div class="item ${x.x?"gen box":x.g?"gen":"c-"+x.c}${i===sel?" sel":""}${fx[i]?" "+fx[i]:""}" data-i="${i}">${art(x)}${(x.g||x.x)?"":`<span class="lv">${x.l}</span>`}</div>`:""}</div>`;
   }
   b.innerHTML=h; fx={};
   renderOrders();
@@ -726,7 +757,7 @@ function renderScene2(){
   const trays=[[291,160],[240,348],[240,418],[672,163],[722,325],[722,405]];
   $("scene").innerHTML=`<img class="photo" src="${ANTEP}" alt="" style="filter:grayscale(${((8-r)*0.08).toFixed(2)}) brightness(${(0.62+r*0.0475).toFixed(2)})">
   <svg class="over" viewBox="0 0 960 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-    <defs><radialGradient id="lg2"><stop offset="0" stop-color="#ffcf73" stop-opacity=".6"/><stop offset="1" stop-color="#ffcf73" stop-opacity="0"/></radialGradient>
+    <defs><linearGradient id="gold2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4c9"/><stop offset=".5" stop-color="#ffd166"/><stop offset="1" stop-color="#e0a030"/></linearGradient><radialGradient id="lg2"><stop offset="0" stop-color="#ffcf73" stop-opacity=".6"/><stop offset="1" stop-color="#ffcf73" stop-opacity="0"/></radialGradient>
       <pattern id="sh2" width="10" height="13" patternUnits="userSpaceOnUse"><rect width="10" height="13" fill="#7d838a"/><rect y="10" width="10" height="3" fill="#5d6268"/></pattern>
       <clipPath id="door"><path d="M300 524V280Q300 214 365 214Q430 214 430 280V524Z"/></clipPath>
       <clipPath id="win"><path d="M462 438V300Q462 208 560 208Q658 208 658 300V438Z"/></clipPath></defs>
@@ -735,8 +766,9 @@ function renderScene2(){
     ${r<6?`<path d="M478 262l166 160M478 422l166-160" stroke="#7a5233" stroke-width="15" stroke-linecap="round"/><path d="M478 262l166 160M478 422l166-160" stroke="#9c6b45" stroke-width="8" stroke-linecap="round"/>`:""}
     ${r<5?trays.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="29" fill="#3a3530" opacity=".55"/>`).join(""):trays.map(([x,y])=>`<path d="M${x-14} ${y-12}q6-8 16-9" stroke="#ffe3b0" stroke-width="4" fill="none" stroke-linecap="round" opacity=".85"/>`).join("")}
     ${r>=3?glow(585,330,120)+glow(238,248,80)+glow(727,230,80)+glow(118,248,55)+glow(365,400,90,.7):""}
-    ${r>=7?`<text x="480" y="156" text-anchor="middle" font-family="${F}" font-weight="700" font-size="25" fill="#f6e7c4" stroke="#3b2414" stroke-width="1.2" textLength="196" lengthAdjust="spacingAndGlyphs">HALİL &amp; MEHMET</text>
-      <text x="480" y="177" text-anchor="middle" font-family="${F}" font-weight="600" font-size="13" fill="#f3d79c" letter-spacing="2">BAKLAVA · 1979</text>`:""}
+    ${r>=7?`<g class="signin"><text x="480" y="160" text-anchor="middle" font-family="${F}" font-weight="700" font-size="31" fill="url(#gold2)" stroke="#2a170b" stroke-width="3" paint-order="stroke" textLength="210" lengthAdjust="spacingAndGlyphs">HALİL &amp; MEHMET</text>
+      <path d="M392 168h176" stroke="#ffd166" stroke-width="1.6" opacity=".8"/><circle cx="480" cy="168" r="3" fill="#ffd166"/>
+      <text x="480" y="183" text-anchor="middle" font-family="${F}" font-weight="600" font-size="13" fill="#ffe7b0" stroke="#2a170b" stroke-width="2" paint-order="stroke" letter-spacing="3">BAKLAVA · 1979</text></g>`:""}
     ${r>=8?`<path d="M195 74Q340 104 482 74T775 74" fill="none" stroke="#4a3020" stroke-width="2.5"/>${[220,262,304,346,388,430,534,576,618,660,702,744].map((x,k)=>`<circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="6.5" fill="#ffd166" stroke="#c98a2a" stroke-width="1.5"/><circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="16" fill="url(#lg2)"/>`).join("")}`:""}
   </svg>`;
 }
@@ -748,12 +780,19 @@ function renderScene(){
   $("scene").innerHTML=`<img class="photo" src="${SHOP}" alt="" style="filter:grayscale(${((5-r)*0.13).toFixed(2)}) brightness(${(0.62+r*0.076).toFixed(2)})">
   <svg class="over" viewBox="0 0 960 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs><radialGradient id="lg"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+      <linearGradient id="cu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e79a5a"/><stop offset=".55" stop-color="#c46a2e"/><stop offset="1" stop-color="#9a4f20"/></linearGradient>
+      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff4c9"/><stop offset=".5" stop-color="#ffd166"/><stop offset="1" stop-color="#e0a030"/></linearGradient>
       <pattern id="sh" width="10" height="14" patternUnits="userSpaceOnUse"><rect width="10" height="14" fill="#7d838a"/><rect y="11" width="10" height="3" fill="#5d6268"/></pattern></defs>
     ${r<3?`<rect x="300" y="246" width="365" height="274" fill="#1b1612" opacity=".72"/>`:""}
     ${r<1?`<rect x="292" y="188" width="378" height="334" fill="url(#sh)"/><rect x="292" y="508" width="378" height="14" fill="#4a4e53"/><rect x="455" y="496" width="52" height="8" rx="3" fill="#3a3d41"/>`:""}
     ${r>=1&&r<4?`<path d="M452 262l186 146M452 408l186-146" stroke="#7a5233" stroke-width="16" stroke-linecap="round"/><path d="M452 262l186 146M452 408l186-146" stroke="#9c6b45" stroke-width="9" stroke-linecap="round"/>`:""}
-    ${r>=1?`<rect x="300" y="146" width="362" height="38" rx="5" fill="#d0793c" stroke="#7a3d17" stroke-width="3"/>
-      <text x="481" y="174" text-anchor="middle" font-family="${F}" font-weight="700" font-size="24" fill="#2a1a10" textLength="326" lengthAdjust="spacingAndGlyphs">MEHMET USTA LOKANTASI</text>`:""}
+    ${r>=1?`<g class="signin">
+      <rect x="292" y="139" width="378" height="52" rx="8" fill="#3b2414"/>
+      <rect x="296" y="142" width="370" height="46" rx="6" fill="url(#cu)" stroke="#5a3218" stroke-width="2"/>
+      <rect x="303" y="148" width="356" height="34" rx="4" fill="none" stroke="#f6c58a" stroke-width="1.6" stroke-dasharray="1 0" opacity=".75"/>
+      ${[[304,150],[658,150],[304,180],[658,180]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3" fill="#ffe0a8" stroke="#5a3218" stroke-width="1"/>`).join("")}
+      <text x="481" y="177" text-anchor="middle" font-family="${F}" font-weight="700" font-size="27" fill="url(#gold)" stroke="#3b2414" stroke-width="2.4" paint-order="stroke" textLength="318" lengthAdjust="spacingAndGlyphs">MEHMET USTA LOKANTASI</text>
+      <text x="481" y="135" text-anchor="middle" font-family="${F}" font-weight="600" font-size="12" fill="#f6e3c0" stroke="#2a1a10" stroke-width="2" paint-order="stroke" letter-spacing="3">ESNAF LOKANTASI · 1974</text></g>`:""}
     ${r>=2?`<rect x="696" y="316" width="50" height="66" fill="#5a3a22" opacity=".0"/><text x="720" y="358" text-anchor="middle" font-family="${F}" font-weight="700" font-size="17" fill="#f6efe2" transform="rotate(-4 720 358)">AÇIK</text>`:""}
     ${r>=3?glow(238,252,90)+glow(727,234,90)+glow(120,256,60)+glow(545,340,170):""}
     ${r>=5?`<path d="M195 74Q340 104 482 74T775 74" fill="none" stroke="#4a3020" stroke-width="2.5"/>${[220,262,304,346,388,430,534,576,618,660,702,744].map((x,k)=>`<circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="6.5" fill="#ffd166" stroke="#c98a2a" stroke-width="1.5"/><circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="16" fill="url(#lg)"/>`).join("")}`:""}
