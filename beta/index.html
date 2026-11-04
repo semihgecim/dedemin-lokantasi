@@ -344,6 +344,21 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .dlgbub b{font:700 1rem var(--display);color:#b5561c}
 .dlgbub p{margin:0;font-size:.95rem;line-height:1.4}
 .dlgnext{align-self:flex-end;font:700 .78rem var(--display);color:#0f6b5b}
+/* board screen fills the phone: bigger faces, bigger items, items sit on the board */
+.app.boardmode{padding-left:max(6px,env(safe-area-inset-left,0px));padding-right:max(6px,env(safe-area-inset-right,0px))}
+.boardscr .custhead{padding-top:calc(12px + var(--chx,0px)*.35);padding-bottom:calc(10px + var(--chx,0px)*.15)}
+.boardscr .custhead .pface{width:var(--pf,66px);height:var(--pf,66px)}
+.boardscr .custhead .bub .need{width:var(--nd,42px);height:var(--nd,42px)}
+.boardscr .boardwrap{padding:5px}
+.boardscr .gobtn.back{padding-block:calc(12px + var(--gbx,0px))}
+.boardscr .item{overflow:visible}
+.boardscr .item:before{content:"";position:absolute;left:16%;right:16%;bottom:7%;height:15%;border-radius:50%;background:radial-gradient(closest-side,rgba(70,55,30,.32),rgba(70,55,30,0));pointer-events:none}
+.boardscr .item img{width:112%;height:112%;max-width:none;transform:translateY(-5%);filter:none;position:relative}
+.boardscr .item svg{width:104%;height:104%;transform:translateY(-4%);filter:none;position:relative}
+.boardscr .item.gen img,.boardscr .item.gen svg{animation:genGlow2 2.6s ease-in-out infinite}
+@keyframes genGlow2{0%,100%{filter:none}50%{filter:drop-shadow(0 0 7px rgba(255,200,90,.95))}}
+.boardscr .item .lv{z-index:2;right:1px;bottom:1px;min-width:12px;height:12px;font-size:.54rem;line-height:12px;background:rgba(40,30,20,.5)}
+.boardscr .item.sel img,.boardscr .item.sel svg{transform:translateY(-9%) scale(1.06)}
 @media (prefers-reduced-motion:reduce){.taskbtn.can,.gobtn.pulse,.gobtn.back.ready,.custhead .pface,.item.gen img,.item.gen svg{animation:none}}
 
 .upnext{margin:2px 0 0;padding:8px 0 0;list-style:none;border-top:1px solid rgba(246,240,227,.12);display:flex;flex-direction:column;gap:5px}
@@ -614,7 +629,7 @@ function playDialog(lines){
 const ICO={hammer:`<svg viewBox="0 0 64 64"><rect x="29" y="22" width="7" height="36" rx="3" fill="#c9955a" stroke="#3b2414" stroke-width="2.5" transform="rotate(-35 32 40)"/><path d="M14 16l18-10 12 6-6 10-8-3-10 6z" fill="#b8c2cc" stroke="#3b2414" stroke-width="2.5" stroke-linejoin="round"/><path d="M20 15l12-6" stroke="#fff" stroke-width="2.5" opacity=".6"/></svg>`,
  letter:`<svg viewBox="0 0 64 64"><rect x="8" y="16" width="48" height="34" rx="4" fill="#fff4dc" stroke="#3b2414" stroke-width="2.5"/><path d="M8 18l24 18 24-18" fill="none" stroke="#3b2414" stroke-width="2.5"/><circle cx="32" cy="36" r="7" fill="#c0392b" stroke="#6b1a12" stroke-width="2"/><path d="M29 36h6M32 33v6" stroke="#ffd166" stroke-width="2"/></svg>`};
 let VIEW="home";
-function setView(v){VIEW=v;$("homeScr").hidden=v!=="home";$("boardScr").hidden=v!=="board";try{window.scrollTo(0,0);}catch(e){}if(v==="board"){renderOrders();requestAnimationFrame(fitBoard);}updateNav();}
+function setView(v){VIEW=v;const ap=document.querySelector(".app");if(ap)ap.classList.toggle("boardmode",v==="board");$("homeScr").hidden=v!=="home";$("boardScr").hidden=v!=="board";try{window.scrollTo(0,0);}catch(e){}if(v==="board"){renderOrders();requestAnimationFrame(fitBoard);}updateNav();}
 function updateNav(){
   const C=chap(),L=C.levels[S.restored],ready=L&&S.stars>=TASK_COST;
   const gh=$("goHome"),gb=$("goBoard");if(!gh)return;
@@ -1606,15 +1621,24 @@ $("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&seen(S.c
 
 // ---------- fit the board to the visible screen
 function fitBoard(){
-  const bd=$("board"); if(!bd)return;
+  const bd=$("board"); if(!bd||$("boardScr").hidden)return;
+  const root=$("boardScr");["--pf","--nd","--chx","--gbx"].forEach(k=>root.style.removeProperty(k));
   bd.style.maxWidth="";
   const standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;
   const vh=(window.visualViewport?visualViewport.height:innerHeight);
+  const reserve=standalone?10:(/iPhone|iPad/.test(navigator.userAgent)?70:10); // Safari floating bottom bar
   const top=bd.getBoundingClientRect().top+window.scrollY;
   const under=document.querySelector(".under"); const uh=under?under.getBoundingClientRect().height:40;
-  const reserve=standalone?12:78; // Safari floating bottom bar
-  const avail=Math.floor(vh-top-uh-reserve-14);
-  bd.style.maxWidth=Math.max(318,Math.min(avail,bd.parentElement.clientWidth))+"px";
+  const gh=$("goHome").getBoundingClientRect().height+8;
+  const ios=/iPhone|iPad/.test(navigator.userAgent);const avail=Math.floor(vh-top-uh-(ios&&!standalone?0:gh)-reserve-14);
+  const w=Math.max(300,Math.min(avail,bd.parentElement.clientWidth));
+  bd.style.maxWidth=w+"px";
+  // spare height left under the button: give it to bigger customers and a taller button
+  const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
+  if(spare>8){const pf=Math.min(112,66+spare*.32),nd=Math.min(60,42+spare*.1);
+    root.style.setProperty("--pf",pf+"px");root.style.setProperty("--nd",nd+"px");
+    const used=(pf-66)+(nd-42);const rest=Math.max(0,spare-used);
+    root.style.setProperty("--chx",Math.min(80,rest*.55)+"px");root.style.setProperty("--gbx",Math.min(8,rest*.1)+"px");}
 }
 window.addEventListener("resize",fitBoard);
 if(window.visualViewport)visualViewport.addEventListener("resize",fitBoard);
