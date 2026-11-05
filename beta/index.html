@@ -381,6 +381,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
     <div class="lvl" id="lvl" title="Dükkân seviyesi"><span id="lvlTxt">Dükkân</span><i><b id="lvlBar"></b></i></div>
     <div class="chip" title="Yıldız"><span class="starI">★</span><span id="stars">0</span></div>
     <div class="chip" title="Enerji"><span class="bolt">⚡</span><span id="energy">50</span><small id="etimer"></small></div>
+    <button class="chip questchip" id="questBtn" type="button" aria-label="Günlük görevler"><span>📜</span><span id="questTxt">0/3</span></button>
     <button class="chip bookchip" id="bookBtn" type="button" aria-label="Defter">Defter</button>
   </div>
   <section class="screen homescr" id="homeScr">
@@ -976,6 +977,9 @@ CITY.forEach(city=>{
  `.album{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}.album i{width:34px;height:34px;border-radius:8px;display:grid;place-items:center;font-style:normal;font-weight:700;color:#9a8a7a;background:#efe6d6}.album i svg,.album i img{width:88%;height:88%}.album i.no{opacity:.55}`+
  `details.oldch summary{cursor:pointer;list-style:none;padding:8px 0}details.oldch summary::-webkit-details-marker{display:none}`+
  `.gh{animation:ghp 1.6s ease-in-out infinite}@keyframes ghp{0%,100%{opacity:.35}50%{opacity:.85}}.garrow{animation:gar 1s ease-in-out infinite}@keyframes gar{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}.gring{animation:grp 1.6s ease-in-out infinite}@keyframes grp{0%,100%{opacity:.95}50%{opacity:.35}}`+
+ `.questchip{border:0;color:inherit;cursor:pointer;position:relative;padding:5px 7px!important;gap:2px!important}.questchip #questTxt{font-size:.7rem}.qrow small{display:block}.questchip.ready{background:#e8a93a!important;color:#2a1a10;animation:pulseG 1.2s ease-in-out infinite}.questchip.ready:after{content:"";position:absolute;top:-2px;right:-2px;width:10px;height:10px;border-radius:50%;background:#e2492f;border:2px solid #fbf4e4}`+
+ `.qrow{display:flex;align-items:center;gap:10px;background:#fbf4e4;border-radius:12px;padding:10px;margin:8px 0;box-shadow:inset 0 0 0 1px #e6d8b8}.qrow>div{flex:1;min-width:0}.qrow b{font-size:.92rem}.qrow small{color:#7a6a4e}.qrow.got{opacity:.6}`+
+ `.qbar{height:7px;border-radius:4px;background:#e6dcc4;margin:5px 0 2px;overflow:hidden}.qbar i{display:block;height:100%;background:linear-gradient(90deg,#45c1a8,#2f9a84)}.qbtn{width:auto!important;min-width:84px;padding:8px 10px!important;margin:0!important;font-size:.85rem}.qbtn:disabled{opacity:.55}`+
  `.daily{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:10px 0}.daily div{border-radius:10px;background:#efe6d6;padding:6px 2px;text-align:center;font:700 11px/1.2 var(--body,system-ui)}.daily div b{display:block;font-size:15px;margin-top:2px}.daily div.on{background:#ffd166;outline:3px solid #c98a2a}.daily div.got{opacity:.5}`;
  document.head.appendChild(st);})();
 
@@ -1153,8 +1157,14 @@ function fresh(){
     orders:[{p:"nuri",items:[{c:"b",l:2}]},{p:"hasan",items:[{c:"f",l:2}]},{p:"pamuk",items:[{c:"s",l:1}]}].map(withReward)};
 }
 let S;
+const okSave=o=>o&&Array.isArray(o.board)&&o.board.length===N&&Array.isArray(o.orders);
 try{S=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){S=null;}
-if(!S||!Array.isArray(S.board)||S.board.length!==N) S=fresh();
+if(!okSave(S)){let B=null;try{B=JSON.parse(localStorage.getItem(KEY+".bak")||"null");}catch(e){}S=okSave(B)?B:null;}
+if(!okSave(S)) S=fresh();
+S.v=4;if(!Number.isFinite(S.stars))S.stars=null;if(!Number.isFinite(S.energy))S.energy=MAXE;if(!S.found)S.found={};
+if(S.orders.length!==3)S.orders=[S.orders[0]||null,S.orders[1]||null,S.orders[2]||null];
+S.orders=S.orders.map(o=>o&&PEOPLE[o.p]&&Array.isArray(o.items)&&o.items.every(x=>CH[x.c])?o:null);
+S.board=S.board.map(x=>x&&(x.x||(x.g&&CH[x.g])||(x.c&&CH[x.c]&&x.l>=1&&x.l<=CH[x.c].items.length))?x:null);
 if(!S.chapter) S.chapter=1;
 if(S.stars==null){S.stars=Math.min(40,Math.floor((S.coins||0)/4));S.tdone=0;}
 if(S.tdone==null)S.tdone=0;
@@ -1172,7 +1182,11 @@ function startChapter(n){
   S.orders=[{p:ppl[0],items:[{c:PEOPLE[ppl[0]].likes[0],l:2}]},{p:ppl[1],items:[{c:PEOPLE[ppl[1]].likes[0],l:2}]},{p:pet,items:[{c:PEOPLE[pet].likes[0],l:1}]}].map(o=>withReward(o,n));
   save(); renderAll(); openPage(n,0);
 }
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}};
+let lastBak=0;
+const save=()=>{try{const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")save();});
+window.addEventListener("pagehide",save);
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
 
 // ---------- per-task visuals: damage that tasks remove, decor that tasks add (960x540 scene space)
 const POS={web1:[300,148],rust:[480,350],web2:[662,148],web3:[238,222],ivy:[680,150],tile1:[330,42],tile2:[470,32],tile3:[610,46],chim:[670,30],ldirt:[480,240],
@@ -1243,8 +1257,9 @@ function newOrder(){
   const free=pool.filter(k=>!busy.includes(k));
   const p=pick(free), P0=PEOPLE[p];const lk0=P0.likes.filter(c=>CHAINS[S.chapter].includes(c));const P=Object.assign({},P0,{likes:lk0.length?lk0:CHAINS[S.chapter]});
   const C0=chap(), prog=C0.levels.slice(0,S.restored).reduce((a,L)=>a+L.tasks.length,0)+S.tdone;
-  const cap=S.chapter===1?2+Math.floor(prog/4):3+Math.floor(prog/8);
-  const minL=Math.min(3,S.chapter===1?1+Math.floor(prog/10):1+Math.floor(prog/12));
+  const ramp=Math.max(0,S.chapter-2); // later cities start a little harder
+  const cap=S.chapter===1?2+Math.floor(prog/4):3+Math.floor((prog+ramp*2)/8);
+  const minL=Math.min(3,S.chapter===1?1+Math.floor(prog/10):1+Math.floor((prog+ramp*2)/12));
   const items=[];
   const count=P.pet?1:(Math.random()<Math.min(0.7,0.2+prog*0.02)?2:1);
   // smart order: sometimes ask for something already sitting on the board
@@ -1269,7 +1284,7 @@ function serve(i){
   const o=S.orders[i]; if(!orderStatus(o).every(Boolean)) return;
   o.items.forEach(x=>{const j=S.board.findIndex(y=>y&&!y.lk&&y.c===x.c&&y.l===x.l);if(j>-1)S.board[j]=null;});
   S.stars+=o.stars||0; S.served++;
-  const P=PEOPLE[o.p];
+  const P=PEOPLE[o.p];SFX("serve");qbump(P.pet?"pet":"serve");
   if(P.pet){S.energy=Math.min(MAXE,S.energy+(S.chapter>=2?8:6));}
   {const card0=document.querySelector(`.cust[data-i="${i}"]`);const host=document.querySelector(".custhead");if(card0&&host){const f=document.createElement("div");f.className="flyrew";f.textContent=P.pet?"+⚡":`+★${o.stars||0}`;const a=card0.getBoundingClientRect(),b=host.getBoundingClientRect();f.style.left=(a.left-b.left+a.width/2)+"px";f.style.top=(a.top-b.top+a.height*.45)+"px";host.appendChild(f);setTimeout(()=>f.remove(),1200);}}
   const card=document.querySelector(`.cust[data-i="${i}"]`); if(card)card.classList.add("leaving");
@@ -1309,7 +1324,7 @@ function drop(from,to){
     if(!b){S.board[to]=a;S.board[from]=null;sel=to;}
     else if(a.c&&b.c&&b.c===a.c&&b.l===a.l&&a.l<max(a.c)){
       const nl=a.l+1;S.board[to]={c:a.c,l:nl};S.board[from]=null;fx[to]="pop";sel=to;
-      const key=a.c+nl; if(b.lk)toast(`Tozlu ${nm(a.c,a.l)} temizlendi!`);if(!S.found[key]){S.found[key]=1;S.stars+=1;toast(`Yeni tarif: ${nm(a.c,nl)}! +1★`);}
+      SFX("merge",nl);qbump("merge");if(nl===4)qbump("lvl4");const key=a.c+nl; if(b.lk)toast(`Tozlu ${nm(a.c,a.l)} temizlendi!`);if(!S.found[key]){S.found[key]=1;S.stars+=1;toast(`Yeni tarif: ${nm(a.c,nl)}! +1★`);}
     } else {S.board[to]=a;S.board[from]=b;sel=to;}
     showInfo(sel); sel=-1;
   }
@@ -1358,16 +1373,16 @@ boardEl.addEventListener("click",e=>{ // tap empty cell to move selected item th
 function produce(gi){
   tickEnergy();
   const c=S.board[gi].g;
-  if(S.energy<1){toast("Enerjin bitti. Biraz bekle ya da kapıdaki dostunu doyur.");return;}
+  if(S.energy<1){SFX("no");toast("Enerjin bitti. Biraz bekle ya da kapıdaki dostunu doyur.");return;}
   const empty=[];S.board.forEach((x,i)=>{if(!x)empty.push(i);});
-  if(!empty.length){toast("Tezgâh dolu! Birleştir ya da bir şey sat.");return;}
+  if(!empty.length){SFX("no");toast("Tezgâh dolu! Birleştir ya da bir şey sat.");return;}
   const gx=gi%7, gy=Math.floor(gi/7); let best=Infinity, cands=[];
   empty.forEach(i=>{const d=Math.hypot(i%7-gx,Math.floor(i/7)-gy);
     if(d<best-1e-6){best=d;cands=[i];}else if(Math.abs(d-best)<1e-6)cands.push(i);});
   if(S.energy===MAXE)S.eAt=Date.now();
   S.energy--;
   const i=pick(cands);
-  S.board[i]={c,l:Math.random()<0.12?2:1}; fx[i]="spawn"; fx[gi]="bump";
+  S.board[i]={c,l:Math.random()<0.12?2:1}; fx[i]="spawn"; fx[gi]="bump";SFX("spawn");qbump("make");
   showInfo(gi); save(); renderBoard(); tickEnergy();
 }
 
@@ -1381,12 +1396,12 @@ function openBox(i){
   S.board[i]=null;const ch=CHAINS[S.chapter];let n=0;
   for(let k=0;k<4;k++){if(placeItem({c:pick(ch),l:Math.random()<0.4?2:1},i))n++;}
   if(n<4)S.energy+=(4-n)*2;
-  toast("Sandık açıldı!"); save(); renderBoard();
+  SFX("box");toast("Sandık açıldı!"); save(); renderBoard();
 }
 
 // ---------- repairs & scene
 function renderTop(){
-  $("stars").textContent=S.stars;tickEnergy();updateNav();
+  $("stars").textContent=S.stars;tickEnergy();updateNav();renderQuestChip();
   const C=chap(),L=C.levels[S.restored];
   if(!L){$("lvlTxt").textContent=`${C.place} · tamamlandı`;$("lvlBar").style.width="100%";return;}
   const done=S.tdone*TASK_COST;
@@ -1433,7 +1448,7 @@ async function doTask(){
   if(busy||!L)return;
   if(S.stars<TASK_COST){toast(`★${TASK_COST} gerekli. Tahtada müşterilere servis yap!`);document.getElementById("goBoard").classList.add("pulse");return;}
   busy=true;$("rBtn").disabled=true;
-  S.stars-=TASK_COST;const T=L.tasks[S.tdone],name=T.n;S.tdone++;
+  S.stars-=TASK_COST;const T=L.tasks[S.tdone],name=T.n;S.tdone++;SFX("hammer");qbump("task");
   let rew;
   if(S.tdone%2){S.energy+=5;rew="+5 ⚡";}
   else{const c=pick(CHAINS[S.chapter]);rew=placeItem({c,l:2})?`Hediye: ${nm(c,2)}`:(S.energy+=5,"+5 ⚡");}
@@ -1445,7 +1460,7 @@ async function doTask(){
     const old=$("scene").innerHTML;
     S.restored++;S.tdone=0;S.energy+=25;placeItem({x:"box"});save();
     renderScene();renderTop();renderRepair();
-    await playBig(old,S.restored+1>C.levels.length?S.restored:S.restored+1);
+    SFX("level");await playBig(old,S.restored+1>C.levels.length?S.restored:S.restored+1);
     busy=false;renderAll();openPage(S.chapter,S.restored);return;
   }
   busy=false;renderRepair();renderTop();renderScene();
@@ -1582,7 +1597,7 @@ function openPage(c,n){
     <div class="hand">${p.hand}</div>
     ${p.after?`<div class="note"><i>${p.after}</i></div>`:""}
     <button class="btn" type="button" id="closePage">${first?"Kepengi kaldır":go?`${TO[c+1]} yola çık`:"Defteri kapat"}</button>`;
-  $("sheet").hidden=false;
+  $("sheet").hidden=false;SFX("page");
   $("closePage").onclick=()=>{$("sheet").hidden=true;
     if(go){startChapter(c+1);return;}
     if(first){setSeen(c);save();
@@ -1606,17 +1621,20 @@ function openBook(){
   h+=`<div class="date">Tarif albümü · ${got}/${tot} · her yeni tarif +1★</div>${al}`;
   $("paper").innerHTML=`<h3>Defterler</h3>${h}
     <div class="note">Hizmet verilen misafir: <b>${S.served}</b></div>
+    <button class="btn" type="button" id="setBtn">⚙ Ayarlar, ses ve kayıt kodu</button>
     <button class="danger" type="button" id="resetBtn">Baştan başla</button>
     <button class="btn" type="button" id="closeBook">Kapat</button>`;
   $("sheet").hidden=false;
   $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.c,+b.dataset.p));
   $("closeBook").onclick=()=>$("sheet").hidden=true;
+  $("setBtn").onclick=openSaveSheet;
   $("resetBtn").onclick=function(){
     if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(1,0);}
     else{this.dataset.armed="1";this.textContent="Emin misin? Tüm ilerleme silinir. Tekrar dokun.";}
   };
 }
 $("bookBtn").addEventListener("click",openBook);
+$("questBtn").addEventListener("click",openQuests);
 $("goBoard").addEventListener("click",()=>setView("board"));
 $("goHome").addEventListener("click",()=>setView("home"));
 $("sell").addEventListener("click",()=>{if(sel>-1&&S.board[sel])drop(sel,"sell");else toast("Satmak için önce bir eşyaya dokun ya da eşyayı buraya sürükle.");});
@@ -1646,11 +1664,96 @@ function fitBoard(){
 window.addEventListener("resize",fitBoard);
 if(window.visualViewport)visualViewport.addEventListener("resize",fitBoard);
 
+// ---------- sound effects (synthesized, no files) + light vibration
+const SFX=(()=>{let ctx=null;const on=()=>S.sound!==false;
+  const ac=()=>{if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){ctx=null;}}if(ctx&&ctx.state==="suspended")ctx.resume();return ctx;};
+  const tone=(f,t0,d,type,vol,f2)=>{const c=ac();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type=type||"sine";
+    const t=c.currentTime+(t0||0);o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.18,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+    o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+0.05);};
+  const noise=(t0,d,vol,fq)=>{const c=ac();if(!c)return;const n=c.createBuffer(1,Math.floor(c.sampleRate*d),c.sampleRate),a=n.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);
+    const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();f.type="bandpass";f.frequency.value=fq||900;g.gain.value=vol||0.25;s.buffer=n;s.connect(f);f.connect(g);g.connect(c.destination);s.start(c.currentTime+(t0||0));};
+  const vib=ms=>{try{if(on()&&navigator.vibrate)navigator.vibrate(ms);}catch(e){}};
+  const P={
+    spawn:()=>tone(520,0,.09,"triangle",.12,780),
+    merge:l=>{const b=330*Math.pow(1.122,l||1);tone(b,0,.12,"triangle",.2,b*1.5);tone(b*1.5,.07,.16,"sine",.14);vib(12);},
+    serve:()=>{[988,1319,1568].forEach((f,i)=>tone(f,i*.07,.18,"sine",.16));vib(20);},
+    hammer:()=>{noise(0,.08,.5,700);tone(160,0,.12,"square",.12,90);noise(.14,.07,.35,900);tone(150,.14,.1,"square",.1,90);vib([15,60,15]);},
+    level:()=>{[523,659,784,1047,1319].forEach((f,i)=>tone(f,i*.11,.28,"triangle",.17));vib([30,40,30,40,60]);},
+    box:()=>{noise(0,.12,.3,1400);[784,988,1175].forEach((f,i)=>tone(f,.08+i*.06,.2,"sine",.13));},
+    no:()=>tone(200,0,.16,"sawtooth",.08,150),
+    page:()=>noise(0,.18,.18,2500),
+    claim:()=>{[659,880,1175,1568].forEach((f,i)=>tone(f,i*.08,.22,"triangle",.15));vib(25);}
+  };
+  document.addEventListener("pointerdown",()=>{if(on())ac();},{passive:true});
+  return (k,a)=>{if(!on()||window.__FAST)return;try{P[k]&&P[k](a);}catch(e){}};
+})();
+
+// ---------- daily quests
+const QT=[
+  {k:"serve",t:n=>`${n} müşteriye servis yap`,n:[6,8,10]},
+  {k:"merge",t:n=>`${n} kez birleştir`,n:[15,20,25]},
+  {k:"lvl4",t:n=>`${n} tane 4. seviye yemek yap`,n:[1,2,2]},
+  {k:"task",t:n=>`Dükkânda ${n} görev yap`,n:[2,3,3]},
+  {k:"pet",t:n=>`Kapıdaki dostu ${n} kez doyur`,n:[2,3,3]},
+  {k:"make",t:n=>`Tahtadan ${n} malzeme çıkar`,n:[25,35,45]}
+];
+const QREW=[{e:20,t:"20 ⚡"},{s:5,t:"★5"},{e:30,t:"30 ⚡"}];
+function questsToday(){
+  const d=dayKey(Date.now());
+  if(!S.q||S.q.d!==d){const pool=QT.slice();const pick3=[];let seed=[...d].reduce((a,c)=>a*31+c.charCodeAt(0)>>>0,7);
+    for(let i=0;i<3;i++){seed=(seed*1103515245+12345)>>>0;const j=seed%pool.length;const q=pool.splice(j,1)[0];pick3.push({k:q.k,g:q.n[i],p:0,c:0});}
+    S.q={d,l:pick3,all:0};}
+  return S.q;
+}
+function qbump(k,n){const Q=questsToday();let ch=false;Q.l.forEach(q=>{if(q.k===k&&q.p<q.g){q.p=Math.min(q.g,q.p+(n||1));ch=true;if(q.p>=q.g)toast(`Günlük görev tamam: ${QT.find(x=>x.k===q.k).t(q.g)}`);}});if(ch)renderQuestChip();}
+function renderQuestChip(){const b=$("questBtn");if(!b)return;const Q=questsToday();const ready=Q.l.filter(q=>q.p>=q.g&&!q.c).length+(Q.l.every(q=>q.c)&&!Q.all?1:0);
+  $("questTxt").textContent=`${Q.l.filter(q=>q.c).length}/3`;b.classList.toggle("ready",ready>0);}
+function openQuests(){
+  const Q=questsToday();
+  const row=(q,i)=>{const T=QT.find(x=>x.k===q.k),R=QREW[i],done=q.p>=q.g;
+    return `<div class="qrow${q.c?" got":""}"><div><b>${T.t(q.g)}</b><div class="qbar"><i style="width:${Math.min(100,q.p/q.g*100)}%"></i></div><small>${q.p}/${q.g}</small></div>
+      <button type="button" class="btn qbtn" data-i="${i}" ${(!done||q.c)?"disabled":""}>${q.c?"Alındı ✓":R.t}</button></div>`;};
+  const allDone=Q.l.every(q=>q.c);
+  $("paper").innerHTML=`<h3>Günlük görevler</h3><div class="note">Her gün yeni üç görev. Hepsini bitirene bir de ödül sandığı!</div>${Q.l.map(row).join("")}
+    <div class="qrow"><div><b>Hepsini bitir</b><small>Üç görevin ödülünü de al</small></div><button type="button" class="btn qbtn" data-i="all" ${(!allDone||Q.all)?"disabled":""}>${Q.all?"Alındı ✓":"Sandık + ★5"}</button></div>
+    <button class="btn" type="button" id="closeQ">Kapat</button>`;
+  $("sheet").hidden=false;
+  $("paper").querySelectorAll(".qbtn").forEach(b=>b.onclick=()=>{
+    if(b.dataset.i==="all"){Q.all=1;S.stars+=5;if(!placeItem({x:"box"}))S.energy+=15;}
+    else{const i=+b.dataset.i,q=Q.l[i],R=QREW[i];if(q.c||q.p<q.g)return;q.c=1;if(R.e)S.energy+=R.e;if(R.s)S.stars+=R.s;}
+    SFX("claim");save();renderTop();renderRepair();renderBoard();renderQuestChip();openQuests();});
+  $("closeQ").onclick=()=>$("sheet").hidden=true;
+}
+
+// ---------- save safety: backup copy, export / import code
+function saveCode(){return "DL1:"+btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
+function loadCode(txt){try{txt=(txt||"").trim();if(!txt.startsWith("DL1:"))return null;const o=JSON.parse(decodeURIComponent(escape(atob(txt.slice(4)))));
+  return (o&&Array.isArray(o.board)&&o.board.length===N&&o.chapter>=1&&o.chapter<=MAXCH)?o:null;}catch(e){return null;}}
+function openSaveSheet(){
+  $("paper").innerHTML=`<h3>Ayarlar ve kayıt</h3>
+    <button class="btn" type="button" id="sndBtn">${S.sound===false?"🔇 Ses kapalı (aç)":"🔊 Ses açık (kapat)"}</button>
+    <div class="note"><b>Kayıt kodu.</b> Oyunun tamamı bu kodda. Kopyalayıp bir yere (WhatsApp'ta kendine, not defterine) sakla. Telefon değişse ya da uygulama silinse bile bu kodla kaldığın yerden devam edersin.</div>
+    <textarea id="codeBox" rows="3" readonly style="width:100%;font:12px monospace;border-radius:10px;padding:8px;box-sizing:border-box">${saveCode()}</textarea>
+    <button class="btn" type="button" id="copyBtn">Kodu kopyala</button>
+    <div class="note"><b>Kayıt yükle.</b> Daha önce aldığın kodu buraya yapıştır.</div>
+    <textarea id="inBox" rows="3" placeholder="DL1:..." style="width:100%;font:12px monospace;border-radius:10px;padding:8px;box-sizing:border-box"></textarea>
+    <button class="btn" type="button" id="loadBtn">Bu kayıttan devam et</button>
+    <button class="btn" type="button" id="closeSave">Kapat</button>`;
+  $("sheet").hidden=false;
+  $("sndBtn").onclick=()=>{S.sound=S.sound===false;save();openSaveSheet();SFX("claim");};
+  $("copyBtn").onclick=async()=>{const t=$("codeBox");try{await navigator.clipboard.writeText(t.value);toast("Kod kopyalandı");}catch(e){t.select();try{document.execCommand("copy");toast("Kod kopyalandı");}catch(_){toast("Kodu seçip elle kopyala");}}};
+  $("loadBtn").onclick=function(){const o=loadCode($("inBox").value);if(!o){toast("Kod geçersiz. Tamamını yapıştırdığından emin ol.");SFX("no");return;}
+    if(!this.dataset.armed){this.dataset.armed="1";this.textContent="Emin misin? Şu anki oyunun yerine geçer. Tekrar dokun.";return;}
+    try{localStorage.setItem(KEY+".bak",JSON.stringify(S));}catch(e){}S=o;save();location.reload();};
+  $("closeSave").onclick=()=>$("sheet").hidden=true;
+}
+
 // ---------- daily gift
 const DAILY=[{e:15,t:"15 ⚡"},{e:20,t:"20 ⚡"},{s:5,t:"★5"},{e:25,t:"25 ⚡"},{s:8,t:"★8"},{e:30,t:"30 ⚡"},{s:10,box:1,t:"★10 + sandık"}];
 const dayKey=t=>{const d=new Date(t);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
 function dailyCheck(){
-  if(window.__FAST||!$("sheet").hidden||!seen(S.chapter))return;
+  if(window.__FAST||!$("sheet").hidden||!$("dlg").hidden||busy||!seen(S.chapter))return;
   const today=dayKey(Date.now());S.daily=S.daily||{d:"",streak:0};if(S.daily.d===today)return;
   const st=(S.daily.d===dayKey(Date.now()-864e5)?S.daily.streak%7:0)+1, R=DAILY[st-1];
   $("paper").innerHTML=`<h3>Günlük hediye</h3><div class="note">Her gün uğra, hediyen büyüsün. ${st}. gün!</div>
