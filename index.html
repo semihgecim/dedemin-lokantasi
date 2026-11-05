@@ -1166,11 +1166,51 @@ function renderSceneCity(){
    </g></svg>`;
 }
 
+// ---------- longer chains: extra levels that unlock as the shop grows (up to level 8)
+const EXT={
+ f:[["Su böreği tepsisi","tray","#e9b04a","#fbf0d0"],["Gül böreği","ring","#d99a4a","#f6e6c0"],["Börekçi sofrası","tray","#c97a34","#e9b04a"]],
+ s:[["Kazandibi","plate","#e8b86a","#8a5a2a"],["Keşkül","bowl","#f6efc0","#5a9a3a"],["Tatlı tepsisi","tray","#fbf2e0","#c97a34"]],
+ b:[["Türlü","pot","#c2412f","#5a9a3a"],["Dolma tabağı","plate","#4f7a3a","#c2412f"],["Etli nohut","pot","#e0b04a","#a8452a"],["Esnaf sofrası","tray","#c2412f","#e0b04a"]],
+ k:[["Bülbül yuvası","nut","#e9b04a","#5a9a3a"],["Bayram baklavası","tray","#e9b04a","#5a9a3a"]],
+ p:[["Fıstıklı kadayıf","nut","#efd28a","#5a9a3a"],["Fıstıklı sarma","long","#d99a4a","#5a9a3a"],["Fıstık sofrası","tray","#5a9a3a","#e9b04a"]],
+ m:[["Simit kebabı","long","#a8452a","#5a9a3a"],["Yuvarlama kazanı","pot","#f6efe0","#a8452a"],["Antep sofrası","tray","#a8452a","#e9b04a"]],
+ A:[["Boyoz tepsisi","tray","#e0a84e","#b8762a"],["Kumru sepeti","tray","#d99a4a","#c2412f"],["Kordon kahvaltısı","tray","#e0a84e","#5d6b2a"]],
+ B:[["Zeytinyağlı tabağı","plate","#c9b23a","#7aa05a"],["Ege mezesi","tray","#7aa05a","#c9b23a"],["Ege sofrası","tray","#5d6b2a","#e2b04a"]],
+ C:[["Lokma kulesi","nut","#d98a2a","#fff4c9"],["Şerbetli tatlı","plate","#e0b04a","#d98a2a"],["Lokma hayrı","tray","#d98a2a","#fff4c9"]],
+ D:[["Hamsi kuşu","fish","#c98a3a","#8aa4b8"],["Hamsi kolu","long","#d9a35a","#8aa4b8"],["Karadeniz sofrası","tray","#8aa4b8","#c98a3a"]],
+ E:[["Mısır ekmeği","round","#f2c94a","#c97a34"],["Muhlama tavası","pot","#f2c94a","#c97a34"],["Yayla sofrası","tray","#f2c94a","#e9b04a"]],
+ F:[["Semaver","pot","#c8743a","#e8e2da"],["Çay bahçesi","tray","#4f8a3a","#b8361f"],["Rize sofrası","tray","#b8361f","#4f8a3a"]],
+ G:[["Kaytaz böreği","long","#efd28a","#c2412f"],["Peynirli künefe","plate","#e8952a","#f6efe0"],["Künefe şöleni","tray","#e8952a","#7aa05a"]],
+ H:[["Fırın humus","pot","#e6d0a0","#c2412f"],["Hatay mezesi","tray","#e6d0a0","#7aa05a"],["Antakya sofrası","tray","#c2412f","#e6d0a0"]],
+ I:[["Kağıt kebabı","plate","#a8452a","#f6efe0"],["Kebap tepsisi","tray","#a8452a","#e8c27d"],["Ziyafet kebabı","tray","#8a3a22","#7aa05a"]],
+ J:[["Bıçak arası","long","#d9a35a","#a8452a"],["Etliekmek kulesi","tray","#e0a04a","#b8452a"],["Fırın sofrası","tray","#b8452a","#e0a04a"]],
+ K:[["Tandır tepsisi","tray","#9a4a2a","#e8c27d"],["Düğün pilavı","bowl","#f6f0e0","#9a4a2a"],["Düğün sofrası","tray","#8a3a22","#f6f0e0"]],
+ L:[["Höşmerim","bowl","#f2d28a","#a8742a"],["Tatlı kulesi","nut","#e3a43e","#7cb342"],["Şerbet sofrası","tray","#e3a43e","#f6e3a0"]],
+ M:[["Büyük testi","jar","#b8693a","#c2412f"],["Testi şöleni","tray","#b8693a","#c2412f"],["Kapadokya ziyafeti","tray","#b8693a","#7aa05a"]],
+ N:[["Köme","long","#8a3a2a","#f6efe0"],["Pekmez helvası","cube","#7a4a2a","#e0c08a"],["Bağ bozumu sofrası","tray","#7a3a8a","#c9773a"]],
+ O:[["Mantı kazanı","pot","#f6e6c0","#c2412f"],["Fırın mantısı","tray","#e9b04a","#c2412f"],["Mantı ziyafeti","tray","#f6e6c0","#c2412f"]],
+ P:[["Kahvaltı tabağı","plate","#f3eccc","#5a9a3a"],["Serpme kahvaltı","tray","#f2c94a","#5a9a3a"],["Van sofrası","tray","#5a9a3a","#f2c94a"]],
+ Q:[["Bal tabağı","plate","#f2a020","#c98a1a"],["Petek tepsisi","tray","#f2b830","#c98a1a"],["Arıcı sofrası","tray","#f2a020","#fbfbf6"]],
+ R:[["Çörek kulesi","ring","#d99a4a","#fbf0d0"],["Fırın sepeti","tray","#d99a4a","#c97a34"],["Sabah sofrası","tray","#c97a34","#f2c94a"]],
+ S:[["Kaburga tepsisi","tray","#8a3a22","#e8d29a"],["Mardin kebabı","long","#a8452a","#e8d29a"],["Konak ziyafeti","tray","#8a3a22","#c99a6a"]],
+ T:[["Badem helvası","cube","#f6ecd8","#c99a6a"],["Badem kulesi","nut","#f6f2ea","#e8c8d8"],["Bayram sofrası","tray","#f6f2ea","#c99a6a"]],
+ U:[["Mırra fincanı","tea","#3b2414","#c9955a"],["Kliçe kulesi","round","#d99a4a","#7a5a3a"],["Mırra sofrası","tray","#3b2414","#d99a4a"]],
+ V:[["Lüfer ızgara","fish","#8a9aa8","#e8c87a"],["Balık tabağı","plate","#5a7a9a","#f2b84a"],["Boğaz ziyafeti","tray","#5a7a9a","#f2b84a"]],
+ W:[["Keşkül","bowl","#f6efc0","#5a9a3a"],["Sütlü tatlı tepsisi","tray","#fbf2e0","#c97a34"],["İstanbul tatlı sofrası","tray","#e8b86a","#fbf2e0"]],
+ X:[["Kahve tepsisi","tray","#3b2414","#f2a0b8"],["Lokum kutusu","cube","#f2a0b8","#fbfbf6"],["Galata sofrası","tray","#3b2414","#f2a0b8"]]
+};
+const CHAIN_CH={};
+for(const ch in CHAINS)CHAINS[ch].forEach(c=>CHAIN_CH[c]=+ch);
+for(const c in EXT){if(!CH[c])continue;CH[c].base=CH[c].items.length;EXT[c].slice(0,8-CH[c].base).forEach((d,j)=>{const l=CH[c].base+j+1;CH[c].items.push(["",d[0]]);ART[c+l]=itemSVG(d[1],d[2],d[3],l);});}
+function extUnlocked(c){const C=CH[c];if(!C.base)return C.items.length;const ch=CHAIN_CH[c];if(ch<S.chapter)return C.items.length;if(ch>S.chapter)return C.base;
+  const NL=CHAPTERS[ch].levels.length;let n=0;for(let j=1;j<=C.items.length-C.base;j++)if(S.restored>=Math.min(NL-1,j+1))n++;return C.base+n;}
+function extUnlockAt(c,l){const C=CH[c],j=l-C.base,NL=CHAPTERS[CHAIN_CH[c]].levels.length;return Math.min(NL-1,j+1)+1;}
+
 const MAXE=100, REGEN=6000, N=49;
 
 // ---------- helpers
 const $=id=>document.getElementById(id);
-const max=c=>CH[c].items.length;
+const max=c=>extUnlocked(c);
 const icon=(c,l)=>ART[c+l];
 const nm=(c,l)=>CH[c].items[l-1][1];
 const val=l=>Math.pow(2,l);
@@ -1308,7 +1348,7 @@ function newOrder(){
     if(l<=3&&!easyStart&&Math.random()<0.35){const c2=pick(P.likes);items.push({c:c2,l:Math.min(max(c2),3)});}
   }
   S.vipN=(S.vipN||0)+1;let vip=0;
-  if(!P.pet&&S.vipN>=9&&prog>=3){S.vipN=0;vip=1;const c=pick(P.likes);items.length=0;items.push({c,l:Math.min(max(c),5)});const c2=pick(P.likes);items.push({c:c2,l:Math.min(max(c2),4)});}
+  if(!P.pet&&S.vipN>=9&&prog>=3){S.vipN=0;vip=1;const c=pick(P.likes);items.length=0;items.push({c,l:Math.max(4,max(c)-1)});const c2=pick(P.likes);items.push({c:c2,l:Math.min(max(c2),4)});}
   return withReward({p,items,vip},S.chapter);
 }
 const ORDER_MIX={1:{2:5,3:40,4:30,5:25},2:{2:5,3:33,4:30,5:27,6:5},3:{2:5,3:35,4:30,5:30},4:{2:4,3:36,4:32,5:28},5:{2:5,3:30,4:33,5:32},
@@ -1349,7 +1389,7 @@ function showInfo(i){
   if(x.x){$("info").innerHTML=`<b>Ödül sandığı</b> · dokun, içinden malzemeler çıksın`;return;}
   if(x.g){$("info").innerHTML=`<b>${GEN_OF[x.g]}</b> · dokun, ${nm(x.g,1)} çıksın (1 ⚡)`;return;}
   if(x.lk){$("info").innerHTML=`<b>Tozlu ${nm(x.c,x.l)}</b> · Yerinden oynamaz. Aynısından birini üstüne getir, temizlenip birleşsin.`;return;}
-  const next=x.l<max(x.c)?`İki tanesi birleşince: <b>${nm(x.c,x.l+1)}</b>`:"Zincirin sonu. Bunu isteyen birini bekle.";
+  const next=x.l<max(x.c)?`İki tanesi birleşince: <b>${nm(x.c,x.l+1)}</b>`:x.l<CH[x.c].items.length?`🔒 ${nm(x.c,x.l+1)}: dükkân ${extUnlockAt(x.c,x.l+1)}. seviyede`:"Zincirin sonu. Bunu isteyen birini bekle.";
   $("info").innerHTML=`<b>${nm(x.c,x.l)}</b> · ${x.l}. seviye · ${next}`;
 }
 function drop(from,to){
@@ -1505,7 +1545,9 @@ async function doTask(){
   if(S.tdone-1===midTask(L)) await playDialog((DLG[S.chapter]||[])[S.restored]);
   if(S.tdone>=L.tasks.length){
     const old=$("scene").innerHTML;
-    S.restored++;S.tdone=0;S.energy+=25;placeItem({x:"box"});placeItem({x:"pack"});save();
+    const mx0=CHAINS[S.chapter].map(c=>max(c));
+    S.restored++;S.tdone=0;S.energy+=25;
+    CHAINS[S.chapter].forEach((c,k)=>{if(max(c)>mx0[k])setTimeout(()=>toast(`Yeni tarif açıldı: ${nm(c,max(c))}!`),window.__FAST?0:2600);});placeItem({x:"box"});placeItem({x:"pack"});save();
     renderScene();renderTop();renderRepair();
     SFX("level");await playBig(old,S.restored+1>C.levels.length?S.restored:S.restored+1);
     busy=false;renderAll();openPage(S.chapter,S.restored);return;
