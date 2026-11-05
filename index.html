@@ -1673,7 +1673,7 @@ const SFX=(()=>{let ctx=null;const on=()=>S.sound!==false;
     o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+0.05);};
   const noise=(t0,d,vol,fq)=>{const c=ac();if(!c)return;const n=c.createBuffer(1,Math.floor(c.sampleRate*d),c.sampleRate),a=n.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);
     const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();f.type="bandpass";f.frequency.value=fq||900;g.gain.value=vol||0.25;s.buffer=n;s.connect(f);f.connect(g);g.connect(c.destination);s.start(c.currentTime+(t0||0));};
-  const vib=ms=>{try{if(on()&&navigator.vibrate)navigator.vibrate(ms);}catch(e){}};
+  const vib=()=>{}; // vibration turned off
   const P={
     spawn:()=>tone(520,0,.09,"triangle",.12,780),
     merge:l=>{const b=330*Math.pow(1.122,l||1);tone(b,0,.12,"triangle",.2,b*1.5);tone(b*1.5,.07,.16,"sine",.14);vib(12);},
