@@ -1868,12 +1868,27 @@ const MEMOS={
  10:[["gkey","Galata dükkânının anahtarı",()=>MEMO_ART.key("#8a9aa8")],["page","Son sayfa",MEMO_ART.page]]
 };
 
+// ---------- local flavour cards (city specialties outside the merge chains)
+const LOCAL={
+ 1:[["İskender","plate","#a8452a","#f6efe0"],["İnegöl köfte","nut","#8a4a2a","#c2412f"],["Pideli köfte","plate","#9a4a2a","#e0a04a"],["Cantık","long","#d99a4a","#c2412f"],["Tahinli pide","ring","#b8742a","#7a4a2a"],["Cevizli lokum","cube","#f6f0e0","#8a5a2a"]],
+ 2:[["Yuvalama","bowl","#f6efe0","#a8452a"],["Simit kebabı","long","#a8452a","#5a9a3a"],["Lebeniye","bowl","#f6efe0","#5a9a3a"],["Şiveydiz","pot","#f6efe0","#a8742a"],["Ezogelin çorbası","bowl","#d8702a","#c8743a"]],
+ 3:[["İzmir köfte","pot","#c2412f","#a55a3a"],["Söğüş","plate","#e8b0a0","#5a9a3a"],["Şambali","cube","#e0a04a","#fbf0d0"],["Bomba","round","#c97a34","#3b2414"],["Midye tava","nut","#e0a04a","#3a3a4a"]],
+ 4:[["Akçaabat köfte","nut","#8a4a2a","#5a9a3a"],["Karalahana sarması","plate","#3e6a3a","#c2412f"],["Vakfıkebir ekmeği","round","#b8742a","#f6e6c0"],["Kaygana","plate","#f2c94a","#8aa4b8"],["Pepeçura","bowl","#5a2a4a","#f6efe0"]],
+ 5:[["Oruk","long","#9a5a2a","#c97a34"],["Haytalı","bowl","#fbf6e6","#e8a0b0"],["Kömbe","round","#d9a35a","#7a5a3a"],["Biberli ekmek","round","#d8702a","#5a9a3a"],["Muhammara","bowl","#c2412f","#8a5a2a"]],
+ 6:[["Bamya çorbası","bowl","#c8743a","#5a7a3a"],["Höşmerim","bowl","#f2d28a","#a8742a"],["Peruhi","plate","#f6e6c0","#c2412f"],["Konya şekeri","cube","#f6f0e0","#e88aa0"],["Bıçak arası","long","#d9a35a","#a8452a"]],
+ 7:[["Nevşehir tavası","pot","#a8452a","#b8693a"],["Aside","bowl","#e8c88a","#5a2a1a"],["Köme","long","#8a3a2a","#f6efe0"],["Dolaz","bowl","#e8b0a0","#7a3a8a"]],
+ 8:[["Keledoş","pot","#e8d29a","#5a9a3a"],["İnci kefali","fish","#9ab0c0","#e8a040"],["Ayran aşı","bowl","#f6efe0","#5a9a3a"],["Ciris otu","leaf","#5a9a3a","#2f5a20"]],
+ 9:[["Sembusek","long","#d9a35a","#a8452a"],["Alluciye","plate","#5a2a2a","#e8d29a"],["Harire","bowl","#7a3a2a","#c99a5a"],["Mumbar dolması","long","#a8742a","#e8d29a"],["Dobo","pot","#8a3a22","#e8d29a"]],
+ 10:[["Hünkâr beğendi","plate","#f6efe0","#a8452a"],["Kumpir","round","#d9a35a","#c2412f"],["Kokoreç","long","#a8692a","#c2412f"],["Boza","glass","#e8d29a","#c97a34"],["Tavuk pilav","plate","#f6f0e0","#e8c88a"]]
+};
+
 // ---------- memory card album
 function cardsOf(c){const C=CHAPTERS[c];if(!C)return [];const ppl=C.people.concat(c===1?["celile"]:c===2?["halil"]:[]);
   return ppl.map((k,i)=>({id:c+":"+k,c,kind:"p",key:k,name:PEOPLE[k].name,rar:PEOPLE[k].pet?2:i<2?1:2}))
    .concat((MEMOS[c]||[]).map(m=>({id:c+":"+m[0],c,kind:"m",key:m[0],art:m[2],name:m[1],rar:2})))
-   .concat([{id:c+":pc",c,kind:"pc",name:C.place+" kartpostalı",rar:3}]);}
-function cardArt(cd){if(cd.kind==="p"){const P=PEOPLE[cd.key];return P.img?`<img src="${P.img}" alt="">`:`<b>${P.init||"?"}</b>`;}if(cd.kind==="pc")return POSTC[cd.c]||"";return cd.art?cd.art():"";}
+   .concat([{id:c+":pc",c,kind:"pc",name:C.place+" kartpostalı",rar:3}])
+   .concat((LOCAL[c]||[]).map((d,i)=>({id:c+":l"+i,c,kind:"l",name:d[0],d,rar:i===0?3:2})));}
+function cardArt(cd){if(cd.kind==="p"){const P=PEOPLE[cd.key];return P.img?`<img src="${P.img}" alt="">`:`<b>${P.init||"?"}</b>`;}if(cd.kind==="pc")return POSTC[cd.c]||"";if(cd.kind==="l")return itemSVG(cd.d[1],cd.d[2],cd.d[3],3);return cd.art?cd.art():"";}
 function cardHTML(cd,n,isNew){return `<div class="mcard r${cd.rar}${n?"":" miss"}">${isNew?`<em>YENİ!</em>`:""}<div class="mart">${n?cardArt(cd):"?"}</div><div class="mname">${n?cd.name:"???"}</div><div class="mrar">${"★".repeat(cd.rar)}</div>${n>1?`<i class="mdup">x${n}</i>`:""}</div>`;}
 function migrateCards(){if(!S.cards||S.cardsV===2)return;const nc={};for(const id in S.cards){const [c,k]=id.split(":");const L=CHAINS[+c]||[];const ix=L.indexOf(k);
   const nid=ix<0?id:ix===2?c+":pc":c+":"+((MEMOS[+c]||[])[ix]||[k])[0];nc[nid]=(nc[nid]||0)+S.cards[id];}S.cards=nc;S.cardsV=2;}
@@ -1894,8 +1909,9 @@ function openAlbum(c){c=c||S.chapter;S.cards=S.cards||{};migrateCards();S.dust=S
   const tabs=Array.from({length:S.chapter},(_,i)=>i+1).map(k=>`<button type="button" class="atab${k===c?" on":""}" data-c="${k}">${CHAPTERS[k].place}${(S.setDone||{})[k]?" ✓":""}</button>`).join("");
   const missing=L.filter(cd=>!S.cards[cd.id]);
   $("paper").innerHTML=`<h3>Hatıra kutusu</h3><div class="atabs">${tabs}</div>
-   <div class="note">Mehmet Dede'nin yolculuğundan kalanlar: dostlarının fotoğrafları, bıraktığı eşyalar ve şehrin kartpostalı. ${CHAPTERS[c].place} seti: <b>${have}/${L.length}</b> · Seti tamamlayana ★15 + 40 ⚡ + sandık.</div>
-   <div class="agrid">${L.map(cd=>cardHTML(cd,S.cards[cd.id]||0)).join("")}</div>
+   <div class="note">Mehmet Dede'nin yolculuğundan kalanlar: dostlarının fotoğrafları, bıraktığı eşyalar, şehrin kartpostalı ve tadına baktığı yerel lezzetler. ${CHAPTERS[c].place} seti: <b>${have}/${L.length}</b> · Seti tamamlayana ★15 + 40 ⚡ + sandık.</div>
+   <div class="date">Hatıralar</div><div class="agrid">${L.filter(cd=>cd.kind!=="l").map(cd=>cardHTML(cd,S.cards[cd.id]||0)).join("")}</div>
+   <div class="date">Yerel lezzetler</div><div class="agrid">${L.filter(cd=>cd.kind==="l").map(cd=>cardHTML(cd,S.cards[cd.id]||0)).join("")}</div>
    <div class="note"><b>Takas dükkânı</b> · Takas puanın: <b>${S.dust}</b></div>
    <div class="trade"><button type="button" class="btn" id="tr1" ${S.dust<40||!missing.length?"disabled":""}>40 puan: eksik bir ${CHAPTERS[c].place} kartı</button>
    <button type="button" class="btn" id="tr2" ${S.dust<25?"disabled":""}>25 puan: ödül sandığı</button></div>
