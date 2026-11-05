@@ -1429,9 +1429,10 @@ function renderTop(){
   $("stars").textContent=S.stars;tickEnergy();updateNav();renderQuestChip();renderRails();renderBoost();
   const C=chap(),L=C.levels[S.restored];
   if(!L){$("lvlTxt").textContent=`${C.place} · tamamlandı`;$("lvlBar").style.width="100%";return;}
-  const done=S.tdone*TASK_COST;
-  $("lvlTxt").textContent=`Dükkân ${S.restored+1}/${C.levels.length} · ${done}/${L.need}`;
-  $("lvlBar").style.width=Math.min(100,done/L.need*100)+"%";
+  const done=S.tdone*TASK_COST,avail=Math.max(0,Math.min(S.stars,L.need-done)),tot=done+avail;
+  $("lvlTxt").textContent=`Dükkân ${S.restored+1}/${C.levels.length} · ${tot}/${L.need}${avail>=TASK_COST?" · görev hazır!":""}`;
+  const bar=$("lvlBar");bar.style.width=Math.min(100,tot/L.need*100)+"%";
+  const cut=tot?done/tot*100:100;bar.style.background=`linear-gradient(90deg,#ffd166 0 ${cut}%,rgba(255,209,102,.5) ${cut}% 100%)`;
 }
 function renderRepair(){
   const C=chap(), L=C.levels[S.restored];
