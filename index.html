@@ -1409,7 +1409,7 @@ function drop(from,to){
       const nl=a.l+1;S.board[to]={c:a.c,l:nl};S.board[from]=null;fx[to]="pop";sel=to;
       SFX("merge",nl);qbump("merge");{const T=to;requestAnimationFrame(()=>{burstAt(boardEl.children[T],nl>=4?16:9);comboHit(boardEl.children[T]);mouseHit(nl,boardEl.children[T]);});addXP(1);maybeBubble({c:a.c,l:nl},T);evAdd(1,null);
       if(nl>=3&&Math.random()<0.07){placeItem(Math.random()<.5?{x:"star",n:Math.max(1,nl-2)}:{x:"en",n:nl},T);}}if(nl===4)qbump("lvl4");const key=a.c+nl; if(b.lk)toast(`Tozlu ${nm(a.c,a.l)} temizlendi!`);if(!S.found[key]){S.found[key]=1;S.stars+=1;toast(`Yeni tarif: ${nm(a.c,nl)}! +1★`);}
-    } else {S.board[to]=a;S.board[from]=b;sel=to;}
+    } else {if(a.c&&b.c===a.c&&b.l===a.l&&a.l<CH[a.c].items.length){toast(`🔒 ${nm(a.c,a.l+1)} dükkân ${extUnlockAt(a.c,a.l+1)}. seviyeye gelince açılır`);}S.board[to]=a;S.board[from]=b;sel=to;}
     showInfo(sel); sel=-1;
   }
   save(); renderBoard(); renderTop(); renderRepair(); return true;
