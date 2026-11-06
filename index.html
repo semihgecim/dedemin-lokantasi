@@ -961,12 +961,43 @@ function mkLevels(city){
 }
 const POS_EXTRA={};
 const CHAIN_BG={};
+
+// city generators: own drawing per generator kind, with the chain's first item heaped on top
+function genArt(C,c){const nmG=C.gen[1];
+  if(nmG==="Un çuvalı"&&ART.gf)return ART.gf;
+  if(nmG==="Süt güğümü"&&ART.gs)return ART.gs;
+  const O='stroke="#3b2a1e" stroke-width="2.4" stroke-linejoin="round"';
+  const it=(x,y,w)=>String(ART[c+1]||"").replace(/^<svg /,`<svg x="${x}" y="${y}" width="${w}" height="${w}" `);
+  const sh='<ellipse cx="32" cy="58" rx="25" ry="4.5" fill="#000" opacity=".16"/>';
+  let base,top;
+  if(/kasası/.test(nmG)){top=it(4,2,30)+it(30,2,30)+it(16,-4,32);
+    base=`<rect x="7" y="30" width="50" height="25" rx="3" fill="#c98a4a" ${O}/><path d="M7 38H57M7 47H57" stroke="#3b2a1e" stroke-width="1.6" opacity=".55"/><rect x="11" y="33" width="6" height="19" rx="1.5" fill="#a86a32" opacity=".7"/><rect x="47" y="33" width="6" height="19" rx="1.5" fill="#a86a32" opacity=".7"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${top}${base}</svg>`;}
+  if(/sepeti/.test(nmG)){top=it(6,4,28)+it(30,4,28)+it(18,-2,28);
+    base=`<path d="M8 32H56L51 55H13Z" fill="#d9a85a" ${O}/><path d="M10 40H54M12 48H52" stroke="#8a5a2a" stroke-width="1.8"/><path d="M20 33L22 54M32 33V54M44 33L42 54" stroke="#8a5a2a" stroke-width="1.6"/><path d="M14 32Q32 6 50 32" fill="none" ${O}/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}${top}</svg>`;}
+  if(/güğümü/.test(nmG)){
+    base=`<path d="M22 14H42L40 22Q54 30 52 44Q50 56 32 56Q14 56 12 44Q10 30 24 22Z" fill="#d7884a" ${O}/><path d="M22 14Q32 9 42 14" fill="#e9a86a" ${O}/><path d="M50 30Q60 30 58 40Q56 46 50 46" fill="none" ${O}/><path d="M18 40Q32 46 46 40" stroke="#f3c48a" stroke-width="2.4" fill="none"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}${it(20,30,24)}</svg>`;}
+  if(/fırını|Tandır/.test(nmG)){
+    base=`<path d="M8 54V38Q8 14 32 14Q56 14 56 38V54Z" fill="#c9875a" ${O}/><path d="M14 30Q20 22 28 22M40 20Q48 24 50 32" stroke="#e9b48a" stroke-width="2.2" fill="none"/><path d="M18 54V42Q18 32 32 32Q46 32 46 42V54Z" fill="#3b2a1e"/><path d="M22 54Q26 44 32 48Q38 42 42 54Z" fill="#f08a3a"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}${it(20,34,24)}</svg>`;}
+  if(/kovanı/.test(nmG)){
+    base=`<path d="M14 54Q8 40 14 28Q20 12 32 12Q44 12 50 28Q56 40 50 54Z" fill="#e9b04a" ${O}/><path d="M12 24H52M10 34H54M10 44H54" stroke="#a8742a" stroke-width="2"/><path d="M26 54Q26 46 32 46Q38 46 38 54Z" fill="#3b2a1e"/><circle cx="50" cy="16" r="3" fill="#ffd166" stroke="#3b2a1e" stroke-width="1.5"/><path d="M48 13Q46 9 49 10M52 13Q54 9 51 10" stroke="#3b2a1e" stroke-width="1.2" fill="#fff"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}</svg>`;}
+  if(/cezve/.test(nmG)){
+    base=`<path d="M16 26H40L44 54H12Z" fill="#c98a4a" ${O}/><path d="M14 26Q28 20 42 26" fill="#e9a86a" ${O}/><path d="M42 34H60" stroke="#3b2a1e" stroke-width="5" stroke-linecap="round"/><path d="M42 34H59" stroke="#8a5a2a" stroke-width="2.6" stroke-linecap="round"/><path d="M16 42Q28 47 42 42" stroke="#f3c48a" stroke-width="2.2" fill="none"/>`;
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}${it(12,0,26)}</svg>`;}
+  // mangal / ocak
+  base=`<path d="M8 34H56L52 46H12Z" fill="#6b6b6b" ${O}/><path d="M14 46L10 58M50 46L54 58" ${O} fill="none"/><path d="M12 34Q16 26 20 34Q24 24 28 34Q32 22 36 34Q40 25 44 34Q48 27 52 34" fill="#f08a3a" stroke="#c2412f" stroke-width="1.6"/><path d="M8 33H56" stroke="#3b2a1e" stroke-width="2.4"/>`;
+  return `<svg viewBox="0 0 64 64" aria-hidden="true">${sh}${base}${it(14,0,36)}</svg>`;
+}
 CITY.forEach(city=>{
   const letters=Object.keys(city.chains);
   letters.forEach(c=>{const C=city.chains[c];
     CH[c]={name:C.name,items:C.items.map(it=>["",it[0]])};
     C.items.forEach((it,i)=>{ART[c+(i+1)]=itemSVG(it[1],it[2],it[3],i+1);});
-    ART["g"+c]=ART[C.gen[0]]||ART.box; GEN_OF[c]=C.gen[1];
+    ART["g"+c]=genArt(C,c); GEN_OF[c]=C.gen[1];
     CHAIN_BG[c]=lt(C.items[0][2],.8);
   });
   CHAINS[city.n]=letters;
