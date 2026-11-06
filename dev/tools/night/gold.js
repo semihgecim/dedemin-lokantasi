@@ -1,0 +1,18 @@
+const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();
+const ctx=await b.newContext({viewport:{width:390,height:800}});await ctx.route(/fonts\.(googleapis|gstatic)/,r=>r.abort());
+const p=await ctx.newPage();const errs=[];p.on('pageerror',e=>errs.push(e.message));
+await p.addInitScript(()=>{if(sessionStorage.getItem('s'))return;sessionStorage.setItem('s',1);const d=new Date(),k=d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();const b=Array(49).fill(null);b[44]={g:"A"};b[45]={g:"B"};b[46]={g:"C"};
+ b[8]={x:"gold",l:1};b[9]={x:"gold",l:1};b[10]={x:"gold",l:2};b[11]={x:"gold",l:3};b[12]={x:"gold",l:4};b[15]={x:"bub",c:"B",l:4,t:Date.now()};b[20]={c:"B",l:2};
+ localStorage.setItem("dedemin-lokantasi.v3",JSON.stringify({tut:99,chapter:3,intro3:true,board:b,stars:5,tdone:0,energy:80,eAt:Date.now(),restored:2,found:{},served:40,seenIntro:true,orders:[null,null,null],daily:{d:k,streak:1},wheel:k}));});
+await p.goto('file:///home/claude/dedemin-lokantasi/index.html');await p.waitForTimeout(800);
+await p.evaluate(()=>document.getElementById("goBoard").click());await p.waitForTimeout(600);
+await p.dragAndDrop('.item[data-i="8"]','.item[data-i="9"]',{force:true});await p.waitForTimeout(400);
+console.log("after merge",await p.evaluate(()=>JSON.parse(localStorage.getItem("dedemin-lokantasi.v3")).board[9]));
+await p.screenshot({path:'night/g1.png'});
+await p.click('#goldBtn');await p.waitForTimeout(300);await p.screenshot({path:'night/g2.png'});
+await p.click('#gEn');await p.waitForTimeout(300);
+console.log(await p.evaluate(()=>[document.getElementById("gold").textContent,document.getElementById("energy").textContent]));
+await p.click('#gClose');await p.click('.item[data-i="15"]',{force:true});await p.waitForTimeout(300);await p.screenshot({path:'night/g3.png'});
+await p.click('#bubBuy');await p.waitForTimeout(300);
+console.log("bub",await p.evaluate(()=>[JSON.parse(localStorage.getItem("dedemin-lokantasi.v3")).board[15],document.getElementById("gold").textContent]));
+console.log(errs);await b.close();})();
