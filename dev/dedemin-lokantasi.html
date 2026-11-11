@@ -1328,7 +1328,7 @@ try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();
 // ---------- per-task visuals: damage that tasks remove, decor that tasks add (960x540 scene space)
 const POS={web1:[300,148],rust:[480,350],web2:[662,148],web3:[238,222],ivy:[680,150],tile1:[330,42],tile2:[470,32],tile3:[610,46],chim:[670,30],ldirt:[480,240],
  crackL:[222,165],crackR:[712,170],posters:[170,205],awning:[480,200],slamps:[480,128],pots:[260,62],flowers:[260,52],pigeons:[470,22],
- frame:[248,168],frameflw:[248,205],bunL:[330,104],bunR:[630,104],cushion:[628,134],cat:[628,126],curt:[160,300],wbox:[160,350],ivyflw:[170,170],pots2:[700,62],wire:[480,82],banner:[480,104],
+ frame:[248,168],frameflw:[248,205],bunL:[330,104],bunR:[630,104],cushion:[735,596],cat:[735,588],curt:[160,300],wbox:[160,350],ivyflw:[170,170],pots2:[700,62],wire:[480,82],banner:[480,104],
  aweb:[365,222],arust:[365,380],adust:[480,156],archd:[480,222],achim:[670,30],aldirt:[480,238],atile1:[330,42],atile2:[610,46],aivy:[140,200],acrack:[150,80],
  tTL:[291,160],tTR:[672,163],tL:[240,383],tR:[722,365],aposters:[178,330],apots:[260,62],aplants:[260,52],apig:[470,22],aplank:[560,342],
  achain:[480,112],ascratch:[480,156],apencil:[480,156],abunL:[330,100],abunR:[630,100],aslamps:[480,118],acurt:[160,300],awbox:[160,350],aivyflw:[170,170],anazar:[365,240],aball:[480,200],abanner:[480,96],awire:[480,82],nazar:[365,236]};Object.assign(POS,POS_EXTRA);
@@ -1723,7 +1723,7 @@ function renderScene(){
       dec("pots2",P_.pots([660,702,744],74)+P_.flowers([660,702,744],74)),
       r<5?dec("wire",P_.wire(195,775,74)):"",
       dec("banner",P_.banner(480,108,"HOŞ GELDİNİZ",200)),
-      dec("cushion",P_.cushion(628,136)),dec("cat",P_.cat(628,136))
+      dec("cushion",P_.cushion(735,596)),dec("cat",P_.cat(735,596))
     ].join("")})()}
     ${r>=5?`<path d="M195 74Q340 104 482 74T775 74" fill="none" stroke="#4a3020" stroke-width="2.5"/>${[220,262,304,346,388,430,534,576,618,660,702,744].map((x,k)=>`<circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="6.5" fill="#ffd166" stroke="#c98a2a" stroke-width="1.5"/><circle cx="${x}" cy="${80+Math.sin(k*1.3)*6}" r="16" fill="url(#lg)"/>`).join("")}`:""}
   </svg>`;
