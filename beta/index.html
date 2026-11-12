@@ -371,6 +371,30 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .upnext li.lvlend:before{display:none}
 .upnext li.lvlend{padding-left:0}
 
+.railbar{gap:4px}.railbar .rail{gap:4px}.railbar .ricon{width:calc((100vw - 52px)/6);max-width:58px}
+.ricon.hot .rimg{animation:pulseK 1.2s ease-in-out infinite}@keyframes pulseK{50%{transform:scale(1.12) rotate(-4deg)}}
+.pface{position:relative}.hearts{position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);font-size:.58rem;line-height:1;color:#e2492f;background:#fff;border-radius:8px;padding:1px 4px;box-shadow:0 1px 2px rgba(0,0,0,.25);white-space:nowrap;letter-spacing:-1px}
+.hearts.full{background:#ffe08a;color:#c0392b}.reghint{color:#c0392b;font-weight:700;white-space:nowrap}
+.mapgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px 4px;margin:12px 0;position:relative}
+.mapgrid:before{content:"";position:absolute;left:8%;right:8%;top:22px;border-top:3px dashed #c9a36a}.mapgrid:after{content:"";position:absolute;left:8%;right:8%;top:calc(50% + 27px);border-top:3px dashed #c9a36a}
+.mstop{position:relative;text-align:center;z-index:1}.mdot{display:grid;place-items:center;width:44px;height:44px;margin:0 auto 2px;border-radius:50%;background:#e8dcc0;border:3px solid #c9a36a;font:800 1rem var(--display);color:#8a6a4a;overflow:hidden;box-sizing:border-box}
+.mdot img{width:100%;height:100%;object-fit:cover}.mstop b{display:block;font:800 .68rem var(--display)}.mstop small{display:block;font-size:.56rem;opacity:.75}
+.mstop.done .mdot{border-color:#45c1a8}.mstop.now .mdot{background:#ffd166;border-color:#e8a93a;color:#3b2414;animation:pulseK 1.6s ease-in-out infinite}.mstop.lock{opacity:.5}
+.mstop.koli .mdot{box-shadow:0 0 0 3px #e2492f}.mstop.koli small{color:#c0392b;font-weight:800;opacity:1}
+.kolicard{display:flex;gap:10px;align-items:center;background:#f3e8d0;border-radius:12px;padding:8px 10px;margin:4px 0 8px}.kolicard img{width:46px;height:46px;border-radius:50%;flex:none;object-fit:cover}
+.skyfx{position:absolute;inset:0;border-radius:inherit;pointer-events:none;overflow:hidden;z-index:2}
+.skyfx.sabah{background:linear-gradient(180deg,rgba(255,206,140,.30),rgba(255,230,190,.10) 60%,transparent)}
+.skyfx.gunduz{background:linear-gradient(180deg,rgba(150,205,255,.34),rgba(255,250,225,.12) 55%,transparent)}
+.skyfx.gece{background:linear-gradient(180deg,rgba(6,10,46,.50),rgba(6,10,46,.22) 60%,rgba(6,10,46,.10))}
+.skyfx .moon{position:absolute;right:9%;top:6%;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffbe0,#f3e3a0);box-shadow:0 0 18px rgba(255,244,190,.8)}
+.skyfx .star{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:twk 2.8s ease-in-out infinite}@keyframes twk{50%{opacity:.15;transform:scale(.6)}}
+.skyfx .flake,.skyfx .leaf,.skyfx .petal{position:absolute;top:-12px;animation:fallK linear infinite}
+.skyfx .flake{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.9}
+.skyfx .leaf{width:10px;height:7px;border-radius:0 80% 0 80%;background:#d9822b}.skyfx .leaf:nth-child(odd){background:#b5532a}
+.skyfx .petal{width:8px;height:6px;border-radius:80% 0 80% 0;background:#f6b8c8}
+@keyframes fallK{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(34px,520px) rotate(300deg)}}
+@media (prefers-reduced-motion:reduce){.skyfx .flake,.skyfx .leaf,.skyfx .petal,.skyfx .star{animation:none;display:none}}
+
 .railbar{display:flex;justify-content:space-between;gap:6px;margin-top:-2px}
 .railbar .rail{position:static;flex-direction:row;gap:6px}
 .railbar .ricon{width:58px;animation:none}
@@ -422,7 +446,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
     <button class="chip bookchip" id="bookBtn" type="button" aria-label="Defter">Defter</button>
   </div>
   <section class="screen homescr" id="homeScr">
-    <div class="scenewrap" id="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Dükkânın ön cephesi"></div>
+    <div class="scenewrap" id="scenewrap"><div id="scene" class="scenebox" role="img" aria-label="Dükkânın ön cephesi"></div><div id="skyfx" class="skyfx" aria-hidden="true"></div>
       <div class="taskdock">
         <button class="taskbtn" id="rBtn" type="button"><span class="tico" id="tIco"></span><span class="tcost" id="tCost">★10</span></button>
       </div>
@@ -1303,7 +1327,7 @@ const pick=a=>a[Math.floor(Math.random()*a.length)];
 const KEY="dedemin-lokantasi.beta";
 function fresh(){
   const b=Array(N).fill(null);
-  [[37,"b",1],[38,"b",1],[30,"f",1],[31,"f",1],[39,"s",1]].forEach(([i,c,l])=>b[i]={c,l});b[44]={g:"f"};b[45]={g:"s"};b[46]={g:"b"};
+  [[51,"b",1],[52,"b",1],[44,"f",1],[45,"f",1],[53,"s",1]].forEach(([i,c,l])=>b[i]={c,l});b[58]={g:"f"};b[59]={g:"s"};b[60]={g:"b"};
   return {chapter:1,stars:0,tdone:0,board:b,coins:0,energy:MAXE,eAt:Date.now(),restored:0,found:{},served:0,seenIntro:false,
     orders:[{p:"nuri",items:[{c:"b",l:2}]},{p:"hasan",items:[{c:"f",l:2}]},{p:"pamuk",items:[{c:"s",l:1}]}].map(withReward)};
 }
@@ -1439,14 +1463,14 @@ function serve(i){
   const o=S.orders[i]; if(!orderStatus(o).every(Boolean)) return;
   const cardEl=document.querySelector(`.cust[data-i="${i}"] .pface`),cardRect=cardEl?cardEl.getBoundingClientRect():null;
   o.items.forEach(x=>{const j=S.board.findIndex(y=>y&&!y.lk&&y.c===x.c&&y.l===x.l);if(j>-1)S.board[j]=null;});
-  S.stars+=o.stars||0; S.served++;
+  const rb=regBonus(o);S.stars+=(o.stars||0)+rb; S.served++;regBump(o.p);
   const P=PEOPLE[o.p];SFX("serve");qbump(P.pet?"pet":"serve");
   if(cardRect){if(P.pet)flyTo(cardRect,enChip(),`<span class="tok en">⚡</span>`,3);else flyTo(cardRect,starChip(),`<span class="tok st">★</span>`,Math.min(6,o.stars||1));}
   evAdd(2,cardRect);addXP(3);mouseCheck();
   if(o.vip){placeItem({x:"pack"});if(cardRect)setTimeout(()=>flyTo(cardRect,starChip(),`<span class="tok st">★</span>`,8),300);toast(`${P.name} çok memnun kaldı! Kart paketi bıraktı.`);}
   if(P.pet)petFed();else if(Math.random()<0.07&&placeItem({x:"pack"}))toast(`${P.name} sana bir hatıra kartı bıraktı!`);
   if(P.pet){S.energy=Math.min(MAXE,S.energy+(S.chapter>=2?8:6));}
-  {const card0=document.querySelector(`.cust[data-i="${i}"]`);const host=document.querySelector(".custhead");if(card0&&host){const f=document.createElement("div");f.className="flyrew";f.textContent=P.pet?"+⚡":`+★${o.stars||0}`;const a=card0.getBoundingClientRect(),b=host.getBoundingClientRect();f.style.left=(a.left-b.left+a.width/2)+"px";f.style.top=(a.top-b.top+a.height*.45)+"px";host.appendChild(f);setTimeout(()=>f.remove(),1200);}}
+  {const card0=document.querySelector(`.cust[data-i="${i}"]`);const host=document.querySelector(".custhead");if(card0&&host){const f=document.createElement("div");f.className="flyrew";f.textContent=P.pet?"+⚡":`+★${(o.stars||0)+rb}`;const a=card0.getBoundingClientRect(),b=host.getBoundingClientRect();f.style.left=(a.left-b.left+a.width/2)+"px";f.style.top=(a.top-b.top+a.height*.45)+"px";host.appendChild(f);setTimeout(()=>f.remove(),1200);}}
   const card=document.querySelector(`.cust[data-i="${i}"]`); if(card)card.classList.add("leaving");
   S.orders[i]=null; save(); renderBoard(); renderTop(); renderRepair();
   setTimeout(()=>{S.orders[i]=newOrder();save();renderOrders();},window.__FAST?0:650);
@@ -1754,7 +1778,7 @@ function renderOrders(){
     const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
     return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
       <div class="bub">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" data-k="${x.c}${x.l}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}<span class="st">${ok?"Ver ":""}${P.pet?"⚡":"★"+o.stars}</span>${o.vip?`<span class="vipb">👑 Özel</span>`:""}</div>
-      <div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}</div>
+      <div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}${regHearts(o.p)}</div>
     </div>`;}).join("");
 }
 $("orders").addEventListener("click",e=>{
@@ -1763,7 +1787,7 @@ $("orders").addEventListener("click",e=>{
   if(orderStatus(o).every(Boolean)){serve(i);return;}
   {const nd=e.target.closest(".need");if(nd&&nd.dataset.k){openRecipe(nd.dataset.k[0],+nd.dataset.k.slice(1));return;}}
   {const P=PEOPLE[o.p];P._a=((P._a||0)+1)%P.ask.length;say(o.p,P.ask[P._a]);}
-  const names=o.items.map(x=>nm(x.c,x.l)).join(" ve ");$("info").innerHTML=`${PEOPLE[o.p].name} istiyor: <b>${names}</b>`;
+  const names=o.items.map(x=>nm(x.c,x.l)).join(" ve ");$("info").innerHTML=`${PEOPLE[o.p].name} istiyor: <b>${names}</b>${regHint(o.p)}`;
 });
 $("orders").addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){const c=e.target.closest(".cust");if(c){e.preventDefault();c.click();}}});
 
@@ -1783,6 +1807,7 @@ function openRecipe(c,l){if(!CH[c])return;const n=CH[c].items.length,M=max(c);S.
 const ICON=(c,k)=>ART[c+k]||"";
 $("info").addEventListener("click",e=>{const b=e.target.closest(".tarifb");if(b)openRecipe(b.dataset.c,+b.dataset.l);});
 function openPage(c,n){
+  if(c===1&&n===0&&!seen(1)&&!S.dedeAsked&&!window.__FAST){askDede(()=>openPage(1,0));return;}
   const p=CHAPTERS[c].pages[n];
   const first=n===0&&!seen(c);
   const go=c<MAXCH&&n===CHAPTERS[c].pages.length-1&&S.chapter===c&&S.restored>=CHAPTERS[c].levels.length;
@@ -1817,13 +1842,15 @@ function openBook(){
   h+=`<div class="date">Tarif albümü · ${got}/${tot} · her yeni tarif +1★</div>${al}`;
   $("paper").innerHTML=`<h3>Defterler</h3>${h}
     <div class="note">Hizmet verilen misafir: <b>${S.served}</b></div>
+    <button class="btn" type="button" id="letBtn">✉ Mektup kutusu · ${letN()}/${LETTERS.length}</button>
+    <button class="btn" type="button" id="mapBtn">🗺 Yolculuk haritası</button>
     <button class="btn" type="button" id="setBtn">⚙ Ayarlar, ses ve kayıt kodu</button>
     <button class="danger" type="button" id="resetBtn">Baştan başla</button>
     <button class="btn" type="button" id="closeBook">Kapat</button>`;
   $("sheet").hidden=false;
   $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.c,+b.dataset.p));
   $("closeBook").onclick=()=>$("sheet").hidden=true;
-  $("setBtn").onclick=openSaveSheet;
+  $("setBtn").onclick=openSaveSheet;$("letBtn").onclick=openLetterBox;$("mapBtn").onclick=openMap;
   $("resetBtn").onclick=function(){
     if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(1,0);}
     else{this.dataset.armed="1";this.textContent="Emin misin? Tüm ilerleme silinir. Tekrar dokun.";}
@@ -1937,6 +1964,7 @@ function openSaveSheet(){
     <button class="btn" type="button" id="sndBtn">${S.sound===false?"🔇 Ses efektleri kapalı (aç)":"🔊 Ses efektleri açık (kapat)"}</button>
     <button class="btn" type="button" id="musBtn">${S.music===false?"🎵 Müzik kapalı (aç)":"🎵 Müzik açık (kapat)"}</button>
     <button class="btn" type="button" id="awnBtn">🎨 Tentenin rengini değiştir</button>
+    <button class="btn" type="button" id="dedeBtn">✏️ Dedenin adı: ${DN()} (değiştir)</button>
     <div class="note"><b>Kayıt kodu.</b> Oyunun tamamı bu kodda. Kopyalayıp bir yere (WhatsApp'ta kendine, not defterine) sakla. Telefon değişse ya da uygulama silinse bile bu kodla kaldığın yerden devam edersin.</div>
     <textarea id="codeBox" rows="3" readonly style="width:100%;font:12px monospace;border-radius:10px;padding:8px;box-sizing:border-box">${saveCode()}</textarea>
     <button class="btn" type="button" id="copyBtn">Kodu kopyala</button>
@@ -1947,6 +1975,7 @@ function openSaveSheet(){
   $("sheet").hidden=false;
   $("sndBtn").onclick=()=>{S.sound=S.sound===false;save();openSaveSheet();SFX("claim");};
   $("musBtn").onclick=()=>{S.music=S.music===false;save();if(S.music===false)MUSIC.stop();else MUSIC.start();openSaveSheet();};
+  $("dedeBtn").onclick=()=>askDede(openSaveSheet);
   $("awnBtn").onclick=async()=>{modalOpen=true;await chooseAwning();modalOpen=false;renderScene();};
   $("copyBtn").onclick=async()=>{const t=$("codeBox");try{await navigator.clipboard.writeText(t.value);toast("Kod kopyalandı");}catch(e){t.select();try{document.execCommand("copy");toast("Kod kopyalandı");}catch(_){toast("Kodu seçip elle kopyala");}}};
   $("loadBtn").onclick=function(){const o=loadCode($("inBox").value);if(!o){toast("Kod geçersiz. Tamamını yapıştırdığından emin ol.");SFX("no");return;}
@@ -2193,13 +2222,15 @@ function renderRails(){
   const nextEv=S.ev.got<EVM.length?EVM[S.ev.got][0]:EVM[EVM.length-1][0];
   const mid=new Date();mid.setHours(24,0,0,0);
   L.innerHTML=`<button type="button" class="ricon" id="rEv" style="--rc:${E.c}"><span class="rimg">${ART.ic_event}</span><span class="rbar"><i style="width:${Math.min(100,S.ev.pts/nextEv*100)}%"></i></span><small>${fmtLeft(end-Date.now())}</small></button>
-    <button type="button" class="ricon" id="rAl" style="--rc:#8a5a2a"><span class="rimg">${ART.ic_album}</span><small>${have}/${nc.length}</small></button>`;
+    <button type="button" class="ricon" id="rAl" style="--rc:#8a5a2a"><span class="rimg">${ART.ic_album}</span><small>${have}/${nc.length}</small></button>
+    <button type="button" class="ricon${koliReady()?" hot":""}" id="rMap" style="--rc:#3a7a5a"><span class="rimg">${ART.ic_map}</span><small>${koliReady()?"Koli!":"Harita"}</small></button>`;
   R.innerHTML=`<button type="button" class="ricon" id="rPet" style="--rc:#45c1a8"><span class="rimg face">${Pp.img?`<img src="${Pp.img}" alt="">`:""}</span><span class="rbar"><i style="width:${P.x/need*100}%"></i></span><small>Sevgi ${P.lv}</small></button>
     <button type="button" class="ricon" id="rWh" style="--rc:#7a3a8a"><span class="rimg">${ART.ic_wheel}</span><small>${S.wheel===dayKey(Date.now())?"Yarın":"Çevir!"}</small></button>
-    <button type="button" class="ricon" id="rGift" style="--rc:#c0392b"><span class="rimg">${ART.ic_gift}</span><small>${(S.daily||{}).d===dayKey(Date.now())?fmtLeft(mid-Date.now()):"Hazır!"}</small></button>`;
+    <button type="button" class="ricon" id="rGift" style="--rc:#c0392b"><span class="rimg">${ART.ic_gift}</span><small>${(S.daily||{}).d!==dayKey(Date.now())?"Hazır!":letterReady()?"Mektup!":fmtLeft(mid-Date.now())}</small></button>`;
+  $("rMap").onclick=openMap;
   $("rEv").onclick=openEvent;$("rWh").onclick=openWheel;$("rAl").onclick=()=>openAlbum(S.chapter);
   $("rPet").onclick=()=>{const P=petLove();toast(`${Pp.name}: sevgi ${P.lv}. seviye · ${P.x}/${3+P.lv*2} mama. Doyurdukça ödül verir.`);};
-  $("rGift").onclick=()=>{if((S.daily||{}).d===dayKey(Date.now()))toast(`Yeni günlük hediye ${fmtLeft(mid-Date.now())} sonra`);else dailyCheck();};
+  $("rGift").onclick=()=>{if((S.daily||{}).d===dayKey(Date.now())&&openLetter())return;if((S.daily||{}).d===dayKey(Date.now()))toast(`Yeni günlük hediye ${fmtLeft(mid-Date.now())} sonra`);else dailyCheck();};
   const B=$("evBadge");if(B){B.style.setProperty("--rc",E.c);B.innerHTML=`<span class="rimg">${ART.ic_event}</span><b>${S.ev.pts}/${nextEv}</b>`;}
 }
 setInterval(()=>{if(VIEW==="home"&&$("sheet").hidden)renderRails();},30000);
@@ -2382,16 +2413,127 @@ function dailyCheck(){
     <button class="btn" type="button" id="takeDaily">Hediyeni al: ${R.t}</button>`;
   $("sheet").hidden=false;
   $("takeDaily").onclick=()=>{S.daily={d:today,streak:st};if(R.e)S.energy+=R.e;if(R.s)S.stars+=R.s;if(R.g)S.gold+=R.g;if(R.box&&!placeItem({x:"box"}))S.energy+=10;
-    save();$("sheet").hidden=true;renderTop();renderRepair();renderBoard();toast(`Günlük hediye: ${R.t}`);};
+    save();$("sheet").hidden=true;renderTop();renderRepair();renderBoard();renderRails();toast(`Günlük hediye: ${R.t}`);setTimeout(openLetter,900);};
 }
+// ================= v5: dedenin adı, müdavimler, mektup kutusu, yaşayan harita, gerçek saat/mevsim =================
+// ---------- dedenin adı (display-time replacement; story data stays untouched)
+const DN=()=>S.dede||"Mehmet";
+function trSuf(name,suf){const lo=name.toLocaleLowerCase("tr-TR"),vs=lo.match(/[aeıioöuü]/g)||["e"],v=vs[vs.length-1],last=lo[lo.length-1];
+  const endV=/[aeıioöuü]/.test(last),hard=/[fstkçşhp]/.test(last);
+  const i4="aı".includes(v)?"ı":"ei".includes(v)?"i":"ou".includes(v)?"u":"ü",e2="aıou".includes(v)?"a":"e";
+  const gen=endV?"n"+i4+"n":i4+"n";
+  return {in:gen,i:endV?"y"+i4:i4,e:endV?"y"+e2:e2,ten:(hard?"t":"d")+e2+"n",te:(hard?"t":"d")+e2,le:(endV?"y":"")+"l"+e2,indi:gen+"d"+i4}[suf];}
+function dedeFix(s){const n=DN();if(n==="Mehmet")return s;
+  return s.replace(/Mehmet'(indi|in|i|e|ten|le|te)(?![a-zçğıöşü])/g,(m,x)=>n+"'"+trSuf(n,x)).replace(/Mehmet/g,n).replace(/MEHMET/g,n.toLocaleUpperCase("tr-TR")).replace(/\bM(?= harfli| kazı)/g,n[0]);}
+{const done=new WeakMap();
+ const walk=node=>{if(DN()==="Mehmet")return;
+   if(node.nodeType===3){const v=node.nodeValue;if(done.get(node)===v||v.length<3||!/ehmet|MEHMET|\bM (harfli|kazı)/.test(v))return;const f=dedeFix(v);done.set(node,f);if(f!==v)node.nodeValue=f;}
+   else if(node.nodeType===1&&node.tagName!=="TEXTAREA"&&node.tagName!=="INPUT"&&node.tagName!=="SCRIPT"){const w=document.createTreeWalker(node,4);let x;while((x=w.nextNode()))walk(x);}};
+ new MutationObserver(ms=>{for(const m of ms){if(m.type==="characterData")walk(m.target);else m.addedNodes.forEach(walk);}}).observe(document.body,{childList:true,subtree:true,characterData:true});
+ window.__dedeWalk=()=>walk(document.body);}
+function askDede(then){
+  $("paper").innerHTML=`<div class="phead"><img src="${FACES.dede}" alt=""><div><div class="date">Başlamadan önce</div><div class="pwho">Bu lokanta kimin?</div></div></div>
+    <h3>Dedenin adı neydi?</h3>
+    <div class="note">Tabelaya onun adını yazalım. Defterde, mektuplarda, dostlarının dilinde hep bu isim geçecek. İstersen kendi dedenin adını yaz.</div>
+    <input id="dedeIn" type="text" maxlength="10" value="${DN()}" autocomplete="off" style="width:100%;box-sizing:border-box;font:700 1.3rem var(--display);padding:10px 12px;border-radius:12px;border:2px solid #c9a36a;text-align:center;background:#fffaf0;color:#3b2414">
+    <div class="note small" id="dedePrev"></div>
+    <button class="btn" type="button" id="dedeOk">Tabelaya yaz</button>`;
+  $("sheet").hidden=false;
+  const clean=v=>{v=(v||"").replace(/[^A-Za-zÇĞİÖŞÜçğıöşüÂâÎîÛû]/g,"").slice(0,10);return v?v[0].toLocaleUpperCase("tr-TR")+v.slice(1).toLocaleLowerCase("tr-TR"):"";};
+  const prev=()=>{const n=clean($("dedeIn").value)||"Mehmet";$("dedePrev").textContent=`Tabela: ${n.toLocaleUpperCase("tr-TR")} USTA LOKANTASI`;};
+  $("dedeIn").oninput=prev;prev();
+  $("dedeOk").onclick=()=>{const n=clean($("dedeIn").value)||"Mehmet";S.dede=n;S.dedeAsked=1;save();$("sheet").hidden=true;renderAll();window.__dedeWalk();if(then)then();};
+}
+
+// ---------- müdavimler: serve the same guest often, their story moves on and they become a regular
+const REG_TH=[4,9,15];
+const regN=p=>(S.reg||{})[p]||0, regH=p=>REG_TH.filter(x=>regN(p)>=x).length;
+const regBonus=o=>(!PEOPLE[o.p].pet&&regN(o.p)>=REG_TH[2])?Math.ceil((o.stars||0)*.25):0;
+const regHearts=p=>{const h=PEOPLE[p].pet?0:regH(p);return h?`<span class="hearts${h>=3?" full":""}">${"♥".repeat(h)}</span>`:"";};
+function regHint(p){if(PEOPLE[p].pet)return "";const n=regN(p),nx=REG_TH.find(x=>x>n);return nx?` · <span class="reghint">♥ ${nx-n} servis sonra</span>`:` · <span class="reghint">♥ Müdavim: +%25 ★</span>`;}
+function regBump(p){const P=PEOPLE[p];if(P.pet)return;S.reg=S.reg||{};S.reg[p]=(S.reg[p]||0)+1;const k=REG_TH.indexOf(S.reg[p]);if(k<0)return;
+  const R=[{e:15},{g:2},{pack:1,g:1}][k],T=["+15 ⚡","+2 🪙","Kart paketi + 1 🪙"][k];giveRew(R);
+  const line=(P.thanks||P.ask||[""])[k%((P.thanks||P.ask||[""]).length)];
+  setTimeout(()=>{say(p,line);if(k===2)celebrate(`${P.name} artık müdavimin!`,"Her siparişinde +%25 ★ bırakacak");else toast(`${P.name} ile aranız ısındı ${"♥".repeat(k+1)} · ${T}`);renderTop();renderBoard();},window.__FAST?0:700);}
+
+// ---------- mektup kutusu: one unsent letter a day
+const LETTERS=[
+ {req:1,t:"Tuz",d:"Torunuma",h:"Torunum, tuzu en son at.\nErken atılan tuz geri alınmaz. Söz de öyle.\nBunu bana bir tepsi baklava öğretti.\nTepsinin hikâyesi uzun.\nÖnce sana arka raftaki kitabı anlatmalıyım. Yarın."},
+ {req:1,t:"Kitap",d:"Torunuma",h:"İsmail parası olmadığı gün bir kitap bıraktı, biliyorsun.\nBilmediğin şu: arasına ilk kazandığım lirayı koydum.\nHarcamaya kıyamadım.\nO lirayı bana kimin verdiğini söylesem şaşarsın.\nOnu da yarın yazarım."},
+ {req:1,t:"İlk lira",d:"Torunuma",h:"İlk liramı bir sütçü verdi.\n'Çorban benim sütümden iyi' dedi, parayı tezgâha bıraktı.\nKapının önünde uyuyan kedisi bende kaldı.\nPamuk, o kedinin torununun torunudur.\nPeki sütçü niye bir daha gelmedi? Yarın."},
+ {req:1,t:"Sütçünün selamı",d:"Torunuma",h:"Sütçü gelmedi, çünkü Antep'e göçtü.\nYıllar sonra kapıma bir delikanlı yolladı:\nelinde bir tepsi baklava, cebinde iki kuruş,\ndilinde sütçünün selamı.\nAdı Halil'di.\nİlk gün yaptığı hatayı kimseye anlatmadım. Yarın sana anlatırım."},
+ {req:1,t:"Şekerli çorba",d:"Torunuma",h:"Halil ilk gün çorbaya şeker attı. Tuz sanmış.\nO çorbayı İsmail içti. 'Fena değil' dedi.\nO gün anladım: dostluk bazen küçük bir yalandır.\nBüyük yalan ise başka şey.\nOnu Antep'e varınca öğrenirsin."},
+ {req:2,t:"Sönmeyen ocak",d:"Torunuma",h:"Halil'e küstüğüm gece ocağı söndürmedim.\nSabaha kadar yandı.\nBir tepsi baklava yaptım, kimseye vermedim.\nKime sakladığımı ben de uzun süre bilmedim.\nİzmir'e varınca sen anlarsın."},
+ {req:3,t:"Vapur",d:"Kardeşime · 1961 · gönderilmedi",h:"Kardeşim,\nvapur kalkarken el salladın. Ben sallayamadım:\nelimde annemin defteri vardı, düşer diye korktum.\nİlk durağım Karadeniz.\nOrada beni kimin karşıladığını bir sonraki mektupta yazacağım."},
+ {req:4,t:"İskele",d:"Kardeşime · 1961 · gönderilmedi",h:"Kardeşim,\nbeni iskelede bir balıkçı karşıladı.\nAdımı sormadan 'Aç mısın?' diye sordu.\nBurada önce sofra, sonra isim.\nHamsinin kırk türlüsünü sayıyorum, otuz dokuzda kaldım.\nKırkıncıyı kim öğretecek, tahmin et."},
+ {req:4,t:"Kırkıncı",d:"Kardeşime · 1962 · gönderilmedi",h:"Kırkıncıyı yaylacı teyze öğretti: hamsili ekmek.\nYine 'Sabır uşağum' dedi.\nSana bir kemençe sesi göndermek isterdim, zarfa sığmıyor.\nGüneye iniyorum.\nOrada sofrada herkes başka dil konuşurmuş. Bakalım ben hangisini konuşacağım."},
+ {req:5,t:"Üç dilde",d:"Kardeşime · 1962 · gönderilmedi",h:"Kardeşim,\nsofraya oturmadan üç dilde 'hoş geldin' duydum.\nUsta tel kadayıfı saç örer gibi örüyor.\nSayfamı çerçeveletti, arkasına da bir şey koydu.\nNe koyduğunu yarın yazarım, bugün ellerim şerbetli."},
+ {req:5,t:"Yasemin",d:"Kardeşime · 1962 · gönderilmedi",h:"Çerçevenin arkasındaki, ustanın annesinden kalma kurutulmuş bir yasemin dalıymış.\n'Sayfan yalnız kalmasın' dedi.\nDemek tarifler de arkadaş istiyor.\nKışa Konya'dayım.\nAyaz çok diyorlar. Fırın sıcakmış ama."},
+ {req:6,t:"Doksan santim",d:"Kardeşime · 1963 · gönderilmedi",h:"Kardeşim,\nKonya'da fırın hiç sönmüyor.\nEtliekmeğim yine doksan santimde kaldı.\nUsta 'On santimi de gönlünden koy' dedi.\nGece semazenleri izledim.\nSen de fırının başında böyle dönüyorsundur diye düşündüm."},
+ {req:7,t:"Yukarıdan",d:"Kardeşime · 1963 · gönderilmedi",h:"Kardeşim,\nburada evler kayanın içinde, yıldızlar avucunda.\nBir balona bindim. Yukarıdan bakınca yollar ip gibi.\nHepsi sana çıkıyor gibi geldi.\nMektubun geldi.\nCevabını yazdım, yırttım. Yazdım, yırttım. Bu da onlardan biri."},
+ {req:8,t:"Benim adımla",d:"Kardeşime · 1964 · gönderilmedi",h:"Kardeşim,\nVan'da kahvaltı dört saat sürüyor, vedalaşmak daha uzun.\nBir kedi her sabah çöreğimi çalıyor. Adımı ona koydular.\nDemek bir yerde benim adımla çağrılan biri hep kalacak.\nSana yün çorap aldım.\nVerebilecek miyim, bilmiyorum."},
+ {req:9,t:"Son sayfa",d:"Kardeşime · 1964 · gönderilmedi",h:"Kardeşim,\nMardin'de damlar birbirine değiyor, kimse yalnız uyumuyor.\nSayfayı duvara ördüm, taşa adımın ilk harfini kazıdım.\nSon sayfa cebimde.\nOnu sana kendi elimle getireceğim.\nSöz."},
+ {req:10,t:"Galata",d:"Kardeşime · 1964 · gönderilmedi",h:"Kardeşim,\nmektubunu aldım. Annem...\nGalata'da bir dükkânın önünde üç saat durdum, içeri giremedim.\nSana da gelemedim.\nBu mektubu da göndermeyeceğim.\nAma bir gün biri bu kutuyu açarsa bilsin:\nher gün dönmek istedim."},
+ {req:10,t:"Yün çorap",d:"Torunuma",h:"Torunum,\nbu kutuyu sonuna kadar okuduysan beni benden iyi tanıyorsun.\nBir ricam var.\nHalana söyle: yün çorap sandıkta.\nHâlâ yeni."}
+];
+const letN=()=>(S.let||{}).n||0;
+const letterReady=()=>{const n=letN();return n<LETTERS.length&&LETTERS[n].req<=S.chapter&&(S.let||{}).d!==dayKey(Date.now())&&seen(S.chapter);};
+function letterHTML(i){const L=LETTERS[i];return `<div class="phead"><img src="${FACES.dede}" alt=""><div><div class="date">${L.d}</div><div class="pwho">Teneke kutudan · ${i+1}. mektup</div></div></div><h3>${L.t}</h3><div class="hand">${L.h}</div>`;}
+function openLetter(){if(!letterReady())return false;const i=letN();
+  const nx=LETTERS[i+1];
+  $("paper").innerHTML=letterHTML(i)+`<div class="note small">${nx?(nx.req<=S.chapter?"Yarın kutudan bir mektup daha çıkacak.":`Sıradaki mektup ${CHAPTERS[nx.req].place} yolunda açılacak.`):"Kutudaki son mektuptu."}</div>
+    <button class="btn" type="button" id="letOk">Mektubu kutuya koy · +10 ⚡</button>`;
+  $("sheet").hidden=false;SFX("page");
+  $("letOk").onclick=()=>{S.let={n:i+1,d:dayKey(Date.now())};S.energy+=10;save();$("sheet").hidden=true;renderTop();renderRails();};
+  return true;}
+function openLetterBox(){const n=letN();
+  $("paper").innerHTML=`<h3>Mektup kutusu</h3><div class="note">Dedenin teneke kutusundan her gün bir mektup çıkar. ${n}/${LETTERS.length} mektup okundu.</div>
+   <div class="pages">${LETTERS.map((L,i)=>i<n?`<button type="button" data-l="${i}">${L.t}<span>${L.d}</span></button>`:`<button type="button" class="locked" disabled>Açılmamış mektup<span>${L.req>S.chapter?CHAPTERS[L.req].place+" yolunda":"Günü gelince"}</span></button>`).join("")}</div>
+   <button class="btn" type="button" id="lbBack">Deftere dön</button>`;
+  $("sheet").hidden=false;$("lbBack").onclick=openBook;
+  $("paper").querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>{$("paper").innerHTML=letterHTML(+b.dataset.l)+`<button class="btn" type="button" id="lbBack2">Kutuya dön</button>`;$("lbBack2").onclick=openLetterBox;SFX("page");});}
+
+// ---------- yaşayan harita: finished cities stay alive and send a parcel every day
+const KOLI={1:["nuri","Çarşıdan selam var. Tabelayı her sabah ben siliyorum, merak etme.",{e:15},"+15 ⚡"],2:["halil","İki isimli tabelanın altından sana baklava yolladım. Sıcak ye.",{s:12},"★12"],
+ 3:["hala","Fırından yeni çıktı. Ağabeyim de yolda hep aç gezerdi.",{e:20},"+20 ⚡"],4:["dost","Hamsi bol çıktı uşağum, payını ayırdım.",{g:1},"1 🪙"],5:["kunefeci","Künefe yolda soğur, onun yerine bereket yolladım.",{s:15},"★15"],
+ 6:["firinci","Bir somun koydum koliye. Yolda acıkırsın.",{e:25},"+25 ⚡"],7:["comlekci","Yeni bir testi yaptım, içine küçük bir şey koydum.",{g:2},"2 🪙"],8:["salon","Kahvaltıdan artan ne varsa sardım, yolladım.",{e:30},"+30 ⚡"],9:["telkari","Gümüş telden küçük bir hatıra işledim sana.",{pack:1},"Kart paketi"]};
+const koliReady=()=>S.chapter>=2&&(S.koli||{}).d!==dayKey(Date.now());
+function openMap(){
+  const today=dayKey(Date.now());let from=0;
+  if(koliReady()){const seed=today.split("-").reduce((a,b)=>a*31+ +b,7);from=1+seed%(S.chapter-1);}
+  const stops=Array.from({length:MAXCH},(_,k)=>k+1).map(c=>{const done=c<S.chapter,now=c===S.chapter,K=KOLI[c],P=K&&PEOPLE[K[0]];
+    return `<div class="mstop ${done?"done":now?"now":"lock"}${c===from?" koli":""}" data-c="${c}"><span class="mdot">${done&&P&&P.img?`<img src="${P.img}" alt="">`:now?"★":c}</span><b>${c<=S.chapter?CHAPTERS[c].place:"?"}</b><small>${c===from?"Koli var!":done?"Dükkân açık":now?"Buradasın":"Yolda"}</small></div>`;}).join("");
+  $("paper").innerHTML=`<h3>Yolculuk haritası</h3><div class="note">${S.chapter>=2?"Açtığın dükkânlar kapanmadı. Dostların her gün içlerinden biri sana bir koli yollar.":"İlk dükkânı bitirip yola çıkınca burada dostların sana her gün koli yollamaya başlar."}</div>
+   <div class="mapgrid">${stops}</div><div id="koliBox"></div><button class="btn ghost" type="button" id="mapClose">Kapat</button>`;
+  $("sheet").hidden=false;$("mapClose").onclick=()=>$("sheet").hidden=true;
+  if(from){const K=KOLI[from],P=PEOPLE[K[0]];
+    $("koliBox").innerHTML=`<div class="kolicard">${P.img?`<img src="${P.img}" alt="">`:""}<div><b>${CHAPTERS[from].place}'dan koli · ${P.name}</b><br><i>“${K[1]}”</i></div></div><button class="btn" type="button" id="koliTake">Koliyi aç · ${K[3]}</button>`;
+    $("koliTake").onclick=()=>{S.koli={d:today,c:from};giveRew(K[2]);SFX("box");save();renderTop();renderBoard();renderRails();toast(`${P.name} kolisi: ${K[3]}`);openMap();};}
+  else if(S.chapter>=2){const c=(S.koli||{}).c,K=KOLI[c];$("koliBox").innerHTML=`<div class="note small">Bugünün kolisi ${K?CHAPTERS[c].place+"'dan geldi":"alındı"}. Yarın bir başka dostundan yenisi gelir.</div>`;}
+}
+ART.ic_map=sv(`<path d="M8 16l16-6 16 6 16-6v38l-16 6-16-6-16 6z" fill="#f3e2b8" stroke="#3b2a1e" stroke-width="2.4" stroke-linejoin="round"/><path d="M24 10v38M40 16v38" stroke="#c9a36a" stroke-width="2"/><path d="M14 40q8-10 16-4t18-12" fill="none" stroke="#c0392b" stroke-width="2.6" stroke-dasharray="3 4" stroke-linecap="round"/><circle cx="48" cy="24" r="4" fill="#c0392b" stroke="#3b2a1e" stroke-width="1.5"/>`);
+
+// ---------- gerçek saat ve mevsim: the shop front follows the player's own clock
+function timeFx(){const el=$("skyfx");if(!el)return;const d=new Date(),h=d.getHours(),m=d.getMonth()+1;
+  const part=h>=6&&h<9?"sabah":h>=9&&h<17?"gunduz":h>=17&&h<21?"aksam":"gece";
+  const season=m===12||m<=2?"kis":m<=5?"bahar":m<=8?"yaz":"guz";
+  const key=part+season;if(el.dataset.k===key)return;el.dataset.k=key;el.className="skyfx "+part+" "+season;
+  let h2="";
+  if(part==="gece"){h2+=`<i class="moon"></i>`+Array.from({length:16},(_,k)=>`<i class="star" style="left:${(k*61+13)%97}%;top:${(k*37+5)%34}%;animation-delay:${(k%7)*.4}s"></i>`).join("");}
+  const P=season==="kis"?["flake",18]:season==="guz"?["leaf",9]:season==="bahar"?["petal",8]:null;
+  if(P)h2+=Array.from({length:P[1]},(_,k)=>`<i class="${P[0]}" style="left:${(k*53+7)%100}%;animation-duration:${6+(k%5)*1.6}s;animation-delay:-${(k*1.3)%9}s"></i>`).join("");
+  el.innerHTML=h2;}
+setInterval(timeFx,120000);
+
 // ---------- boot
-function renderAll(){renderTop();renderRepair();renderScene();renderBoard();
+function renderAll(){renderTop();renderRepair();renderScene();renderBoard();timeFx();
 }
 for(const k in CHAPTERS)(CHAPTERS[k].levels||[]).forEach(L=>{L.need=L.tasks.length*TASK_COST;});
 for(let i=0;i<S.orders.length;i++){if(!S.orders[i])S.orders[i]=newOrder();}
 {const seenP={};S.orders.forEach((o,i)=>{if(seenP[o.p]){S.orders[i]=null;S.orders[i]=newOrder();}seenP[S.orders[i].p]=1;});}
 renderAll();
 requestAnimationFrame(fitBoard);setTimeout(fitBoard,400);
+if(!S.v5seen){S.v5seen=1;if(S.seenIntro)setTimeout(()=>toast("Yeni: harita, mektup kutusu ve müdavimler! Ayarlardan dedenin adını da tabelaya yazabilirsin."),4200);}
 tutInit();
 {const away=S.lastSeen?Date.now()-S.lastSeen:0;if(away>45*60000&&seen(S.chapter))setTimeout(()=>toast(`Tekrar hoş geldin usta! Sen yokken enerjin doldu, müşteriler seni bekliyor.`),1500);}
 const JUMP=KEY.endsWith("beta")?+(new URLSearchParams(location.search).get("bolum")||0):0;
