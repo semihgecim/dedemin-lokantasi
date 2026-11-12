@@ -371,6 +371,15 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .upnext li.lvlend:before{display:none}
 .upnext li.lvlend{padding-left:0}
 
+.boardscr .gobtn.back{padding:7px 12px!important;border-radius:14px}.boardscr .gobtn.back span{font-size:1rem}.boardscr .gobtn.back small{display:none}
+.boardscr.rectc .board{max-width:none!important;width:100%}.boardscr.rectc .cell{aspect-ratio:auto;height:var(--cellh)}
+.boardscr.rectc .item img{width:auto;max-width:112%;height:108%;transform:translateY(-4%)}.boardscr.rectc .item svg{height:100%;width:auto}
+.boardscr .boardwrap{padding:4px}
+.rushb{border:0;border-radius:12px;padding:6px 10px;font:800 .78rem var(--display);background:linear-gradient(#ffd166,#e8a93a);color:#3b2414;box-shadow:0 2px 0 #9a6a1c;animation:pulseK 1.4s ease-in-out infinite;white-space:nowrap}
+.rushb.on{background:linear-gradient(#ff8a5c,#e2492f);color:#fff;box-shadow:0 2px 0 #8a2a12}.rushb b{font-size:.95rem}
+.custhead.rush{box-shadow:0 0 0 3px #e2492f,0 0 18px rgba(226,73,47,.55)}
+.rlist{margin:4px 0 10px;padding-left:22px;font-size:.88rem;line-height:1.45}.rlist li{margin:2px 0}
+
 .railbar{gap:4px}.railbar .rail{gap:4px}.railbar .ricon{width:calc((100vw - 52px)/6);max-width:58px}
 .ricon.hot .rimg{animation:pulseK 1.2s ease-in-out infinite}@keyframes pulseK{50%{transform:scale(1.12) rotate(-4deg)}}
 .pface{position:relative}.hearts{position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);font-size:.58rem;line-height:1;color:#e2492f;background:#fff;border-radius:8px;padding:1px 4px;box-shadow:0 1px 2px rgba(0,0,0,.25);white-space:nowrap;letter-spacing:-1px}
@@ -466,7 +475,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
     <section class="boardwrap">
       <div class="speech" id="speech" aria-live="polite"></div>
       <div class="board" id="board"></div>
-      <div class="under"><div class="info" id="info">Tahtadaki bakır karelere dokun, malzeme çıksın.</div><div class="tools"><button type="button" class="evbadge" id="evBadge" aria-label="Etkinlik"></button><button type="button" class="mousechip" id="mouseChip" hidden aria-label="Mutfak faresi"></button><span class="tsp"></span><button type="button" class="depob" id="depoBtn" aria-label="Depo"><span class="rimg" id="depoImg"></span><b id="depoN">0/4</b></button><button type="button" class="boost" id="boost" aria-label="Çift güç">x2</button><div class="sell" id="sell">Sat</div></div></div>
+      <div class="under"><div class="info" id="info">Tahtadaki bakır karelere dokun, malzeme çıksın.</div><div class="tools"><button type="button" class="evbadge" id="evBadge" aria-label="Etkinlik"></button><button type="button" class="mousechip" id="mouseChip" hidden aria-label="Mutfak faresi"></button><button type="button" class="rushb" id="rushBtn" hidden>⏱ Yoğun saat</button><span class="tsp"></span><button type="button" class="depob" id="depoBtn" aria-label="Depo"><span class="rimg" id="depoImg"></span><b id="depoN">0/4</b></button><button type="button" class="boost" id="boost" aria-label="Çift güç">x2</button><div class="sell" id="sell">Sat</div></div></div>
     </section>
     <button class="gobtn back" id="goHome" type="button"><span>◂ Dükkân</span><small id="goHomeSub">Yıldızlarla dükkânı onar</small></button>
   </section>
@@ -1305,7 +1314,7 @@ const GIMG={"face:vankedi": "data:image/webp;base64,UklGRvAiAABXRUJQVlA4WAoAAAAQ
   if(t==="name"){for(const c in CH)CH[c].items.forEach((it,i)=>{if(it[1]===v)ART[c+(i+1)]=im(u);});}
   else if(t==="face"){if(PEOPLE[v])PEOPLE[v].img=u;}
   else if(t==="card"){CARDIMG[v]=u;}
-  else if(t==="gen"){if(v==="Fıstık sepeti")ART.gp=im(u);CITY.forEach(city=>{for(const c in city.chains)if(city.chains[c].gen[1]===v)ART["g"+c]=im(u);});}}}
+  else if(t==="gen"){if(v==="Fıstık sepeti")ART.gp=im(u);if(v==="Mangal")ART.gm=im(u);CITY.forEach(city=>{for(const c in city.chains)if(city.chains[c].gen[1]===v)ART["g"+c]=im(u);});}}}
 function extUnlocked(c){const C=CH[c];if(!C.base)return C.items.length;const ch=CHAIN_CH[c];if(ch<S.chapter)return C.items.length;return ch>S.chapter?C.base:C.items.length;}
 function extUnlockAt(c,l){const C=CH[c],j=l-C.base,NL=CHAPTERS[CHAIN_CH[c]].levels.length;return Math.min(NL-1,j+1)+1;}
 
@@ -1453,6 +1462,7 @@ function newOrder(){
   }
   S.vipN=(S.vipN||0)+1;let vip=0;
   if(!P.pet&&S.vipN>=9&&prog>=3){S.vipN=0;vip=1;const c=pick(P.likes);items.length=0;items.push({c,l:Math.min(max(c),4+(S.restored>=3?1:0)+(S.restored>=5?1:0))});const c2=pick(P.likes);items.push({c:c2,l:Math.min(max(c2),4)});}
+  if(rushOn()&&!P.pet){items.length=0;const c=pick(P.likes);items.push({c,l:Math.min(max(c),2+(Math.random()<.45?1:0))});vip=0;const o=withReward({p,items,vip},S.chapter);o.stars*=2;o.rush=1;return o;}
   return withReward({p,items,vip},S.chapter);
 }
 const ORDER_MIX={1:{2:5,3:40,4:30,5:25},2:{2:5,3:33,4:30,5:27,6:5},3:{2:5,3:35,4:30,5:30},4:{2:4,3:36,4:32,5:28},5:{2:5,3:30,4:33,5:32},
@@ -1463,7 +1473,7 @@ function serve(i){
   const o=S.orders[i]; if(!orderStatus(o).every(Boolean)) return;
   const cardEl=document.querySelector(`.cust[data-i="${i}"] .pface`),cardRect=cardEl?cardEl.getBoundingClientRect():null;
   o.items.forEach(x=>{const j=S.board.findIndex(y=>y&&!y.lk&&y.c===x.c&&y.l===x.l);if(j>-1)S.board[j]=null;});
-  const rb=regBonus(o);S.stars+=(o.stars||0)+rb; S.served++;regBump(o.p);
+  const rb=regBonus(o);if(o.rush&&rushOn())S.rush.n++;S.stars+=(o.stars||0)+rb; S.served++;regBump(o.p);
   const P=PEOPLE[o.p];SFX("serve");qbump(P.pet?"pet":"serve");
   if(cardRect){if(P.pet)flyTo(cardRect,enChip(),`<span class="tok en">⚡</span>`,3);else flyTo(cardRect,starChip(),`<span class="tok st">★</span>`,Math.min(6,o.stars||1));}
   evAdd(2,cardRect);addXP(3);mouseCheck();
@@ -1842,6 +1852,7 @@ function openBook(){
   h+=`<div class="date">Tarif albümü · ${got}/${tot} · her yeni tarif +1★</div>${al}`;
   $("paper").innerHTML=`<h3>Defterler</h3>${h}
     <div class="note">Hizmet verilen misafir: <b>${S.served}</b></div>
+    <button class="btn" type="button" id="rcBtn">📖 Annenin tarif defteri · ${RECIPES.filter(recipeOpen).length}/${RECIPES.length}</button>
     <button class="btn" type="button" id="letBtn">✉ Mektup kutusu · ${letN()}/${LETTERS.length}</button>
     <button class="btn" type="button" id="mapBtn">🗺 Yolculuk haritası</button>
     <button class="btn" type="button" id="setBtn">⚙ Ayarlar, ses ve kayıt kodu</button>
@@ -1850,7 +1861,7 @@ function openBook(){
   $("sheet").hidden=false;
   $("paper").querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>openPage(+b.dataset.c,+b.dataset.p));
   $("closeBook").onclick=()=>$("sheet").hidden=true;
-  $("setBtn").onclick=openSaveSheet;$("letBtn").onclick=openLetterBox;$("mapBtn").onclick=openMap;
+  $("setBtn").onclick=openSaveSheet;$("letBtn").onclick=openLetterBox;$("rcBtn").onclick=openRecipes;$("mapBtn").onclick=openMap;
   $("resetBtn").onclick=function(){
     if(this.dataset.armed){S=fresh();save();sel=-1;$("sheet").hidden=true;renderAll();openPage(1,0);}
     else{this.dataset.armed="1";this.textContent="Emin misin? Tüm ilerleme silinir. Tekrar dokun.";}
@@ -1864,6 +1875,7 @@ $("mouseChip").addEventListener("click",()=>{if(S.mouse)toast(`Mutfak faresi: ${
 
 $("boost").addEventListener("click",()=>{S.boost=!S.boost;save();renderBoost();toast(S.boost?"Çift güç açık: her dokunuş 2 ⚡, malzemeler bir seviye yüksek çıkar":"Çift güç kapalı");});
 function renderBoost(){$("boost").classList.toggle("on",!!S.boost);}
+$("rushBtn").onclick=()=>{if(!rushOn())startRush();};
 $("goBoard").addEventListener("click",()=>setView("board"));
 $("goHome").addEventListener("click",()=>setView("home"));
 $("sell").addEventListener("click",()=>{if(sel>-1&&S.board[sel])drop(sel,"sell");else toast("Satmak için önce bir eşyaya dokun ya da eşyayı buraya sürükle.");});
@@ -1872,7 +1884,7 @@ $("sheet").addEventListener("pointerdown",e=>{if(e.target.id==="sheet"&&seen(S.c
 // ---------- fit the board to the visible screen
 function fitBoard(){
   const bd=$("board"); if(!bd||$("boardScr").hidden)return;
-  const root=$("boardScr");["--pf","--nd","--chx","--gbx"].forEach(k=>root.style.removeProperty(k));
+  const root=$("boardScr");["--pf","--nd","--chx","--gbx","--cellh"].forEach(k=>root.style.removeProperty(k));root.classList.remove("rectc");{const vh0=(window.visualViewport?visualViewport.height:innerHeight);if(vh0>700){root.style.setProperty("--pf",Math.min(96,Math.round(vh0*.088))+"px");root.style.setProperty("--nd",Math.min(54,Math.round(vh0*.05))+"px");}}
   bd.style.maxWidth="";
   const standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;
   const vh=(window.visualViewport?visualViewport.height:innerHeight);
@@ -1881,11 +1893,11 @@ function fitBoard(){
   const under=document.querySelector(".under"); const uh=under?under.getBoundingClientRect().height:40;
   const gh=$("goHome").getBoundingClientRect().height+8;
   const ios=/iPhone|iPad/.test(navigator.userAgent);const avail=Math.floor(vh-top-uh-(ios&&!standalone?0:gh)-reserve-14);
-  const w=Math.max(280,Math.min(Math.floor(avail*7/(N/7)),bd.parentElement.clientWidth));
-  bd.style.maxWidth=w+"px";
+  const pw=bd.parentElement.clientWidth,rows=N/7,cw=pw/7,ch=Math.max(34,Math.min(cw,Math.floor(avail/rows)));
+  bd.style.maxWidth=pw+"px";root.style.setProperty("--cellh",ch+"px");root.classList.toggle("rectc",ch<cw-1);
   // spare height left under the button: give it to bigger customers and a taller button
   const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
-  if(spare>8){const pf=Math.min(112,66+spare*.32),nd=Math.min(60,42+spare*.1);
+  if(spare>8&&!root.classList.contains("rectc")){const pf=Math.min(112,66+spare*.32),nd=Math.min(60,42+spare*.1);
     root.style.setProperty("--pf",pf+"px");root.style.setProperty("--nd",nd+"px");
     const used=(pf-66)+(nd-42);const rest=Math.max(0,spare-used);
     root.style.setProperty("--chx",Math.min(80,rest*.55)+"px");root.style.setProperty("--gbx",Math.min(8,rest*.1)+"px");}
@@ -2187,8 +2199,8 @@ const POSTINFO={1:"Bursa: Ulu Cami'nin kubbeleri, arkada Uludağ. Osmanlı'nın 
 function cardInfo(cd){if(cd.kind==="pc")return POSTINFO[cd.c]||"";if(cd.kind==="p"){const P=PEOPLE[cd.key];const q=(P.thanks||P.ask||[])[0];return `${CHAPTERS[cd.c].place} yolculuğunun dostlarından.${q?` <i>“${q}”</i>`:""}`;}return CARDINFO[cd.name]||"";}
 function openCard(cd,back){const n=(S.cards||{})[cd.id]||0;
   $("paper").innerHTML=`<div class="czoom r${cd.rar}"><div class="cbig${cd.kind==="p"?" face":""}">${cardArt(cd)}</div><h3>${cd.name}</h3><div class="mrar">${"★".repeat(cd.rar)} · ${CHAPTERS[cd.c].place}${n>1?` · x${n}`:""}</div><div class="note">${cardInfo(cd)}</div></div>
-   <button class="btn" type="button" id="cBack">Hatıra kutusuna dön</button>`;
-  $("sheet").hidden=false;SFX("page");$("cBack").onclick=()=>openAlbum(back);}
+   ${cd.kind==="pc"?`<button class="btn" type="button" id="cSend">✉ Arkadaşına gönder</button>`:""}<button class="btn" type="button" id="cBack">Hatıra kutusuna dön</button>`;
+  $("sheet").hidden=false;SFX("page");$("cBack").onclick=()=>openAlbum(back);if($("cSend"))$("cSend").onclick=()=>sendPostcard(cd);}
 function openAlbum(c){c=c||S.chapter;S.cards=S.cards||{};migrateCards();S.dust=S.dust||0;const L=cardsOf(c),have=L.filter(cd=>S.cards[cd.id]).length;
   const tabs=Array.from({length:S.chapter},(_,i)=>i+1).map(k=>`<button type="button" class="atab${k===c?" on":""}" data-c="${k}">${CHAPTERS[k].place}${(S.setDone||{})[k]?" ✓":""}</button>`).join("");
   const missing=L.filter(cd=>!S.cards[cd.id]);
@@ -2525,8 +2537,77 @@ function timeFx(){const el=$("skyfx");if(!el)return;const d=new Date(),h=d.getHo
   el.innerHTML=h2;}
 setInterval(timeFx,120000);
 
+// ================= v6: annenin defteri (real recipes), yoğun saat, kartpostal gönder =================
+// ---------- annenin defteri: every page a mother left in a city is a real, cookable recipe
+const RECIPES=[
+ {c:4,t:"Mercimek çorbası",k:"4 kişilik · 40 dk",m:["1 su bardağı kırmızı mercimek","1 soğan","1 havuç","1 yemek kaşığı un","1 yemek kaşığı salça","2 yemek kaşığı tereyağı","6 su bardağı sıcak su","Tuz, kimyon, pul biber, limon"],
+  s:["Soğanı ve havucu doğra, tereyağında yumuşayana kadar kavur.","Unu ve salçayı ekleyip bir dakika daha kavur.","Yıkanmış mercimeği ve sıcak suyu ekle; mercimek dağılana kadar 25 dakika pişir.","Blenderdan geçir, tuzunu ve kimyonunu ayarla.","Üstüne pul biberli tereyağı gezdir, limonla servis et."],n:"Annenin notu: Tuzu en son at. Erken atılan tuz geri alınmaz."},
+ {c:5,t:"Fırın sütlaç",k:"6 kâse · 1 saat",m:["1 litre süt","½ su bardağı pirinç","1,5 su bardağı su","1 su bardağı şeker","2 yemek kaşığı pirinç unu","1 paket vanilin"],
+  s:["Pirinci suyla, suyunu çekene kadar haşla.","Sütü ekle, kaynayınca 15 dakika kısık ateşte pişir.","Şekeri ekle; pirinç ununu yarım bardak sütle açıp karıştırarak dök.","Kıvam alınca vanilini ekle, toprak kâselere paylaştır.","Fırının en üst rafında üstü kızarana kadar tut, soğuyunca ye."],n:"Annenin notu: Karıştırırken acele etme. Sütlaç sabırla koyulaşır."},
+ {c:6,t:"Etli yaprak sarması",k:"6 kişilik · 1,5 saat",m:["40 asma yaprağı","250 g kıyma","1 su bardağı pirinç","1 soğan (rendelenmiş)","1 yemek kaşığı salça","Nane, karabiber, tuz","2 yemek kaşığı tereyağı","Sıcak su, limon"],
+  s:["Yaprakları sıcak suda 5 dakika haşla, süzdür.","Kıyma, pirinç, soğan, salça ve baharatları yoğur.","Her yaprağın damarlı yüzüne bir kaşık iç koy, kenarlarını kapatıp sıkıca sar.","Tencereye sıra sıra diz, üstüne tereyağı ve sarmaları geçecek kadar sıcak su ekle.","Üstüne ters bir tabak kapat, kısık ateşte 45 dakika pişir; yoğurtla servis et."],n:"Annenin notu: Sıkı sar, gevşek sarma tencerede açılır. Söz gibi."},
+ {c:7,t:"Kayseri mantısı",k:"4 kişilik · 1,5 saat",m:["3 su bardağı un","1 yumurta","1 su bardağı ılık su","1 çay kaşığı tuz","200 g kıyma","1 küçük soğan (rendelenmiş)","Sarımsaklı yoğurt","Tereyağı, pul biber, kuru nane"],
+  s:["Un, yumurta, su ve tuzla sert bir hamur yoğur, 20 dakika dinlendir.","Kıymayı soğan, tuz ve karabiberle yoğur.","Hamuru ince aç, küçük kareler kes, her kareye nohut kadar iç koy.","Dört köşesini birleştirip bohça yap.","Tuzlu kaynar suda 10 dakika haşla; yoğurt ve pul biberli tereyağıyla servis et."],n:"Annenin notu: Kırk mantı bir kaşığa sığmalı. Kırk küçük dua."},
+ {c:8,t:"Kavut",k:"4 kişilik · 20 dk",m:["1 su bardağı kavrulmuş buğday unu","3 yemek kaşığı tereyağı","3 yemek kaşığı bal veya pekmez","Bir tutam tuz","İsteğe göre ceviz"],
+  s:["Tereyağını tavada erit.","Kavut ununu ekleyip kokusu çıkana kadar kısık ateşte kavur.","Ateşten al, balı ya da pekmezi ekleyip karıştır.","Ilıkken kâselere bastır, üstüne ceviz serp.","Sıcak çayla ye; Van'da sabah böyle başlar."],n:"Annenin notu: Kavutu yakma, sabırla kavur. Kokusu geldi mi tamamdır."},
+ {c:9,t:"İç pilav",k:"6 kişilik · 50 dk",m:["2 su bardağı pirinç","2 yemek kaşığı tereyağı","2 yemek kaşığı çam fıstığı","2 yemek kaşığı kuş üzümü","100 g kuzu ciğeri (küp)","1 soğan","1 çay kaşığı tarçın, yenibahar","3 su bardağı sıcak su"],
+  s:["Pirinci 20 dakika ılık tuzlu suda beklet, süzdür.","Tereyağında çam fıstığını pembeleştir, soğanı ekle.","Ciğeri ekleyip rengi dönene kadar kavur.","Pirinci, kuş üzümünü ve baharatları ekleyip 3 dakika kavur.","Sıcak suyu ve tuzu ekle, suyunu çekene kadar kısık ateşte pişir; 15 dakika demlendir."],n:"Annenin notu: Pilav demlenmeden yenmez. Dostluk da öyle."},
+ {c:10,t:"Ev baklavası",k:"1 tepsi · 2 saat",m:["20 yaprak hazır baklavalık yufka","250 g tereyağı (eritilmiş)","2 su bardağı ceviz veya fıstık","Şerbet: 3 su bardağı şeker, 2,5 su bardağı su, birkaç damla limon"],
+  s:["Önce şerbeti kaynat, limonu ekle ve soğumaya bırak.","Tepsiyi yağla, yufkaları tek tek yağlayarak yarısını diz.","Cevizi serp, kalan yufkaları da yağlayarak üstüne diz.","Baklava dilimi kes, kalan yağı üstüne gezdir.","180 derecede altın rengi olana kadar pişir; sıcak baklavaya soğuk şerbeti dök."],n:"Annenin notu: Ben bunu hiç tam yapamadım. Sen yap."}
+];
+const recipeOpen=r=>S.chapter>r.c||(S.chapter===r.c&&S.restored>=Math.ceil(CHAPTERS[r.c].levels.length/2));
+function recipeText(r){return `${r.t} (${r.k})\n\nMalzemeler:\n${r.m.map(x=>"• "+x).join("\n")}\n\nYapılışı:\n${r.s.map((x,i)=>(i+1)+". "+x).join("\n")}\n\n${r.n}\n\nDedemin Lokantası'ndan: ${location.origin+location.pathname}`;}
+async function shareText(title,text){try{if(navigator.share){await navigator.share({title,text});return;}}catch(e){if(e&&e.name==="AbortError")return;}
+  try{await navigator.clipboard.writeText(text);toast("Kopyalandı, istediğin yere yapıştırabilirsin.");}catch(e){toast("Paylaşılamadı.");}}
+function openRecipes(){
+  $("paper").innerHTML=`<h3>Annenin tarif defteri</h3><div class="note">Dedenin yol boyunca dağıttığı sayfalar. Bulduğun her sayfa gerçek bir tarif: mutfağa gir, pişir, paylaş.</div>
+   <div class="pages">${RECIPES.map((r,i)=>recipeOpen(r)?`<button type="button" data-r="${i}">${r.t}<span>${CHAPTERS[r.c].place} sayfası</span></button>`:`<button type="button" class="locked" disabled>Kayıp sayfa<span>${CHAPTERS[r.c].place}'da bulunacak</span></button>`).join("")}</div>
+   <button class="btn" type="button" id="rcBack">Deftere dön</button>`;
+  $("sheet").hidden=false;$("rcBack").onclick=openBook;
+  $("paper").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>openRecipePage(+b.dataset.r));}
+function openRecipePage(i){const r=RECIPES[i];
+  $("paper").innerHTML=`<div class="phead"><img src="${FACES.dede}" alt=""><div><div class="date">${CHAPTERS[r.c].place} sayfası · ${r.k}</div><div class="pwho">Annenin tarif defteri</div></div></div>
+   <h3>${r.t}</h3><div class="date">Malzemeler</div><ul class="rlist">${r.m.map(x=>`<li>${x}</li>`).join("")}</ul>
+   <div class="date">Yapılışı</div><ol class="rlist">${r.s.map(x=>`<li>${x}</li>`).join("")}</ol>
+   <div class="hand" style="font-size:1.15rem">${r.n}</div>
+   <div class="row2"><button class="btn" type="button" id="rcShare">Tarifi paylaş</button><button class="btn ghost" type="button" id="rcBack2">Geri</button></div>`;
+  $("sheet").hidden=false;SFX("page");$("rcBack2").onclick=openRecipes;$("rcShare").onclick=()=>shareText(r.t,recipeText(r));}
+
+// ---------- yoğun saat (usta eli): once a day, 60 seconds of quick small orders for double stars
+const RUSH_MS=60000;
+const rushOn=()=>!!(S.rush&&S.rush.end>Date.now());
+const rushReady=()=>S.chapter>=1&&S.seenIntro&&(S.rushD!==dayKey(Date.now()))&&!rushOn();
+let rushTick=null;
+function startRush(){if(!rushReady())return;S.rushD=dayKey(Date.now());S.rush={end:Date.now()+RUSH_MS,n:0};
+  S.orders=[null,null,null];for(let i=0;i<3;i++)S.orders[i]=newOrder();save();renderOrders();renderRush();SFX("level");
+  celebrate("Yoğun saat başladı!","60 saniye · küçük siparişler · çift yıldız");rushLoop();}
+function rushLoop(){clearInterval(rushTick);rushTick=setInterval(()=>{if(!S.rush){clearInterval(rushTick);return;}renderRush();if(!rushOn())endRush();},500);}
+function endRush(){clearInterval(rushTick);const n=(S.rush||{}).n||0;S.rush=null;
+  const R=n>=12?{g:3,box:1,e:30}:n>=8?{g:2,e:20}:n>=4?{g:1,e:10}:{e:5},T=n>=12?"3 🪙 + sandık + 30 ⚡":n>=8?"2 🪙 + 20 ⚡":n>=4?"1 🪙 + 10 ⚡":"5 ⚡";
+  giveRew(R);S.orders=[null,null,null];for(let i=0;i<3;i++)S.orders[i]=newOrder();save();renderOrders();renderTop();renderBoard();renderRush();
+  if(!window.__FAST){$("paper").innerHTML=`<h3>Yoğun saat bitti!</h3><div class="note">60 saniyede <b>${n}</b> misafire servis yaptın. ${n>=12?"Usta eli bu! Dedenin bile bu kadar hızlı olduğunu sanmıyorum.":n>=8?"Mutfak tıkır tıkır işledi.":n>=4?"Fena değil, yarın daha hızlı olursun.":"Kalabalık biraz bastırdı. Yarın tekrar dene!"}</div>
+   <div class="note">Ödül: <b>${T}</b><br><small>4, 8 ve 12 servis ödül basamakları.</small></div><button class="btn" type="button" id="rushOk">Tamam</button>`;$("sheet").hidden=false;$("rushOk").onclick=()=>$("sheet").hidden=true;}}
+function renderRush(){const b=$("rushBtn");if(!b)return;const on=rushOn();
+  b.hidden=!(on||rushReady());b.classList.toggle("on",on);
+  b.innerHTML=on?`⏱ <b>${Math.ceil((S.rush.end-Date.now())/1000)}</b> sn · ${S.rush.n}`:`⏱ Yoğun saat`;
+  const h=document.querySelector(".custhead");if(h)h.classList.toggle("rush",on);}
+
+// ---------- kartpostal gönder: share a finished city's postcard as a real image
+function postcardCanvas(cd){return new Promise(res=>{const W=900,H=640,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d");
+  g.fillStyle="#f6ecd6";g.fillRect(0,0,W,H);g.strokeStyle="#c9a36a";g.lineWidth=10;g.strokeRect(14,14,W-28,H-28);
+  g.setLineDash([14,10]);g.lineWidth=3;g.strokeRect(34,34,W-68,H-68);g.setLineDash([]);
+  const im=new Image();im.onload=()=>{const s=Math.min(520/im.width,420/im.height),w=im.width*s,h=im.height*s;g.drawImage(im,(W-w)/2,58+(420-h)/2,w,h);fin();};im.onerror=fin;
+  function fin(){g.fillStyle="#3b2414";g.textAlign="center";g.font="bold 46px Georgia,serif";g.fillText(`${CHAPTERS[cd.c].place}'dan selam!`,W/2,530);
+    g.font="italic 26px Georgia,serif";g.fillStyle="#7a5a3a";g.fillText(`Dedemin Lokantası · ${DN()} Usta'nın izinde`,W/2,572);
+    g.font="20px sans-serif";g.fillText(location.host+location.pathname,W/2,606);cv.toBlob(b=>res(b),"image/jpeg",.9);}
+  im.src=CARDIMG[cd.id]||"";if(!CARDIMG[cd.id])fin();});}
+async function sendPostcard(cd){const blob=await postcardCanvas(cd);const name=`kartpostal-${CHAPTERS[cd.c].place}.jpg`;
+  const text=`${CHAPTERS[cd.c].place}'dan selam! Dedemin Lokantası'nda dedemin izinden gidiyorum. Sen de gel: ${location.origin+location.pathname}`;
+  try{const f=new File([blob],name,{type:"image/jpeg"});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text});S.pcSent=(S.pcSent||0)+1;if(S.pcSent===1){S.gold+=2;toast("İlk kartpostalın yola çıktı! +2 🪙");}save();renderTop();return;}}catch(e){if(e&&e.name==="AbortError")return;}
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();toast("Kartpostal indirildi, WhatsApp'tan gönderebilirsin.");}
+
 // ---------- boot
-function renderAll(){renderTop();renderRepair();renderScene();renderBoard();timeFx();
+function renderAll(){renderTop();renderRepair();renderScene();renderBoard();timeFx();renderRush();
 }
 for(const k in CHAPTERS)(CHAPTERS[k].levels||[]).forEach(L=>{L.need=L.tasks.length*TASK_COST;});
 for(let i=0;i<S.orders.length;i++){if(!S.orders[i])S.orders[i]=newOrder();}
@@ -2535,6 +2616,8 @@ renderAll();
 requestAnimationFrame(fitBoard);setTimeout(fitBoard,400);
 if(!S.v5seen){S.v5seen=1;if(S.seenIntro)setTimeout(()=>toast("Yeni: harita, mektup kutusu ve müdavimler! Ayarlardan dedenin adını da tabelaya yazabilirsin."),4200);}
 tutInit();
+if(S.rush){if(rushOn())rushLoop();else endRush();}
+setInterval(()=>{if(!rushOn())renderRush();},60000);
 {const away=S.lastSeen?Date.now()-S.lastSeen:0;if(away>45*60000&&seen(S.chapter))setTimeout(()=>toast(`Tekrar hoş geldin usta! Sen yokken enerjin doldu, müşteriler seni bekliyor.`),1500);}
 const JUMP=KEY.endsWith("beta")?+(new URLSearchParams(location.search).get("bolum")||0):0;
 if(JUMP>=2&&JUMP<=MAXCH){try{history.replaceState(null,"",location.pathname);}catch(e){}S.stars=Math.max(S.stars,20);startChapter(JUMP);}
