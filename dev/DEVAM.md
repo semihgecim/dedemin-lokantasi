@@ -34,3 +34,4 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 ## Not (14 Kasım 2026)
 - Tüm ürün/üreteç/karakter resimleri Gemini ile tamamlandı.
 - Semih: "Boğaz ziyafeti" resmi biraz saçma (balığın yanında ayran ve çay olmaz); sonra yenisi istenecek.
+- 3-10. şehir dükkân sahneleri oyuna yerleştirildi: `SCNIMG` (resimler) + `SCN` (her şehrin kapı/pencere/tabela/çatı koordinatları) + yeni `renderSceneCity`. Onarım parçaları bu koordinatlara göre oturur. Orijinal sahneler `dev/sahneler/`. 'Bacayı ör' görevi 'Bacanın kurumunu temizle' oldu (resimde baca zaten var).
