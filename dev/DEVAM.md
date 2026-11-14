@@ -30,3 +30,7 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 1. Semih Gemini'den resimleri (dev/gemini listeleri) gönderdikçe oyuna yerleştir. Aynı adlı malzemeler (Un 6 yerde, Et 4, Hamur 4, Şeker/Şerbet/Çay/Çay yaprağı 2'şer) tek resimle tüm yerlere konur; Süt/Yufka/Kazandibi/Keşkül/Tatlı tepsisi Bursa resimlerini kullanır.
 2. 3-10. şehir dükkân sahneleri gelince, sahnedeki görev parçalarını (ağlar, kepenk, tabela, tente…) her resme ayrı ayrı oturt (Bursa/Antep'teki gibi). Deneme Van sahnesi stil olarak onaylandı.
 3. Stil: yemek/eşya yarı gerçekçi boyalı, çizgisiz; karakterler ince kahverengi çizgili, krem daire içinde.
+
+## Not (14 Kasım 2026)
+- Tüm ürün/üreteç/karakter resimleri Gemini ile tamamlandı.
+- Semih: "Boğaz ziyafeti" resmi biraz saçma (balığın yanında ayran ve çay olmaz); sonra yenisi istenecek.
