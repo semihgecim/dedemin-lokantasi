@@ -718,7 +718,7 @@ function updateNav(){
   gh.classList.toggle("ready",!!ready);{const jb=JOB[S.chapter];gh.querySelector("span").textContent="◂ "+(jb?jb.noun:"Dükkân");$("goHomeSub").textContent=ready?(jb?"Görev hazır! Geri dön":"Görev hazır! Dükkâna dön"):(jb?"Yıldızlarla görevleri yap":"Yıldızlarla dükkânı onar");}
   gb.classList.toggle("pulse",!!L&&S.stars<TASK_COST);$("goBoardSub").textContent=L&&S.stars<TASK_COST?`Görev için ★${TASK_COST-S.stars} daha topla`:"Müşterilere servis yap, ★ topla";
 }
-const TASK_COST=40;
+const TASK_COST=50;
 const CHAINS={1:["f","s","b"],2:["k","p","m"]};
 ART.box=sv(`<rect x="8" y="26" width="48" height="28" rx="4" fill="#b8692c" ${O}/><path d="M8 26Q8 12 32 12Q56 12 56 26Z" fill="#d0793c" ${O}/><rect x="28" y="12" width="8" height="42" fill="#ffd166" stroke="#3b2a1e" stroke-width="2"/><rect x="25" y="28" width="14" height="11" rx="2" fill="#ffe7a8" stroke="#3b2a1e" stroke-width="2"/><circle cx="32" cy="33.5" r="2" fill="#3b2a1e"/><path d="M14 20q5-5 12-6" stroke="#f0a66f" stroke-width="3" fill="none" stroke-linecap="round"/>`);
 Object.assign(PEOPLE,{celile:{name:"Celile Teyze",init:"CT",col:"#b9d3c7",likes:["s","b"],
@@ -1278,7 +1278,7 @@ const GIMG={"face:vankedi": "data:image/webp;base64,UklGRvAiAABXRUJQVlA4WAoAAAAQ
 function extUnlocked(c){const C=CH[c];if(!C.base)return C.items.length;const ch=CHAIN_CH[c];if(ch<S.chapter)return C.items.length;return ch>S.chapter?C.base:C.items.length;}
 function extUnlockAt(c,l){const C=CH[c],j=l-C.base,NL=CHAPTERS[CHAIN_CH[c]].levels.length;return Math.min(NL-1,j+1)+1;}
 
-const MAXE=100, REGEN=6000, N=63;
+const MAXE=100, REGEN=90000, N=63;
 
 // ---------- helpers
 const $=id=>document.getElementById(id);
