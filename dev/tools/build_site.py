@@ -1,3 +1,5 @@
+import time
+B=str(int(time.time()))
 h=open("/home/claude/dedemin-lokantasi.html",encoding="utf8").read()
 i=h.index('<div class="app"'); head_part=h[:i].replace('<meta name="claude:viewport-fit-sides" content="cover">\n',''); body_part=h[i:]
 page=f'''<!doctype html>
@@ -14,10 +16,13 @@ page=f'''<!doctype html>
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}}body{{margin:0;font:14px system-ui,sans-serif}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
+<script>window.__BUILD="{B}";</script>
 {head_part}</head>
 <body>
 {body_part}
+<script>(function(){{function chk(){{try{{fetch("version.txt?u="+Date.now(),{{cache:"no-store"}}).then(function(r){{return r.ok?r.text():""}}).then(function(t){{t=(t||"").trim();if(/^\d+$/.test(t)&&t!==window.__BUILD){{var k="upd"+t;try{{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}}catch(e){{}}location.replace(location.pathname+"?v="+t);}}}}).catch(function(){{}});}}catch(e){{}}}}
+setTimeout(chk,1500);document.addEventListener("visibilitychange",function(){{if(document.visibilityState==="visible")chk();}});}})();</script>
 </body>
 </html>
 '''
-open("/home/claude/dedemin-lokantasi/index.html","w",encoding="utf8").write(page); print("built")
+open("/home/claude/dedemin-lokantasi/index.html","w",encoding="utf8").write(page); open("/home/claude/dedemin-lokantasi/version.txt","w").write(B+"\n"); print("built")

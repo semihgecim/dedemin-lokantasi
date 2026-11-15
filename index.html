@@ -12,6 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script>window.__BUILD="1794740891";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -2583,5 +2584,7 @@ else if(!seen(S.chapter)) openPage(S.chapter,0); else setTimeout(dailyCheck,900)
 })();
 </script>
 
+<script>(function(){function chk(){try{fetch("version.txt?u="+Date.now(),{cache:"no-store"}).then(function(r){return r.ok?r.text():""}).then(function(t){t=(t||"").trim();if(/^\d+$/.test(t)&&t!==window.__BUILD){var k="upd"+t;try{if(sessionStorage.getItem(k))return;sessionStorage.setItem(k,1);}catch(e){}location.replace(location.pathname+"?v="+t);}}).catch(function(){});}catch(e){}}
+setTimeout(chk,1500);document.addEventListener("visibilitychange",function(){if(document.visibilityState==="visible")chk();});})();</script>
 </body>
 </html>
