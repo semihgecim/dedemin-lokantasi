@@ -360,7 +360,7 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 
 .boardscr .gobtn.back{padding:7px 12px!important;border-radius:14px}.boardscr .gobtn.back span{font-size:1rem}.boardscr .gobtn.back small{display:none}
 .boardscr.rectc .board{max-width:none!important;width:100%}.boardscr.rectc .cell{aspect-ratio:auto;height:var(--cellh)}
-.boardscr.rectc .custhead{padding:8px 6px 14px}.boardscr.rectc .custhead .cust{flex-direction:row-reverse;align-items:center;justify-content:center;gap:2px}.boardscr.rectc .custhead .bub{margin:0}.boardscr.rectc .custhead .bub:after{display:none}.boardscr.rectc .cell,.boardscr.rectc .item{overflow:visible}.boardscr.rectc .item img,.boardscr.rectc .item svg{width:var(--isz)!important;height:var(--isz)!important;max-width:none!important;max-height:none!important;flex:none;object-fit:contain;transform:translateY(-9%);position:relative;z-index:1}
+.boardscr.rectc .custhead{padding:8px 6px 14px}.boardscr.rectc .custhead .cust{flex-direction:row-reverse;align-items:center;justify-content:center;gap:2px}.boardscr.rectc .custhead .bub{margin:0}.boardscr.rectc .custhead .bub:after{display:none}.boardscr.rectc .cell,.boardscr.rectc .item{overflow:visible}.boardscr.rectc .item img,.boardscr.rectc .item svg{width:var(--isz)!important;height:var(--isz)!important;max-width:none!important;max-height:none!important;flex:none;object-fit:contain;transform:translateY(-3%);position:relative;z-index:1}.boardscr.rectc .item .lv{z-index:6}.boardscr.rectc .custhead .pface{flex-shrink:0;min-width:var(--pf)}.boardscr.rectc .custhead .bub{flex-shrink:1;min-width:0}.boardscr.rectc .custhead .cust{min-width:0}
 .boardscr .boardwrap{padding:4px}
 .rushb{border:0;border-radius:12px;padding:6px 10px;font:800 .78rem var(--display);background:linear-gradient(#ffd166,#e8a93a);color:#3b2414;box-shadow:0 2px 0 #9a6a1c;animation:pulseK 1.4s ease-in-out infinite;white-space:nowrap}
 .rushb.on{background:linear-gradient(#ff8a5c,#e2492f);color:#fff;box-shadow:0 2px 0 #8a2a12}.rushb b{font-size:.95rem}
@@ -1839,10 +1839,10 @@ function fitBoard(){
   const ios=/iPhone|iPad/.test(navigator.userAgent);const avail=Math.floor(vh-top-uh-(ios&&!standalone?0:gh)-reserve-14);
   const pw=bd.parentElement.clientWidth,rows=N/7,cw=pw/7,ch=Math.max(34,Math.min(cw,Math.floor(avail/rows)));
   bd.style.maxWidth=pw+"px";root.style.setProperty("--cellh",ch+"px");root.classList.toggle("rectc",ch<cw-1);
-  if(ch<cw-1){root.classList.add("rectc");root.style.setProperty("--pf","50px");root.style.setProperty("--nd","40px");
+  if(ch<cw-1){root.classList.add("rectc");root.style.setProperty("--pf","50px");root.style.setProperty("--nd","34px");
     const top2=bd.getBoundingClientRect().top+window.scrollY,av2=Math.floor(vh-top2-uh-(ios&&!standalone?0:gh)-reserve-14);
     const ch2=Math.max(34,Math.min(cw,Math.floor(av2/rows)));root.style.setProperty("--cellh",ch2+"px");root.classList.toggle("rectc",ch2<cw-1);
-    root.style.setProperty("--isz",Math.floor(Math.min(cw*.96,ch2*1.32))+"px");}
+    root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,ch2*1.06))+"px");}
   // spare height left under the button: give it to bigger customers and a taller button
   const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
   if(spare>8&&!root.classList.contains("rectc")){const pf=Math.min(112,66+spare*.32),nd=Math.min(60,42+spare*.1);
