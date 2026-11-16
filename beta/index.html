@@ -443,6 +443,18 @@ button:focus-visible{outline:3px solid var(--turq);outline-offset:2px}
 .rcard{position:relative;margin:0 auto}
 .goldI{display:inline-block;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c14e 45%,#c98a1a);box-shadow:0 0 0 1.5px #7a4a10;vertical-align:-3px}.goldchip{border:0;color:inherit;cursor:pointer}.tok.gd{background:radial-gradient(circle at 35% 30%,#fff3b0,#f2c14e 45%,#c98a1a)!important}.goldrow{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0;text-align:center}.goldrow span{display:block;width:48px;height:48px;margin:auto}.goldrow span svg{width:100%;height:100%}.goldrow b{display:block;font:800 1rem var(--display)}.goldrow small{font-size:.66rem;line-height:1.1;display:block}.shoplist{display:flex;flex-direction:column;gap:8px;margin:8px 0}.shoplist .btn{width:100%;box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;gap:8px}.shoplist .btn[disabled]{opacity:.5}.bubdlg{display:flex;gap:12px;align-items:center}.bubart{flex:none;width:72px;height:72px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff,#cfeeff 40%,#9fd3f0);padding:8px;box-sizing:border-box}.bubart img,.bubart svg{width:100%;height:100%;object-fit:contain}.row2{display:flex;gap:8px;margin-top:10px}.row2 .btn{flex:1}.btn.gold{background:#f2c14e;color:#3b2414}.note.small{font-size:.75rem}
 html,body{overflow-x:hidden;max-width:100%}
+
+/* ---- görsel geçiş 16 Kasım ---- */
+body{background:radial-gradient(120% 60% at 50% -10%,#24564b 0%,#123a33 45%,#0b2622 100%) fixed,#0f2e29}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23f3ead6' stroke-width='1.2'%3E%3Cpath d='M28 4l7 17 17 7-17 7-7 17-7-17-17-7 17-7z'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E")}
+.custhead.scn{background:linear-gradient(180deg,rgba(255,240,215,.10) 0%,rgba(40,25,10,.05) 55%,rgba(40,25,10,.38) 100%),var(--chbg) center 62%/cover no-repeat;box-shadow:inset 0 0 0 2px rgba(255,240,210,.35),0 6px 16px rgba(0,0,0,.35)}
+.custhead.scn:after{height:16px;background:linear-gradient(#b98552,#8a5a30);box-shadow:inset 0 2px 0 rgba(255,220,170,.5);opacity:1}
+.boardscr .boardwrap{background:linear-gradient(160deg,#c08a55,#8d5c33 55%,#7a4e2b);box-shadow:inset 0 0 0 2px rgba(255,225,180,.35),inset 0 -3px 0 rgba(0,0,0,.25),0 8px 18px rgba(0,0,0,.35);padding:6px}
+.boardscr .board{border-radius:10px;box-shadow:inset 0 2px 6px rgba(60,35,10,.35)}
+.boardscr .cell{background:#fbf6ea}
+.boardscr .cell.alt{background:#f2e8d3}
+.boardscr .cell.target{background:#cdeedd}
+.boardscr .info{color:#3b2414}
 </style>
 
 </head>
@@ -476,7 +488,7 @@ html,body{overflow-x:hidden;max-width:100%}
   </section>
 
   <section class="screen boardscr" id="boardScr" hidden>
-    <div class="custhead"><div class="custs" id="orders"></div></div>
+    <div class="custhead" id="custhead"><div class="custs" id="orders"></div></div>
     <section class="boardwrap">
       <div class="speech" id="speech" aria-live="polite"></div>
       <div class="board" id="board"></div>
@@ -1212,7 +1224,7 @@ function renderSceneCity(){
   const C=chap(),n=C.city.n,A=JOB[n],r=S.restored,NL=C.levels.length;
   const {add}=doneOps(),NX=nextKey(),tx=480-A.cx*JK_;
   A.t.forEach((t,i)=>{const q=(JOBP[n]||[])[i]||[t[1],t[2]];POS["j"+n+"_"+i]=jobPos(n,q[0],q[1]);});
-  const full=r>=NL,base=full?1:0;
+  const full=r>=NL,prog=(C.levels.slice(0,r).reduce((a,L)=>a+L.tasks.length,0)+S.tdone)/33,base=full?1:Math.min(.55,prog*.6);
   const spots=full?"":A.t.map((t,i)=>{const k="j"+n+"_"+i,mk=(JOBMASK[n]||[])[i];if(!mk||!add.has(k))return "";
     return `<image href="${mk}" x="0" y="0" width="1200" height="900" preserveAspectRatio="none">${JUST===k?'<animate attributeName="opacity" from="0" to="1" dur="1.4s" fill="freeze"/>':""}</image>`;}).join("");
   const ring=k=>{const p=POS[k];return `<g class="gring"><circle cx="${p[0]}" cy="${p[1]}" r="38" fill="none" stroke="#fff" stroke-width="4" stroke-dasharray="9 7"/><circle cx="${p[0]}" cy="${p[1]}" r="38" fill="none" stroke="#ffd166" stroke-width="2" stroke-dasharray="9 7" stroke-dashoffset="8"/></g><g class="garrow"><path d="M${p[0]-13} ${p[1]-66}h26l-13 18z" fill="#ffd166" stroke="#3b2414" stroke-width="2.5" stroke-linejoin="round"/></g>`;};
@@ -1742,7 +1754,7 @@ function renderScene(){
 }
 
 // ---------- orders render (customers stand in front of the shop)
-function renderOrders(){
+function renderOrders(){{const ch=document.getElementById("custhead");if(ch){const im=JOB[S.chapter]&&JOBIMG[S.chapter+"a"];ch.classList.toggle("scn",!!im);if(im)ch.style.setProperty("--chbg",`url(${im})`);}}
   const box=$("orders");
   box.innerHTML=S.orders.map((o,i)=>{
     if(!o)return `<div class="cust leaving" data-i="${i}"></div>`;
