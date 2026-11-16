@@ -40,3 +40,4 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - Lokantam (15 Kasım): harita sayfasındaki düğmeden açılır. 20 hatıra = her şehrin 3. seviyesi + şehir sonu. Resimler dev/sahneler/lokanta (boş/dolu), maskeler dev/tools/lok.py ile. S.lok = görülen hatıra sayısı.
 - Gizem: Asena (kırmızı defterli kız, Can Usta'nın torunu), 3-9. şehirlerde 2. ve 4. seviye konuşmalarında izleri; İstanbul sonu + son mektup 'Kırmızı mürekkep' 2. Sezon kancası. Asena Teyze adı Aybüke Teyze oldu.
 - Ekonomi (15 Kasım): enerji dolumu 6 sn → 90 sn/enerji (MAXE 100), görev 40 → 50 yıldız. Bot Trabzon'u ~950 enerjiyle bitiriyor; bir şehir artık ~1-2 günlük oyun.
+- Yeni şehre geçerken yıldız ★100 ile sınırlı; fazlası 50 yıldız = 1 altın (en çok 12) olarak verilir (startChapter).

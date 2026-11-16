@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1794838464";</script>
+<script>window.__BUILD="1794850305";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1326,7 +1326,8 @@ function startChapter(n){
   S.board=b;
   const ppl=CHAPTERS[n].people.filter(k=>!PEOPLE[k].pet),pet=CHAPTERS[n].people.find(k=>PEOPLE[k].pet);
   S.orders=[{p:ppl[0],items:[{c:PEOPLE[ppl[0]].likes[0],l:2}]},{p:ppl[1],items:[{c:PEOPLE[ppl[1]].likes[0],l:2}]},{p:pet,items:[{c:PEOPLE[pet].likes[0],l:1}]}].map(o=>withReward(o,n));
-  save(); renderAll(); openPage(n,0);
+  let carry="";if(S.stars>100){const ex=S.stars-100,g=Math.min(12,Math.max(1,Math.floor(ex/50)));S.stars=100;S.gold=(S.gold||0)+g;carry=`Önceki şehirden artan yıldızların ${g} altına çevrildi. Yeni şehre ★100 ile başlıyorsun.`;}
+  save(); renderAll(); openPage(n,0);if(carry)setTimeout(()=>toast(carry),600);
 }
 let lastBak=0;
 const save=()=>{try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}};
