@@ -1464,7 +1464,7 @@ function showInfo(i){
   if(x.x==="bub"){$("info").innerHTML=`<b>Baloncuk</b> · içinde ${nm(x.c,x.l)} · dokun: altınla al ya da patlat`;return;}
   if(x.x){$("info").innerHTML=`<b>Ödül sandığı</b> · dokun, içinden malzemeler çıksın`;return;}
   if(x.g){const gl=x.gl||1;$("info").innerHTML=`<b>${GEN_OF[x.g]}${gl>1?" · Sv"+gl:""}</b> · dokun, ${nm(x.g,1)} çıksın (1 ⚡) · ${gl<3?`aynısıyla birleşir`:"en güçlü"} <button type="button" class="tarifb" data-c="${x.g}" data-l="1">Tarif</button>`;return;}
-  if(x.lk){$("info").innerHTML=`<b>Tozlu ${nm(x.c,x.l)}</b> · Yerinden oynamaz. Aynısından birini üstüne getir, temizlenip birleşsin.`;return;}
+  if(x.lk){$("info").innerHTML=`<b>Tozlu ${nm(x.c,x.l)}</b> · Aynısını üstüne getir, temizlensin.${x.l>1?` Yapmak için iki <b>${nm(x.c,x.l-1)}</b> birleştir${x.l>2?"":` (üreteci: ${GEN_OF[x.c]||"tahtada"})`}.`:` Üreteci: ${GEN_OF[x.c]||"tahtada"}.`} <button type="button" class="tarifb" data-c="${x.c}" data-l="${x.l}">Tarif</button>`;return;}
   const next=x.l<max(x.c)?`İki tanesi birleşince: <b>${nm(x.c,x.l+1)}</b>`:x.l<CH[x.c].items.length?`🔒 ${nm(x.c,x.l+1)}: ${extUnlockAt(x.c,x.l+1)}. seviyede`:"Zincirin sonu. Bunu isteyen birini bekle.";
   $("info").innerHTML=`<b>${nm(x.c,x.l)}</b> · ${x.l}. seviye · ${next} <button type="button" class="tarifb" data-c="${x.c}" data-l="${x.l}">Tarif</button>`;
 }
