@@ -41,3 +41,9 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - Gizem: Asena (kırmızı defterli kız, Can Usta'nın torunu), 3-9. şehirlerde 2. ve 4. seviye konuşmalarında izleri; İstanbul sonu + son mektup 'Kırmızı mürekkep' 2. Sezon kancası. Asena Teyze adı Aybüke Teyze oldu.
 - Ekonomi (15 Kasım): enerji dolumu 6 sn → 90 sn/enerji (MAXE 100), görev 40 → 50 yıldız. Bot Trabzon'u ~950 enerjiyle bitiriyor; bir şehir artık ~1-2 günlük oyun.
 - Yeni şehre geçerken yıldız ★100 ile sınırlı; fazlası 50 yıldız = 1 altın (en çok 12) olarak verilir (startChapter).
+
+## 17 Kasım 2026 · Her şehre 2. büyük iş
+- 3-10. şehirlerde 6 seviyeden sonra 4 seviye daha (6+6+7+8 = 27 görev). Sahne `JOB2[n]` (görev adları, açılma noktaları), maskeler `JOBMASK2`, resimler `JOBIMG[n+"c"]` (bitmiş) / `n+"d"` (harap). Kaynaklar `dev/sahneler/isler2/`, yüzler `dev/yuzler2/`. Üretim: scratchpad p2/ (clusA.py kmeans 26 küme, tasks2.py görev sırası, masks2.py, story2.py, build2.py → inject2.js).
+- Hikâye (STORY2): sayfa bulunduktan sonra dede'nin o şehirde kaldığı ev/yer onarılır. Her şehre 4 kısa defter sayfası (sayfa 7-10), 1 konuşma (seviye 9 ortası), 1 yeni misafir (seviye 7'den sonra). Eski son sayfanın 'after' yazısı ikinci işi tanıtıyor; "N. bölüm" geçişi artık son sayfada.
+- İstanbul 2. iş = Can Usta'nın Kuzguncuk köşkü; son sayfa kırmızı defter → 2. Sezon kancası.
+- İSİMSİZ karakterler (Semih Play Store öncesi isim verecek): udcu (halanın torunu), yaylanine, hanci, bagdede, avanos (çömlekçinin kızı), veteriner, midyat (ustanın oğlu), İstanbul eski kalfa (yüzü henüz gelmedi).
