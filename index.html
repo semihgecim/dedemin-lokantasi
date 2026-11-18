@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1794985669";</script>
+<script>window.__BUILD="1795014499";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1409,7 +1409,7 @@ function startChapter(n){
   save(); renderAll(); openPage(n,0);if(carry)setTimeout(()=>toast(carry),600);
 }
 let lastBak=0;
-const save=()=>{try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}try{if(S.seenIntro)cloudSoon();}catch(e){}};
+const save=()=>{try{if(S.seenIntro&&!S.cloudId)cloudId();}catch(e){}try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}try{if(S.seenIntro)cloudSoon();}catch(e){}};
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")save();});
 window.addEventListener("pagehide",save);
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}

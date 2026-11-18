@@ -1393,7 +1393,7 @@ function startChapter(n){
   save(); renderAll(); openPage(n,0);if(carry)setTimeout(()=>toast(carry),600);
 }
 let lastBak=0;
-const save=()=>{try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}try{if(S.seenIntro)cloudSoon();}catch(e){}};
+const save=()=>{try{if(S.seenIntro&&!S.cloudId)cloudId();}catch(e){}try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}try{if(S.seenIntro)cloudSoon();}catch(e){}};
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")save();});
 window.addEventListener("pagehide",save);
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
