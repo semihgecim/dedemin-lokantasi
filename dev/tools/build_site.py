@@ -25,4 +25,24 @@ setTimeout(chk,1500);document.addEventListener("visibilitychange",function(){{if
 </body>
 </html>
 '''
+# --- hızlı açılış: büyük resimleri ayrı dosyalara taşı (sahneler + ürün resimleri) ---
+import re,base64,hashlib,os
+IMGD="/home/claude/dedemin-lokantasi/img";os.makedirs(IMGD,exist_ok=True);used=set()
+def ext(m):
+    key,typ,b64=m.group(1),m.group(2),m.group(3);raw=base64.b64decode(b64)
+    fn=hashlib.sha1(raw).hexdigest()[:16]+"."+("webp" if typ=="webp" else typ);used.add(fn)
+    fp=os.path.join(IMGD,fn)
+    if not os.path.exists(fp):open(fp,"wb").write(raw)
+    return '"%s": "img/%s"'%(key,fn)
+page=re.sub(r'"(\d+[a-d]|name:[^"]{1,60})": "data:image/(webp|png|jpeg);base64,([A-Za-z0-9+/=]+)"',ext,page)
+for f in os.listdir(IMGD):
+    if f not in used:os.remove(os.path.join(IMGD,f))
+sw='''const C="dl-img-v1";
+self.addEventListener("install",e=>self.skipWaiting());
+self.addEventListener("activate",e=>e.waitUntil(self.clients.claim()));
+self.addEventListener("fetch",e=>{const u=new URL(e.request.url);if(e.request.method!=="GET"||!u.pathname.includes("/img/"))return;
+ e.respondWith(caches.open(C).then(c=>c.match(e.request).then(r=>r||fetch(e.request).then(n=>{if(n.ok)c.put(e.request,n.clone());return n;}))));});
+'''
+open("/home/claude/dedemin-lokantasi/sw.js","w").write(sw)
+page=page.replace("</body>",'<script>if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("sw.js").catch(function(){});</script>\n</body>',1)
 open("/home/claude/dedemin-lokantasi/index.html","w",encoding="utf8").write(page); open("/home/claude/dedemin-lokantasi/version.txt","w").write(B+"\n"); print("built")

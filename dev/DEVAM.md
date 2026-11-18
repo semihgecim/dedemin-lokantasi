@@ -47,3 +47,9 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - Hikâye (STORY2): sayfa bulunduktan sonra dede'nin o şehirde kaldığı ev/yer onarılır. Her şehre 4 kısa defter sayfası (sayfa 7-10), 1 konuşma (seviye 9 ortası), 1 yeni misafir (seviye 7'den sonra). Eski son sayfanın 'after' yazısı ikinci işi tanıtıyor; "N. bölüm" geçişi artık son sayfada.
 - İstanbul 2. iş = Can Usta'nın Kuzguncuk köşkü; son sayfa kırmızı defter → 2. Sezon kancası.
 - İSİMSİZ karakterler (Semih Play Store öncesi isim verecek): udcu (halanın torunu), yaylanine, hanci, bagdede, avanos (çömlekçinin kızı), veteriner, midyat (ustanın oğlu), kalfa (İstanbul eski kalfa, yüzü eklendi).
+
+## 18 Kasım 2026 · Bulut kaydı + hızlı açılış
+- Supabase projesi `dedemin-lokantasi` (ref yocwobzpekmeemsppztu, eu-central-1, org Sinav Arena). Tablo `saves(code pk, data jsonb, chapter, restored, build, updated_at)`, RLS açık, politika yok; erişim sadece `save_game(p_code,p_data,p_build)` ve `load_game(p_code)` RPC'leri (security definer). Kod: 10 harf, alfabe A-Z2-9 (I/O/0/1 yok), S.cloudId.
+- İstemci: save() → cloudSoon() (30 sn gecikmeli, uzun aradan sonra 4 sn), sekme gizlenince keepalive ile push. Ayarlar (Defter > Ayarlar) bulut kodu, kopyala, "Buluttaki oyunu getir". Eski DL1 kodu "İnternetsiz yedek kod" altında.
+- chapter/restored sütunları: oyuncuların nerede kaldığını görmek için (analitik).
+- build_site.py artık sahne (JOBIMG \d+[a-d]) ve ürün (GIMG name:*) resimlerini img/<sha1>.webp dosyalarına çıkarıyor; index 11.9 MB → 4.6 MB. sw.js sadece /img/ isteklerini cache-first saklıyor.

@@ -1393,7 +1393,7 @@ function startChapter(n){
   save(); renderAll(); openPage(n,0);if(carry)setTimeout(()=>toast(carry),600);
 }
 let lastBak=0;
-const save=()=>{try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}};
+const save=()=>{try{S.lastSeen=Date.now();const j=JSON.stringify(S);localStorage.setItem(KEY,j);if(Date.now()-lastBak>60000){localStorage.setItem(KEY+".bak",j);lastBak=Date.now();}}catch(e){}try{if(S.seenIntro)cloudSoon();}catch(e){}};
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")save();});
 window.addEventListener("pagehide",save);
 try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
@@ -2003,6 +2003,22 @@ function openQuests(){
   $("closeQ").onclick=()=>$("sheet").hidden=true;
 }
 
+
+// ---------- bulut kayıt (Supabase) ----------
+const SB_URL="https://yocwobzpekmeemsppztu.supabase.co",SB_KEY="sb_publishable_dweK4paC8COYGD9960XMVg_BwQNyEfP";
+const CLOUD={t:null,last:0,busy:false,ok:null};
+const cloudId=()=>{if(!S.cloudId){const A="ABCDEFGHJKLMNPQRSTUVWXYZ23456789",r=new Uint8Array(10);(window.crypto||{getRandomValues:a=>a.map(()=>Math.random()*256|0)}).getRandomValues(r);S.cloudId=[...r].map(x=>A[x&31]).join("");}return S.cloudId;};
+const fmtCode=c=>c.slice(0,5)+"-"+c.slice(5);
+function sbRpc(fn,body,keep){return fetch(SB_URL+"/rest/v1/rpc/"+fn,{method:"POST",keepalive:!!keep,headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(body)});}
+function cloudPush(keep){if(CLOUD.busy&&!keep)return;if(typeof navigator!=="undefined"&&navigator.onLine===false)return;
+  try{const id=cloudId();CLOUD.busy=true;CLOUD.last=Date.now();
+    sbRpc("save_game",{p_code:id,p_data:S,p_build:String(window.__BUILD||"")},keep).then(r=>{CLOUD.ok=r.ok;}).catch(()=>{CLOUD.ok=false;}).finally(()=>{CLOUD.busy=false;});}catch(e){CLOUD.busy=false;}}
+function cloudSoon(){if(window.__FAST)return;clearTimeout(CLOUD.t);CLOUD.t=setTimeout(()=>cloudPush(false),Date.now()-CLOUD.last>120000?4000:30000);}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&!window.__FAST&&S&&S.seenIntro)cloudPush(true);});
+async function cloudPull(code){code=(code||"").toUpperCase().replace(/[^A-Z2-9]/g,"");if(code.length!==10)return {err:"Kod 10 harf/rakam olmalı."};
+  try{const r=await sbRpc("load_game",{p_code:code});if(!r.ok)return {err:"Bağlantı sorunu, birazdan tekrar dene."};const a=await r.json();
+    if(!a.length)return {err:"Bu kodla bir kayıt bulunamadı."};const o=a[0].data;
+    if(!(o&&Array.isArray(o.board)&&o.chapter>=1&&o.chapter<=MAXCH))return {err:"Kayıt okunamadı."};o.cloudId=code;return {o};}catch(e){return {err:"İnternet bağlantısı yok gibi görünüyor."};}}
 // ---------- save safety: backup copy, export / import code
 function saveCode(){return "DL1:"+btoa(unescape(encodeURIComponent(JSON.stringify(S))));}
 function loadCode(txt){try{txt=(txt||"").trim();if(!txt.startsWith("DL1:"))return null;const o=JSON.parse(decodeURIComponent(escape(atob(txt.slice(4)))));
@@ -2013,12 +2029,20 @@ function openSaveSheet(){
     <button class="btn" type="button" id="musBtn">${S.music===false?"🎵 Müzik kapalı (aç)":"🎵 Müzik açık (kapat)"}</button>
     <button class="btn" type="button" id="awnBtn">🎨 Tentenin rengini değiştir</button>
     <button class="btn" type="button" id="dedeBtn">✏️ Dedenin adı: ${DN()} (değiştir)</button>
+    <div class="note"><b>☁️ Bulut kaydı.</b> Oyunun internet varken kendiliğinden yedekleniyor. Telefon değişirse ya da oyun silinirse bu kodla kaldığın yerden devam edersin. Kodu bir yere not et.</div>
+    <div style="text-align:center;font:700 26px/1.2 monospace;letter-spacing:2px;margin:6px 0;color:#7a3b12">${fmtCode(cloudId())}</div>
+    <div class="note" style="text-align:center;margin-top:0">${CLOUD.ok===false?"Son yedekleme olmadı, internet gelince tekrar denenecek.":CLOUD.ok?"Son yedekleme başarılı ✓":"Yedekleme birazdan yapılacak."}</div>
+    <button class="btn" type="button" id="ccopyBtn">Bulut kodunu kopyala</button>
+    <div class="note"><b>Başka telefondan devam et.</b> Eski telefondaki bulut kodunu yaz:</div>
+    <input id="cIn" placeholder="ABCDE-FGH23" autocapitalize="characters" autocomplete="off" style="width:100%;font:700 20px monospace;text-align:center;border-radius:10px;padding:8px;box-sizing:border-box;border:1px solid #c9b79c;background:#fffaf0;color:#3a2a1a">
+    <button class="btn" type="button" id="cLoadBtn">Buluttaki oyunu getir</button>
+    <details style="margin-top:10px"><summary style="cursor:pointer;color:#7a6a5a">İnternetsiz yedek kod (eski yöntem)</summary>
     <div class="note"><b>Kayıt kodu.</b> Oyunun tamamı bu kodda. Kopyalayıp bir yere (WhatsApp'ta kendine, not defterine) sakla. Telefon değişse ya da uygulama silinse bile bu kodla kaldığın yerden devam edersin.</div>
     <textarea id="codeBox" rows="3" readonly style="width:100%;font:12px monospace;border-radius:10px;padding:8px;box-sizing:border-box">${saveCode()}</textarea>
     <button class="btn" type="button" id="copyBtn">Kodu kopyala</button>
     <div class="note"><b>Kayıt yükle.</b> Daha önce aldığın kodu buraya yapıştır.</div>
     <textarea id="inBox" rows="3" placeholder="DL1:..." style="width:100%;font:12px monospace;border-radius:10px;padding:8px;box-sizing:border-box"></textarea>
-    <button class="btn" type="button" id="loadBtn">Bu kayıttan devam et</button>
+    <button class="btn" type="button" id="loadBtn">Bu kayıttan devam et</button></details>
     <button class="btn" type="button" id="closeSave">Kapat</button>`;
   $("sheet").hidden=false;
   $("sndBtn").onclick=()=>{S.sound=S.sound===false;save();openSaveSheet();SFX("claim");};
@@ -2030,6 +2054,11 @@ function openSaveSheet(){
     if(!this.dataset.armed){this.dataset.armed="1";this.textContent="Emin misin? Şu anki oyunun yerine geçer. Tekrar dokun.";return;}
     try{localStorage.setItem(KEY+".bak",JSON.stringify(S));}catch(e){}S=o;save();location.reload();};
   $("closeSave").onclick=()=>$("sheet").hidden=true;
+  $("ccopyBtn").onclick=async()=>{const c=fmtCode(cloudId());try{await navigator.clipboard.writeText(c);toast("Kod kopyalandı: "+c);}catch(e){toast("Kodun: "+c);}};
+  $("cLoadBtn").onclick=async function(){const b=this;if(b.dataset.o){try{localStorage.setItem(KEY+".bak",JSON.stringify(S));}catch(e){}S=JSON.parse(b.dataset.o);save();location.reload();return;}
+    b.textContent="Aranıyor…";const r=await cloudPull($("cIn").value);if(r.err){b.textContent="Buluttaki oyunu getir";toast(r.err);SFX("no");return;}
+    if(r.o.cloudId===S.cloudId){b.textContent="Buluttaki oyunu getir";toast("Bu zaten bu telefondaki oyunun kodu.");return;}
+    b.dataset.o=JSON.stringify(r.o);b.textContent=`Bulundu: ${r.o.chapter}. bölüm. Bu telefondaki oyunun yerine geçsin mi? Tekrar dokun.`;};
 }
 
 // ================= LIVELINESS PACK: album, festival, boost, bonus drops, pet love, flying rewards =================
