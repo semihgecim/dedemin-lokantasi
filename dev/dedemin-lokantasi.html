@@ -1560,6 +1560,7 @@ boardEl.addEventListener("pointerdown",e=>{
   $("speech").classList.remove("show");
   const it=e.target.closest(".item"); if(!it)return;
   e.preventDefault();
+  if(drag&&drag.ghost)drag.ghost.remove();document.querySelectorAll(".dragghost").forEach(g=>g.remove());
   drag={from:+it.dataset.i,x:e.clientX,y:e.clientY,moving:false,ghost:null,el:it,over:null};
 });
 document.addEventListener("pointermove",e=>{
@@ -1588,7 +1589,10 @@ document.addEventListener("pointerup",e=>{
     else{sel=d.from;showInfo(sel);renderBoard();}
   }
 });
-document.addEventListener("pointercancel",()=>{if(drag){if(drag.ghost)drag.ghost.remove();drag=null;renderBoard();}});
+const dragReset=()=>{document.querySelectorAll(".dragghost").forEach(g=>g.remove());if(drag){drag=null;renderBoard();}};
+document.addEventListener("pointercancel",dragReset);addEventListener("blur",dragReset);
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")dragReset();});
+document.addEventListener("pointerup",()=>{setTimeout(()=>{if(!drag)document.querySelectorAll(".dragghost").forEach(g=>g.remove());},0);},true);
 boardEl.addEventListener("click",e=>{ // tap empty cell to move selected item there
   if(e.target.closest(".item"))return; const c=e.target.closest(".cell");
   if(c&&sel>-1&&S.board[sel])drop(sel,+c.dataset.i);
