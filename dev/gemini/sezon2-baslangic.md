@@ -3,16 +3,26 @@
 ## Hikâye (kısa ve net)
 İstanbul'da, köşkün bahçesindeki sandıktan Can Usta'nın kırmızı defteri çıktı. İlk sayfada Mehmet Usta'nın yazısı var: "Can, defterin öbür yarısı sende."
 
-1964'te iki usta, annenin tarif defterini ikiye bölmüş. Mehmet Usta kendi yarısıyla Anadolu'yu dolaşmış, 1. Sezonda biz onun izini sürdük. Can Usta da öbür yarıyla Trakya'ya ve Doğu'ya gitmiş. Her şehirde bir dosta bir sayfa emanet etmiş.
+1964'te iki usta, annenin tarif defterini ikiye bölmüş. Mehmet Usta kendi yarısıyla Anadolu'yu dolaşmış, 1. Sezonda biz onun izini sürdük. Can Usta da öbür yarıyla Trakya'ya, Karadeniz'e ve Doğu'ya gitmiş. Her şehirde bir dosta bir sayfa emanet etmiş.
 
-2. Sezonda Asena ile birlikte Can Usta'nın yolunu sürüyoruz. Sorulacak soru tek: **İki dost neden defteri bölüp ayrı yollara gitti?** Cevap sezonun sonunda, son sayfada.
+2. Sezonda Asena ile birlikte Can Usta'nın yolunu sürüyoruz. Sezonun sorusu tek: **İki dost neden defteri bölüp ayrı yollara gitti?**
+
+**Hikâyenin kilometre taşları** (her biri birkaç şehre yayılır, az konuşma ve çok mektupla anlatılır):
+- **Edirne ve Safranbolu:** Can Usta'nın mektupları başlıyor. Her mektubun sonunda aynı cümle var: "Mengen'de buluşacağız, söz."
+- **Amasya ve Erzurum:** Bir fotoğraf çıkıyor. Mehmet, Can ve tanımadığımız üçüncü bir genç aynı mutfakta. Bu kim?
+- **Kars ve Şanlıurfa:** Üçüncü gencin adı ortaya çıkıyor: Mengenli usta Rıza. İkisinin de ustası. Defteri bölmelerini o istemiş: "Bir yarıyı batıya, bir yarıyı doğuya götürün. Öğretin, sonra Mengen'de birleştirin."
+- **Adana ve Ayvalık:** 1974 buluşması. Mehmet Mengen'e gitmiş, Can gelememiş. Neden? Asena dedesinin hastane mektuplarını buluyor. Can kırgın değilmiş, hastaymış. Mehmet bunu hiç öğrenmemiş.
+- **Afyon:** Rıza Usta'nın torunu çıkıyor. Elinde iki defterin kapağı var.
+- **Mengen (sezon finali):** Aşçılar köyünde iki yarı birleşiyor. Annenin defteri altmış yıl sonra ilk kez tamamlanıyor.
+
+**3. Sezona kanca:** Birleşen defterin ilk sayfası ne Mehmet'in ne Can'ın yazısıyla. İlk sayfa annenin kendi el yazısıyla, Rumca ve Türkçe karışık yazılmış: "Selanik, 1938. Bu tarifleri annemden aldım." Annenin kökü Balkanlar'da. 3. Sezon: Selanik, Üsküp, Saraybosna ve oradan dünya mutfaklarına uzanan yol.
 
 Yapı 1. Sezon ile aynı:
 - Her şehirde iki büyük iş var.
 - Her şehirde 3 malzeme zinciri var.
 - Az konuşma, çok mektup ve sayfa.
 
-## Şehirler (8)
+## Şehirler (10)
 | # | Şehir | 1. büyük iş | 2. büyük iş | Zincirler |
 |---|---|---|---|---|
 | 11 | Edirne | Kırkpınar er meydanının tribünleri | Meriç kıyısındaki eski kayıkhane | Ciğer · Badem ezmesi · Peynir helvası |
@@ -23,13 +33,19 @@ Yapı 1. Sezon ile aynı:
 | 16 | Şanlıurfa | Balıklıgöl kenarındaki avlu | İsot tarlasındaki kerpiç ev | İsot · Çiğköfte · Şıllık tatlısı |
 | 17 | Adana | Pamuk tarlası ve harman yeri | Seyhan kıyısındaki eski köşk | Kebap · Şalgam · Bici bici |
 | 18 | Ayvalık | Eski zeytinyağı fabrikası | Cunda'daki taş ev ve iskele | Zeytin · Tost · Lor tatlısı |
+| 19 | Afyon | Termal kaynaktaki eski kaplıca | Haşhaş tarlasındaki taş değirmen | Kaymak · Sucuk · Ekmek kadayıfı |
+| 20 | Mengen (Bolu) | Aşçılar köyünün meydanı ve eski aşçı okulu | Rıza Usta'nın göl kıyısındaki evi | Mengen pilavı · Bolu keşkeği · Çikolata ve kestane |
+
+Sezon 2'nin uzunluğu en az 1. Sezon kadar olacak: 10 şehir, şehir başına 2 büyük iş.
 
 Her şehir için gereken resimler, aynı 1. Sezondaki gibi:
 - 3 üreteç ve 15 malzeme (zincir başına 5 malzeme),
 - 4 sahne (iki büyük iş, her biri için önce ve sonra),
 - 4-5 yüz.
 
-Bu yaklaşık 27 resim eder. Hepsini bir kerede yapmaya çalışma. Önce Edirne ve Safranbolu'yu bitirelim. Bu iki şehir oyuna girince 2. Sezon açılır, diğer şehirler geldikçe eklenir.
+Bu, şehir başına yaklaşık 27, toplamda yaklaşık 270 resim eder. Ek olarak hikâye için birkaç özel resim isteyeceğim: üç gencin fotoğrafı, iki defter kapağı ve son sayfa. Onların komutlarını sırası gelince yazarım.
+
+Hepsini bir kerede yapmaya çalışma. Önce Edirne ve Safranbolu'yu bitirelim. Bu iki şehir oyuna girince 2. Sezon açılır, diğer şehirler geldikçe eklenir.
 
 ---
 
