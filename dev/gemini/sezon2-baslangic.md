@@ -99,6 +99,9 @@ Her satırın sonuna şu ortak metni ekle:
 3. `an elegant 70-year-old woman who makes almond paste, silver hair in a bun, pearl earrings, gentle smile`
 4. `a young boatman in his 20s with curly hair and a striped shirt, sun-tanned`
 
+### Hayvan misafir (malzeme gibi üret)
+- `a white stork standing on one leg on a wooden post`
+
 ---
 
 ## SAFRANBOLU (bölüm 12)
@@ -141,8 +144,11 @@ S2A: `A small white Ottoman vineyard house standing in the middle of a blooming 
 3. `a young woman in her 20s, a historian, short dark hair, round glasses, holding an old photograph`
 4. `a 65-year-old coppersmith with a leather apron and a small hammer, bushy eyebrows`
 
+### Hayvan misafir (malzeme gibi üret)
+- `a tabby cat sleeping on a sunny red tile roof edge`
+
 ---
 
-**Toplam:** Edirne için 18 malzeme, 4 sahne ve 4 yüz; Safranbolu için de aynısı. İki şehirde toplam 52 resim.
+**Toplam:** Her şehir için 18 malzeme, 4 sahne, 4 yüz ve 1 hayvan, yani 27 resim. İki şehirde toplam 54 resim. Kalan 8 şehir `sezon2-kalan-sehirler.md` dosyasında.
 
 Gönderme sırası önemli değil. Her şehrin sahne çiftini (A ve B) art arda gönderirsen hangisinin hangisi olduğunu anlarım.
