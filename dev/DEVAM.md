@@ -53,3 +53,10 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - İstemci: save() → cloudSoon() (30 sn gecikmeli, uzun aradan sonra 4 sn), sekme gizlenince keepalive ile push. Ayarlar (Defter > Ayarlar) bulut kodu, kopyala, "Buluttaki oyunu getir". Eski DL1 kodu "İnternetsiz yedek kod" altında.
 - chapter/restored sütunları: oyuncuların nerede kaldığını görmek için (analitik).
 - build_site.py artık sahne (JOBIMG \d+[a-d]) ve ürün (GIMG name:*) resimlerini img/<sha1>.webp dosyalarına çıkarıyor; index 11.9 MB → 4.6 MB. sw.js sadece /img/ isteklerini cache-first saklıyor.
+
+## 20 Kasım 2026 · 2. Sezon iskeleti (Kırmızı Defter, şehir 11-20)
+- Veri: dev/sezon2/cities1-4.py → gen.py → CITY_S2 / STORY_S2 / TO_S2 / MAPXY_S2 / JOBN_S2 (HTML'de CITY.push bloğunun hemen altında).
+- Kapı: `S2_READY=[]` listesine şehir no eklenince o şehir oyuna girer. `?s2test` adresiyle hepsi geçici (S1 sahne) resimleriyle açılır, sadece test.
+- S2 şehirlerinde 1. iş 27 görev (S2_TPL 3,4,4,5,5,6), 2. iş 27 görev (JOB2 mekanizması). Resimler gelince: JOB[n] (t: [ad,x,y,r] 26+1), JOBMASK[n], JOBIMG n a/b, JOB2[n] (t 27, p 26), JOBMASK2[n], JOBIMG n c/d; GIMG name:/face:/gen: anahtarları.
+- Zincir harfleri AA..BD (iki harf). Kişi anahtarları benzersiz (amasyaogretmen vb.).
+- İstanbul sonu: 11 varsa STORY2[10].end "Edirne'ye çağırıyor" olur, yoksa sezon sonu.
