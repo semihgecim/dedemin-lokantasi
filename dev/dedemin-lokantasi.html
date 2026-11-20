@@ -1381,7 +1381,7 @@ const chap=()=>CHAPTERS[S.chapter];
 const seen=c=>c===1?S.seenIntro:!!S["intro"+c];
 function setSeen(c){if(c===1)S.seenIntro=true;else S["intro"+c]=true;}
 function startChapter(n){
-  S.chapter=n; S.restored=0; S.tdone=0; S["intro"+n]=false; S.energy=MAXE; S.eAt=Date.now(); sel=-1;
+  S.chapter=n; S.restored=0; S.tdone=0; S["intro"+n]=false; S.energy=Math.max(S.energy||0,MAXE); S.eAt=Date.now(); sel=-1;
   const [a,c2,c3]=CHAINS[n];
   const b=Array(N).fill(null);
   [[51,a,1],[52,a,1],[44,c2,1],[45,c2,1],[53,c3,1]].forEach(([i,c,l])=>b[i]={c,l});b[58]={g:a};b[59]={g:c2};b[60]={g:c3};
@@ -1504,7 +1504,7 @@ function serve(i){
   evAdd(2,cardRect);addXP(3);mouseCheck();
   if(o.vip){placeItem({x:"pack"});if(cardRect)setTimeout(()=>flyTo(cardRect,starChip(),`<span class="tok st">★</span>`,8),300);toast(`${P.name} çok memnun kaldı! Kart paketi bıraktı.`);}
   if(P.pet)petFed();else if(Math.random()<0.07&&placeItem({x:"pack"}))toast(`${P.name} sana bir hatıra kartı bıraktı!`);
-  if(P.pet){S.energy=Math.min(MAXE,S.energy+(S.chapter>=2?8:6));}
+  if(P.pet&&S.energy<MAXE){S.energy=Math.min(MAXE,S.energy+(S.chapter>=2?8:6));}
   {const card0=document.querySelector(`.cust[data-i="${i}"]`);const host=document.querySelector(".custhead");if(card0&&host){const f=document.createElement("div");f.className="flyrew";f.textContent=P.pet?"+⚡":`+★${(o.stars||0)+rb}`;const a=card0.getBoundingClientRect(),b=host.getBoundingClientRect();f.style.left=(a.left-b.left+a.width/2)+"px";f.style.top=(a.top-b.top+a.height*.45)+"px";host.appendChild(f);setTimeout(()=>f.remove(),1200);}}
   const card=document.querySelector(`.cust[data-i="${i}"]`); if(card)card.classList.add("leaving");
   S.orders[i]=null; save(); renderBoard(); renderTop(); renderRepair();
@@ -1538,7 +1538,7 @@ function drop(from,to){
   if(a.lk){toast("Tozlu eşya yerinden oynamaz. Aynısını üstüne getir!");return false;}
   if(to==="sell"&&a.g&&S.board.filter(y=>y&&y.g===a.g).length>1){S.board[from]=null;S.energy+=3*(a.gl||1);toast(`Fazla ${GEN_OF[a.g]} satıldı: +${3*(a.gl||1)} ⚡`);sel=-1;save();renderBoard();renderTop();return true;}
   if(to==="sell"&&(a.g||a.x)){toast(a.x==="gold"?"Altın satılmaz, dokunup kesene koy.":a.x?"Sandığı satamazsın, dokunup aç.":"Son üreteç satılamaz. Fazlası olunca satabilirsin.");return false;}
-  if(to==="sell"){const g=a.l>=2?Math.pow(2,a.l-2):0;S.energy+=g;S.board[from]=null;toast(g?`${nm(a.c,a.l)} satıldı: +${g} ⚡`:`${nm(a.c,a.l)} atıldı`);sel=-1;$("info").textContent="";}
+  if(to==="sell"){const g=a.l>=3?Math.min(4,Math.pow(2,a.l-3)):0;S.energy+=g;S.board[from]=null;toast(g?`${nm(a.c,a.l)} satıldı: +${g} ⚡`:`${nm(a.c,a.l)} atıldı`);sel=-1;$("info").textContent="";}
   else if(to===null||to===from){return false;}
   else{
     const b=S.board[to];
@@ -1651,7 +1651,7 @@ function renderRepair(){
   $("rName").textContent=L.tasks[S.tdone].n;
   $("rBar").style.width=Math.min(100,S.stars/TASK_COST*100)+"%";
   const isL=S.tdone===midTask(L)&&!!((DLG[S.chapter]||[])[S.restored]);
-  $("upNext").innerHTML=L.tasks.slice(S.tdone+1,S.tdone+4).map((t,k)=>`<li>${S.tdone+1+k===midTask(L)&&(DLG[S.chapter]||[])[S.restored]?"✉ ":""}${t.n}</li>`).join("")+(S.tdone+4>=L.tasks.length?`<li class="lvlend">🎁 Seviye sonu: ödül sandığı + 25 ⚡</li>`:"");
+  $("upNext").innerHTML=L.tasks.slice(S.tdone+1,S.tdone+4).map((t,k)=>`<li>${S.tdone+1+k===midTask(L)&&(DLG[S.chapter]||[])[S.restored]?"✉ ":""}${t.n}</li>`).join("")+(S.tdone+4>=L.tasks.length?`<li class="lvlend">🎁 Seviye sonu: ödül sandığı + 15 ⚡</li>`:"");
   $("tIco").innerHTML=isL?ICO.letter:ICO.hammer;$("tCost").textContent=`★${TASK_COST}`;
   $("rBtn").classList.toggle("can",S.stars>=TASK_COST);$("rBtn").classList.toggle("letter",isL);
   $("rBtn").disabled=busy;
@@ -1681,7 +1681,7 @@ async function playBig(oldHtml,lvl){
   const cols=["#ffd166","#45c1a8","#d0793c","#f6b8c8","#9fd3c7"];
   fx.innerHTML=`<div class="fx-old scenebox">${oldHtml}</div><div class="fx-flash"></div>`+
     Array.from({length:26},(_,k)=>`<i class="conf" style="left:${Math.random()*100}%;background:${cols[k%5]};animation-delay:${(0.5+Math.random()*0.8).toFixed(2)}s"></i>`).join("")+
-    `<div class="fxcard big" style="animation-delay:1.1s"><b>${JOB[S.chapter]?jobNoun()+" güzelleşiyor!":"Dükkân gelişti!"}</b><span>Seviye ${lvl} · +25 ⚡ ve ödül sandığı</span></div>`;
+    `<div class="fxcard big" style="animation-delay:1.1s"><b>${JOB[S.chapter]?jobNoun()+" güzelleşiyor!":"Dükkân gelişti!"}</b><span>Seviye ${lvl} · +15 ⚡ ve ödül sandığı</span></div>`;
   $("scenewrap").appendChild(fx);await wait(3200);fx.remove();
 }
 async function doTask(){
@@ -1692,7 +1692,7 @@ async function doTask(){
   {const T0=L.tasks[S.tdone];if(T0&&T0.a==="awning"&&!(S.deco||{})["awn"+S.chapter]){modalOpen=true;await chooseAwning();modalOpen=false;}}
   S.stars-=TASK_COST;const T=L.tasks[S.tdone],name=T.n;S.tdone++;SFX("hammer");qbump("task");S.hiGen=0;evAdd(5,null);addXP(5);
   let rew;
-  if(S.tdone%2){S.energy+=5;rew="+5 ⚡";}
+  if(S.tdone%4===1){S.energy+=5;rew="+5 ⚡";}
   else{const c=pick(CHAINS[S.chapter]);rew=placeItem({c,l:2})?`Hediye: ${nm(c,2)}`:(S.energy+=5,"+5 ⚡");}
   save();renderTop();renderBoard();
   const JK=T.a||T.r||null;
@@ -1701,7 +1701,7 @@ async function doTask(){
   if(S.tdone>=L.tasks.length){
     const old=$("scene").innerHTML;
     const mx0=CHAINS[S.chapter].map(c=>max(c));
-    S.restored++;S.tdone=0;S.energy+=25;
+    S.restored++;S.tdone=0;S.energy+=15;
     CHAINS[S.chapter].forEach((c,k)=>{if(max(c)>mx0[k])setTimeout(()=>toast(`Yeni tarif açıldı: ${nm(c,max(c))}!`),window.__FAST?0:2600);});placeItem({x:"box"});placeItem({x:"pack"});if(!placeItem({x:"gold",l:2}))S.gold+=GOLDV[1];{const gc=pick(CHAINS[S.chapter]);if(placeItem({g:gc,gl:1}))setTimeout(()=>toast(`Hediye: bir ${GEN_OF[gc]} daha! Aynısıyla birleştir, güçlensin.`),window.__FAST?0:3800);}save();
     renderScene();renderTop();renderRepair();
     SFX("level");await playBig(old,S.restored+1>C.levels.length?S.restored:S.restored+1);
