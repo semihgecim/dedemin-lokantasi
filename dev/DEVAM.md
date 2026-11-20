@@ -60,3 +60,9 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - S2 şehirlerinde 1. iş 27 görev (S2_TPL 3,4,4,5,5,6), 2. iş 27 görev (JOB2 mekanizması). Resimler gelince: JOB[n] (t: [ad,x,y,r] 26+1), JOBMASK[n], JOBIMG n a/b, JOB2[n] (t 27, p 26), JOBMASK2[n], JOBIMG n c/d; GIMG name:/face:/gen: anahtarları.
 - Zincir harfleri AA..BD (iki harf). Kişi anahtarları benzersiz (amasyaogretmen vb.).
 - İstanbul sonu: 11 varsa STORY2[10].end "Edirne'ye çağırıyor" olur, yoksa sezon sonu.
+
+## Sezon 2 resim üretimi (Gemini, Chrome üzerinden) — 20 Kasım 2026
+- Edirne (11) yayında. S2_READY=[11]. Araçlar: dev/sezon2/art/ (clus.py → tasks_<şehir>.py → build_city.py → proc_city.py → inject.py).
+- Dosya adları: <şehir>-01..03 üreteç, 04..18 malzeme (zincir sırası), 19 hayvan; S1A/S1B/S2A/S2B sahne; Y1..Y4 yüz. "-NNb-" varsa onu kullanır.
+- Safranbolu (12): sahneler + görev listeleri hazır (art_12.json), malzeme 01-08 + yüz Y1,Y2 hazır. Eksik: 09-19, Y3 (tarihçi), Y4 (safrancı nine). Gemini günlük sınırı doldu (~60 resim/gün).
+- Yüz anahtarları: 13 elmaci,kayikci3,amasyaogretmen,keskekci · 14 cagci,hamamci,kayakci,emekliogretmen · 15 peynirci,kazci,arici2,coban · 16 cigkofteci,isotcu,baglamaci,siraci · 17 kebapci2,salgamci,bicibicici,pamukcu · 18 yagci,tostcu,kaptan,lorcu · 19 kaymakci,sucukcu,kaplicaci,degirmenci · 20 rizaoglu,rizatorun,muhtar,cirak2
