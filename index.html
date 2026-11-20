@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795179705";</script>
+<script>window.__BUILD="1795183102";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1572,7 +1572,7 @@ function drop(from,to){
   if(a.lk){toast("Tozlu eşya yerinden oynamaz. Aynısını üstüne getir!");return false;}
   if(to==="sell"&&a.g&&S.board.filter(y=>y&&y.g===a.g).length>1){S.board[from]=null;S.energy+=3*(a.gl||1);toast(`Fazla ${GEN_OF[a.g]} satıldı: +${3*(a.gl||1)} ⚡`);sel=-1;save();renderBoard();renderTop();return true;}
   if(to==="sell"&&(a.g||a.x)){toast(a.x==="gold"?"Altın satılmaz, dokunup kesene koy.":a.x?"Sandığı satamazsın, dokunup aç.":"Son üreteç satılamaz. Fazlası olunca satabilirsin.");return false;}
-  if(to==="sell"){const g=a.l>=3?Math.min(4,Math.pow(2,a.l-3)):0;S.energy+=g;S.board[from]=null;toast(g?`${nm(a.c,a.l)} satıldı: +${g} ⚡`:`${nm(a.c,a.l)} atıldı`);sel=-1;$("info").textContent="";}
+  if(to==="sell"){const g=[0,0,0,1,2,4,6,8,10,12][a.l]||0;S.energy+=g;S.board[from]=null;toast(g?`${nm(a.c,a.l)} satıldı: +${g} ⚡`:`${nm(a.c,a.l)} atıldı`);sel=-1;$("info").textContent="";}
   else if(to===null||to===from){return false;}
   else{
     const b=S.board[to];
@@ -1685,7 +1685,7 @@ function renderRepair(){
   $("rName").textContent=L.tasks[S.tdone].n;
   $("rBar").style.width=Math.min(100,S.stars/TASK_COST*100)+"%";
   const isL=S.tdone===midTask(L)&&!!((DLG[S.chapter]||[])[S.restored]);
-  $("upNext").innerHTML=L.tasks.slice(S.tdone+1,S.tdone+4).map((t,k)=>`<li>${S.tdone+1+k===midTask(L)&&(DLG[S.chapter]||[])[S.restored]?"✉ ":""}${t.n}</li>`).join("")+(S.tdone+4>=L.tasks.length?`<li class="lvlend">🎁 Seviye sonu: ödül sandığı + 15 ⚡</li>`:"");
+  $("upNext").innerHTML=L.tasks.slice(S.tdone+1,S.tdone+4).map((t,k)=>`<li>${S.tdone+1+k===midTask(L)&&(DLG[S.chapter]||[])[S.restored]?"✉ ":""}${t.n}</li>`).join("")+(S.tdone+4>=L.tasks.length?`<li class="lvlend">🎁 Seviye sonu: ödül sandığı + 20 ⚡</li>`:"");
   $("tIco").innerHTML=isL?ICO.letter:ICO.hammer;$("tCost").textContent=`★${TASK_COST}`;
   $("rBtn").classList.toggle("can",S.stars>=TASK_COST);$("rBtn").classList.toggle("letter",isL);
   $("rBtn").disabled=busy;
@@ -1715,7 +1715,7 @@ async function playBig(oldHtml,lvl){
   const cols=["#ffd166","#45c1a8","#d0793c","#f6b8c8","#9fd3c7"];
   fx.innerHTML=`<div class="fx-old scenebox">${oldHtml}</div><div class="fx-flash"></div>`+
     Array.from({length:26},(_,k)=>`<i class="conf" style="left:${Math.random()*100}%;background:${cols[k%5]};animation-delay:${(0.5+Math.random()*0.8).toFixed(2)}s"></i>`).join("")+
-    `<div class="fxcard big" style="animation-delay:1.1s"><b>${JOB[S.chapter]?jobNoun()+" güzelleşiyor!":"Dükkân gelişti!"}</b><span>Seviye ${lvl} · +15 ⚡ ve ödül sandığı</span></div>`;
+    `<div class="fxcard big" style="animation-delay:1.1s"><b>${JOB[S.chapter]?jobNoun()+" güzelleşiyor!":"Dükkân gelişti!"}</b><span>Seviye ${lvl} · +20 ⚡ ve ödül sandığı</span></div>`;
   $("scenewrap").appendChild(fx);await wait(3200);fx.remove();
 }
 async function doTask(){
@@ -1726,7 +1726,7 @@ async function doTask(){
   {const T0=L.tasks[S.tdone];if(T0&&T0.a==="awning"&&!(S.deco||{})["awn"+S.chapter]){modalOpen=true;await chooseAwning();modalOpen=false;}}
   S.stars-=TASK_COST;const T=L.tasks[S.tdone],name=T.n;S.tdone++;SFX("hammer");qbump("task");S.hiGen=0;evAdd(5,null);addXP(5);
   let rew;
-  if(S.tdone%4===1){S.energy+=5;rew="+5 ⚡";}
+  if(S.tdone%3===1){S.energy+=5;rew="+5 ⚡";}
   else{const c=pick(CHAINS[S.chapter]);rew=placeItem({c,l:2})?`Hediye: ${nm(c,2)}`:(S.energy+=5,"+5 ⚡");}
   save();renderTop();renderBoard();
   const JK=T.a||T.r||null;
@@ -1735,7 +1735,7 @@ async function doTask(){
   if(S.tdone>=L.tasks.length){
     const old=$("scene").innerHTML;
     const mx0=CHAINS[S.chapter].map(c=>max(c));
-    S.restored++;S.tdone=0;S.energy+=15;
+    S.restored++;S.tdone=0;S.energy+=20;
     CHAINS[S.chapter].forEach((c,k)=>{if(max(c)>mx0[k])setTimeout(()=>toast(`Yeni tarif açıldı: ${nm(c,max(c))}!`),window.__FAST?0:2600);});placeItem({x:"box"});placeItem({x:"pack"});if(!placeItem({x:"gold",l:2}))S.gold+=GOLDV[1];{const gc=pick(CHAINS[S.chapter]);if(placeItem({g:gc,gl:1}))setTimeout(()=>toast(`Hediye: bir ${GEN_OF[gc]} daha! Aynısıyla birleştir, güçlensin.`),window.__FAST?0:3800);}save();
     renderScene();renderTop();renderRepair();
     SFX("level");await playBig(old,S.restored+1>C.levels.length?S.restored:S.restored+1);
