@@ -12,6 +12,8 @@ for k,t in enumerate(T):
     if len(xs)==0: out['pos'].append([600,450]);out['masks'].append("");continue
     # position: point inside mask nearest to centroid
     cx,cy=xs.mean(),ys.mean();i=np.argmin((xs-cx)**2+(ys-cy)**2);out['pos'].append([int(xs[i]),int(ys[i])])
+    if isr and t.get('minus'):
+        sub=np.isin(L,[j+1 for j in t['minus']]);m=(m>0)&~sub;m=m.astype(np.uint8)*255
     if t.get('diff'):
         Aa=np.array(Image.open(spec['after']).convert('RGB').resize((1200,900))).astype(int);Cc=np.array(Image.open(sys.argv[3]).convert('RGB').resize((1200,900))).astype(int)
         dd=(np.abs(Aa-Cc).sum(2)>60).astype(np.uint8);dd=cv2.dilate(dd,np.ones((5,5),np.uint8));m=(m>0)&(dd>0);m=m.astype(np.uint8)*255
