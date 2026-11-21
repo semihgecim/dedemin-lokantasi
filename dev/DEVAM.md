@@ -66,3 +66,10 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - Dosya adları: <şehir>-01..03 üreteç, 04..18 malzeme (zincir sırası), 19 hayvan; S1A/S1B/S2A/S2B sahne; Y1..Y4 yüz. "-NNb-" varsa onu kullanır.
 - Safranbolu (12): sahneler + görev listeleri hazır (art_12.json), malzeme 01-08 + yüz Y1,Y2 hazır. Eksik: 09-19, Y3 (tarihçi), Y4 (safrancı nine). Gemini günlük sınırı doldu (~60 resim/gün).
 - Yüz anahtarları: 13 elmaci,kayikci3,amasyaogretmen,keskekci · 14 cagci,hamamci,kayakci,emekliogretmen · 15 peynirci,kazci,arici2,coban · 16 cigkofteci,isotcu,baglamaci,siraci · 17 kebapci2,salgamci,bicibicici,pamukcu · 18 yagci,tostcu,kaptan,lorcu · 19 kaymakci,sucukcu,kaplicaci,degirmenci · 20 rizaoglu,rizatorun,muhtar,cirak2
+
+### 21 Kasım durum (Gemini limiti 5 saatte bir ~40-60 resim)
+- Yayında: 11 Edirne, 12 Safranbolu, 13 Amasya.
+- Hazır: tüm yüzler (14-20), sahneler: erzurum, kars, adana, sanliurfa S2 (S1 çifti yeniden üretilecek: A ve B eşleşmiyor), ayvalik S1A/S1B/S2A.
+- Görev listeleri hazır: tasks_erzurum, tasks_kars, tasks_adana (art_14/15/17.json üretildi).
+- Malzeme: erzurum 01-08 hazır; 09'dan itibaren (qall2.json sırası) kaldı.
+- Chrome: "Browser 2" (a3167c6d). Sekmeler: malzeme sohbeti 143732f4ee4a4e54, sahne sohbeti ae6560fb66d65662, yeni malzeme sohbeti 4f05a6cbbb495f89. __q4 + watchdog (__wd) kullan; sayfa yenilenirse ilk kaydı kontrol et.

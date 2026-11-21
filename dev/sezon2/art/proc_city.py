@@ -10,7 +10,7 @@ ch=list(c['chains'].values());pet=[k for k,v in c['people'].items() if len(v)>5 
 keys=['gen:'+v[1][1] for v in ch]+['name:'+it[0] for v in ch for it in v[2]]+['pet:'+pet]
 U='/mnt/user-data/uploads/resim 2/'
 def f(i):
-  g=sorted(glob.glob(U+f'{CN}-{i:02d}b-*.png'))or sorted(glob.glob(U+f'{CN}-{i:02d}-*.png'));return g[0] if g else None
+  g=sorted(glob.glob(U+f'{CN}-{i:02d}b*.png'))or sorted(glob.glob(U+f'{CN}-{i:02d}-*.png'))or sorted(glob.glob(U+f'{CN}-{i:02d}.png'));return g[0] if g else None
 from rembg import remove,new_session
 ses=new_session("isnet-general-use");out={};pv=[];miss=[]
 for i,k in enumerate(keys,1):
