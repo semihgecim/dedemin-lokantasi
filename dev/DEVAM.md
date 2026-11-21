@@ -73,3 +73,16 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 - Görev listeleri hazır: tasks_erzurum, tasks_kars, tasks_adana (art_14/15/17.json üretildi).
 - Malzeme: erzurum 01-08 hazır; 09'dan itibaren (qall2.json sırası) kaldı.
 - Chrome: "Browser 2" (a3167c6d). Sekmeler: malzeme sohbeti 143732f4ee4a4e54, sahne sohbeti ae6560fb66d65662, yeni malzeme sohbeti 4f05a6cbbb495f89. __q4 + watchdog (__wd) kullan; sayfa yenilenirse ilk kaydı kontrol et.
+
+## SAHNE YENİLEME (2026-11-22 gece) — devam planı
+Amaç: 1-20 tüm bölüm sahnelerinde görev eşyaları önce YOK, görev yapılınca tam yerinde belirsin (kullanıcı isteği).
+Bitti ve canlı: 1 (Bursa, OBJC keyed), 2 (Antep, OBJC keyed), 5 (Hatay a+c sahneleri). 3c paketlendi+inject edildi ama henüz yayınlanmadı (3a temiz resmi ikinci geçişte: clean3x/once3x).
+Kalan: 3a, 4a, 4c, 6a,6c, 7a,7c, 8a,8c, 9a,9c, 10a,10c, 11-20 (a ve c).
+Araçlar: scratchpad/obj/ (kopyası dev/sahneler/obj/):
+ - grid.py src.jpg out.jpg  → koordinat ızgarası
+ - specN.json / specNc.json → görev listesi (sayı = JOB[n].t uzunluğu (33 veya 27 vb) / JOB2[n].t uzunluğu (27)); "poly" bölge (r: temiz resmi açar), "sam":[{"box":[x1,y1,x2,y2]}] eşya (A'dan), "kind","polys","diff":true (ışık dizisi gibi ince şeyler)
+ - sam_scene.py spec.json → masks/;  labels.py spec.json → lab_ID.jpg kontrol; cover.py
+ - Gemini (Chrome Browser 2, sekme gemini): window.__Q.push([dosya,"kaldırılacaklar listesi",tag]); __qrun() → cleanTAG.png + onceTAG.png indirir (Downloads/resim 2). Dosyalar önce /mnt/user-data/uploads/sahne/ altına kopyalanıp file_upload ile #__fi inputuna yüklenmeli (src_Nx.jpg → sNx.jpg).
+ - device_stage_files ile çek, fetch.sh TAG after.jpg → hizalar, cmp_TAG.jpg kontrol (temizde eşya kaldıysa ikinci geçiş).
+ - pack.py spec.json onceX.jpg cleanX.jpg → inject_obj.py N a|c obj_ID.json (bölüm 3-20); bölüm 1-2 inject_keys.py
+ - build_site.py, night/mig.js (zorunlu), obj/shot.js N '[[r,td],...]', obj/run_chN.js, sonra git push.
