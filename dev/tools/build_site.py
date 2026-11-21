@@ -34,7 +34,7 @@ def ext(m):
     fp=os.path.join(IMGD,fn)
     if not os.path.exists(fp):open(fp,"wb").write(raw)
     return '"%s": "img/%s"'%(key,fn)
-page=re.sub(r'"(\d+[a-d]|name:[^"]{1,60})": "data:image/(webp|png|jpeg);base64,([A-Za-z0-9+/=]+)"',ext,page)
+page=re.sub(r'"(\d+[a-d]|name:[^"]{1,60}|body:[a-z0-9]{1,30})": "data:image/(webp|png|jpeg);base64,([A-Za-z0-9+/=]+)"',ext,page)
 for f in os.listdir(IMGD):
     if f not in used:os.remove(os.path.join(IMGD,f))
 sw='''const C="dl-img-v1";

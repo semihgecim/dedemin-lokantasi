@@ -1,0 +1,89 @@
+nuri|a kind elderly retired Turkish gentleman, completely bald head, round brown glasses, short white beard and white mustache, grey wool cardigan over a white shirt, holding a folded newspaper, gentle smile
+elif|a cheerful young Turkish woman about 20, long brown hair in a high ponytail, rosy cheeks, teal jacket over a light shirt, waving hello
+hasan|a friendly middle-aged Turkish craftsman, short dark grey hair, light stubble, dark work jacket over a grey shirt, arms crossed confidently, warm smile
+aynur|a sweet elderly Turkish auntie, grey hair in a bun, gentle smile, mauve knitted cardigan over a pink blouse, holding a small plate of homemade cookies
+pamuk|a fluffy white long-haired Turkish Angora cat with bright green eyes and pink nose, sitting upright, full body, cute and happy
+torun|a lively Turkish teenage boy about 14, messy black hair, big smile, white t-shirt with a school backpack strap on one shoulder, mischievous wink
+kebapci|a jolly middle-aged kebab master from Gaziantep, red fez-like cap, thick black curled mustache, big laugh, white shirt with sleeves rolled up and a dark vest, holding a long skewer
+cirak|a young apprentice coppersmith boy about 15, curly black hair with a red bandana, soot smudge on cheek, grinning, rolled-up sleeves, holding a small copper bowl
+nine|a tiny sweet elderly Turkish grandmother, white headscarf, many wrinkles, warm smile, small gold earrings, beige cardigan, hands folded on chest
+kopek|a friendly black and tan street dog (rottweiler mix) with tongue out, happy face, sitting upright, full body, cute
+hala|a kind elderly Turkish great-aunt, purple headscarf, round glasses, smiling, patterned purple cardigan, holding a cup of tea
+balikci|an old fisherman from Izmir, navy knit beanie, short grey beard, dark blue turtleneck sweater with a checked flannel shirt over it, holding a fishing rod over his shoulder
+ogrenci|a friendly young Turkish university girl, long wavy black hair, light denim jacket over a white tee, holding books to her chest, cheerful
+vapurcu|a cheerful old ferry captain from Izmir, white captain's hat with anchor badge, grey mustache, navy uniform jacket with a striped sailor shirt underneath, saluting
+kordonkedi|a cute orange tabby cat with a blue collar, round happy face, sitting upright, full body
+dost|an old fisherman friend, black knit beanie, full white beard, dark plaid flannel shirt, laughing heartily, holding a bucket of fish
+yayla|a rosy-cheeked old highland woman from Trabzon, red-orange striped traditional Black Sea headscarf, patterned vest, smiling, holding a basket of tea leaves
+kemence|a young man from the Black Sea region, black bandana headband, short beard, black traditional shirt, holding a small kemence fiddle and bow
+sofor|a friendly middle-aged minibus (dolmus) driver, flat cap, round glasses, grey mustache, olive green jacket, giving a thumbs up, car keys in hand
+kedi4|a grey and white cat wearing a tiny red patterned Black Sea scarf, happy face, sitting upright, full body, cute
+kunefeci|an old kunefe master from Hatay, bald head, big white mustache, white shirt with brown vest and a white apron, holding a round tray of golden kunefe
+esnaf|a middle-aged shopkeeper from Hatay's long bazaar, beige wrapped headscarf (puşi) on head, grey mustache, brown vest over a white shirt, welcoming open hands
+kilise|a kind neighborhood grandmother from Antakya, patterned brown and red headscarf, gentle smile, dark cardigan, holding a small loaf of bread
+muzisyen|a young street musician with long black hair and a black headband, light beard, cream linen shirt, holding an oud
+kedi5|a cute orange tabby courtyard cat wearing a small blue evil-eye (nazar) charm on its collar, smiling, sitting upright, full body
+firinci|an old baker from Konya, white baker's cap, white mustache, white baker's jacket and apron dusted with flour, holding a long flatbread (etli ekmek) on a wooden peel
+semazen|a calm middle-aged whirling dervish (semazen), tall honey-brown felt hat (sikke), white robe with black cloak, hand on chest in a respectful bow, serene smile
+ciftci|a sturdy middle-aged farmer from the Konya plains, dark flat cap, thick black mustache, checked shirt, holding a bundle of golden wheat
+ogretmen|a kind village schoolteacher woman in her 50s, grey hair in a bun, round glasses, patterned brown neck scarf, dark cardigan, holding chalk and a book
+kedi6|a chubby tabby bakery cat with golden eyes, smiling, sitting upright, full body, a little flour on its nose
+comlekci|an old potter from Cappadocia, bald head, short grey beard, cream shirt with rolled sleeves and a brown leather apron, clay on hands, holding a small clay pot
+pilot|a cheerful young hot air balloon pilot woman, blonde hair in a top bun with sunglasses on her head, dark green utility jacket, waving
+bagci|a sweet elderly vineyard auntie, green patterned headscarf, olive knitted vest, smiling, holding a bunch of purple grapes
+rehber|a friendly young tour guide man, short brown hair, black rectangular glasses, beige jacket over a white tee with a backpack, pointing excitedly
+kedi7|a fluffy cream-colored cat with amber eyes, smiling, sitting upright, full body, cute
+salon|a cheerful old man who runs a breakfast salon in Van, grey flat cap, white mustache, cream shirt with a blue argyle sweater vest, holding a tray of breakfast plates
+arici|an old beekeeper from Van, brown flat cap, grey mustache, olive vest over a checked shirt, holding a honeycomb frame with a little bee nearby
+kayikci|a weathered middle-aged boatman from Lake Van, blue captain-style cap, grey stubble, navy jacket with a red neck scarf, holding an oar
+kizlar|a young woman from Van, long black braided hair with a colorful embroidered headband, dark purple embroidered vest over a white blouse, holding a hand-embroidered cloth
+vankedi|a white Van cat with one blue eye and one amber eye, fluffy, smiling, sitting upright, full body
+telkari|an old silver filigree (telkari) master from Mardin, grey flat cap, short white beard, white shirt with navy vest, holding fine silver tweezers and a small silver filigree brooch
+dokumaci|a kind middle-aged weaver woman from Mardin, orange headscarf, purple patterned vest over a cream blouse, holding a colorful woven textile
+sabuncu|an old soap maker from Mardin, dark flat cap, grey mustache, olive vest, holding green bittim soap bars
+cocuk|a cute little boy about 9 from Mardin, short brown hair, blue argyle sweater vest over a white shirt, big curious eyes, holding a paper kite
+kedi9|a black and white tuxedo cat with a little bell collar, sitting upright, full body, cute
+asena|a confident young Turkish woman in her late 20s, shoulder-length wavy brown hair, mustard yellow cardigan over a white top, holding a small red notebook
+can|a friendly bald middle-aged chef, round glasses, short beard, white shirt with a black vest and dark apron, hands on hips
+galatali|a dapper old restaurateur from Galata Istanbul, black fedora hat, round glasses, white mustache, navy suit jacket with a white shirt, holding a menu card
+vapur10|an old Bosphorus ferry captain, navy captain's hat with gold badge, full white beard, navy double-breasted coat over a cream turtleneck, holding a ship's rope
+hanim|an elegant Istanbul lady from Cihangir in her 40s, auburn hair in a loose updo, dark patterned shawl over a cream blouse, holding a teacup on a saucer
+muzik|a young street violinist with long wavy black hair and a dark headband, light stubble, dark shirt, holding a violin
+galatakedi|a tabby cat with a red collar and small bell, sitting upright, full body, cute smiling
+leylek|a white stork with black wing tips and a long orange beak and legs, standing proudly on one leg, full body, cute friendly
+bakirci|an old coppersmith from Safranbolu, black flat cap, grey mustache, white shirt with a brown leather apron, holding a small hammer and a shiny copper tray
+lokumcu|a jolly chubby Turkish delight maker, white cap, curly black hair, red neckerchief, white jacket, holding a plate of colorful lokum
+tarihci|a young history student girl, short black hair, round glasses, mustard sweater, holding an old black and white photograph
+damkedi|a ginger cat that loves roofs, stretching happily, standing on all fours, full body, cute
+kayikci3|a middle-aged river boatman from Amasya, navy flat cap, black mustache, brown vest over a light shirt, holding a wooden oar
+keskekci|a middle-aged village woman who makes keskek, patterned brown headscarf, sage green blouse with rolled sleeves, holding a big wooden spoon
+amasyaogretmen|a young male history teacher from Amasya, short dark hair, trimmed beard, brown scarf over a cream sweater, holding an old photograph
+turuncukedi|a fat orange cat, sitting upright among red apples, full body, smiling, cute
+cagci|a cagkebap master from Erzurum, white cap, big white mustache, cream vest over a white shirt, holding a long skewer of cag kebab
+hamamci|a friendly middle-aged woman from Erzurum, patterned headscarf, cream cable-knit sweater, holding a folded towel and a small copper bowl
+kayakci|a sporty young woman ski instructor, red pom-pom beanie, teal ski jacket, rosy cheeks, holding ski poles
+ankara|a white fluffy Turkish Angora cat with blue eyes, sitting elegantly upright, full body
+peynirci|an old cheese master from Kars, white cap, full white beard, white work jacket, holding a big wheel of gravyer cheese
+kazci|a cheerful middle-aged woman from Kars, colorful red and yellow patterned headscarf, brown knitted top, holding a white goose
+arici2|a young beekeeper from Kars, khaki beekeeper hat with a veil pushed back, short beard, khaki beekeeping jacket, holding a jar of honey
+kangal|a big friendly Kangal shepherd dog, cream fur with black muzzle, sitting upright, full body, gentle smile
+cigkofteci|a cigkofte master from Sanliurfa, red and white checked keffiyeh headscarf (puşi), black mustache, brown shirt, holding a plate of cigkofte with lettuce
+baglamaci|a young baglama player, curly dark hair, olive sweater, holding a long-necked baglama
+siraci|a middle-aged woman hosting a sira gecesi, red patterned headscarf, embroidered dark red vest, holding a brass tray with tea glasses
+gollukedi|a grey tabby cat sitting upright next to a small pond, full body, cute smiling
+kebapci2|a cheerful Adana kebab master, grey hair, grey mustache, red patterned neckerchief, white chef jacket, holding a plate of Adana kebab
+salgamci|a warm middle-aged woman from Adana, patterned red-brown headscarf, rust-colored blouse, holding a glass of dark red salgam juice
+bicibicici|a cheerful young woman selling bici bici dessert, straw sun hat, dark hair in a ponytail, light blouse, holding a bowl of pink and white bici bici ice dessert
+kopek2|a lazy chubby golden-orange dog with floppy ears, sleepy happy face, sitting, full body, cute
+yagci|a wise old olive oil master from Ayvalik, wavy white hair, short white beard, cream linen shirt, holding an olive branch and a small bottle of olive oil
+tostcu|a friendly woman in her 40s who runs a toast shop in Ayvalik, short brown hair, red patterned neck scarf, beige blouse with a floral apron, holding a glass of tea and a toasted sandwich
+kaptan|a handsome young sea captain, navy captain's cap, short beard, navy wool sweater with a blue neckerchief, confident smile, holding a coiled rope
+adakedi|a black and white island cat, sitting upright, full body, cute smiling
+kaymakci|a kaymak master from Afyon, grey hair, short grey beard, white shirt and white apron, holding a bowl of thick clotted cream (kaymak)
+sucukcu|a sucuk maker from Afyon, grey hair, grey mustache, red neckerchief, white shirt with a brown leather apron, holding a string of sucuk sausages
+kaplicaci|a young thermal bath attendant woman, white towel wrapped on her head, light blue shirt, smiling, holding a copper bath bowl
+manda|a cute baby water buffalo calf, dark brown-black, standing, full body, happy face
+muhtar|the old village headman (muhtar) of Mengen, olive green flat cap, grey mustache, brown tweed vest with a red neckerchief, holding a wooden walking stick
+rizatorun|a young woman chef in her 20s, dark hair in a bun, white chef jacket with a red neckerchief, proudly holding a wooden spoon
+cirak2|a young kitchen apprentice boy about 15, white chef's hat, white chef jacket with a red neckerchief, holding a whisk, eager smile
+ormankopek|a brown forest dog with a red bandana, floppy ears, happy, sitting upright, full body
