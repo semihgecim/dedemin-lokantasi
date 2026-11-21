@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795275804";</script>
+<script>window.__BUILD="1795278673";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -2851,6 +2851,30 @@ setInterval(birds,16000);setTimeout(birds,3500);
 // restore helpers used by playSmall/playBig
 window.juicePuffs=function(host,px,py){if(RM())return;for(let k=0;k<10;k++){const p=document.createElement("i");p.className="jpuff";const a=k/10*6.283;p.style.left=px+"%";p.style.top=py+"%";p.style.setProperty("--dx",Math.cos(a)*70+"px");p.style.setProperty("--dy",Math.sin(a)*45+"px");p.style.animationDelay=(Math.random()*.1)+"s";host.appendChild(p);setTimeout(()=>p.remove(),1100);}};
 window.juiceShake=function(el){if(RM()||!el)return;el.classList.remove("jshake");void el.offsetWidth;el.classList.add("jshake");setTimeout(()=>el.classList.remove("jshake"),300);};
+})();
+
+// ---------- THEME v2: bright, airy, colourful
+(function(){
+const css=document.createElement("style");css.textContent=`
+:root{--ground:#1a7f86;--panel:#16736f;--turq:#3fd0b4}
+body{background:linear-gradient(180deg,#56c6e6 0%,#8ad9ee 24%,#bdeaf3 48%,#f7e6c4 100%) fixed!important}
+#board{background:#fff;padding:5px;border-radius:16px;box-shadow:0 0 0 4px #fff,0 0 0 7px #43b3d2,0 12px 24px rgba(20,70,90,.35)!important;gap:0!important}
+#board .cell{background:#eaf7f5!important;border-radius:0}
+#board .cell.alt{background:#d8efea!important}
+#board .cell.target{background:#b9ecd9!important}
+#board .item img{transform:translateY(-3%) scale(1.2)!important;filter:saturate(1.3) contrast(1.06) drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 3px 2px rgba(20,60,70,.3))!important}
+#board .item svg{transform:scale(1.1)!important;filter:saturate(1.2) drop-shadow(0 3px 2px rgba(20,60,70,.25))}
+#board .item .lv{background:#ff8a3d!important;color:#fff!important;border-radius:7px;box-shadow:0 0 0 1.5px #fff}
+#board .item.want:before{content:"✓";position:absolute;right:-2px;top:-2px;z-index:7;width:15px;height:15px;border-radius:50%;background:#35c46a;color:#fff;font:800 10px/15px system-ui;text-align:center;box-shadow:0 0 0 2px #fff,0 2px 3px rgba(0,0,0,.25)}
+.pface{box-shadow:0 0 0 4px #fff,0 0 0 7px #ffc94a,0 8px 16px rgba(20,60,80,.35)!important}
+.cust.ready .pface{box-shadow:0 0 0 4px #fff,0 0 0 7px #35c46a,0 0 22px rgba(53,196,106,.8)!important}
+.bub{background:#fff!important;border:3px solid #ffd76a!important;border-radius:16px!important;box-shadow:0 5px 12px rgba(20,60,80,.25)!important}
+.cust.ready .bub{border-color:#35c46a!important}
+.need.ok:after{background:#35c46a!important}
+#scenewrap img,#custhead{filter:saturate(1.15) contrast(1.03)}
+`;document.head.appendChild(css);
+const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);try{const W=new Set();(S.orders||[]).forEach(o=>o&&o.items.forEach(x=>W.add(x.c+"|"+x.l)));
+  boardEl.querySelectorAll(".item").forEach(el=>{const x=S.board[+el.dataset.i];if(x&&x.c&&!x.g&&!x.x&&!x.lk&&W.has(x.c+"|"+x.l))el.classList.add("want");});}catch(e){}};
 })();
 
 function renderAll(){renderTop();renderRepair();renderScene();renderBoard();timeFx();renderRush();
