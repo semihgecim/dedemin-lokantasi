@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795296173";</script>
+<script>window.__BUILD="1795296488";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1691,7 +1691,7 @@ function openBox(i){
   save();renderBoard();boxFly(src,j);
 }
 function boxFly(src,j){const cell=boardEl.children[j],it=cell&&cell.firstElementChild;if(!it)return;
-  if(!src||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){it.classList.add("spawn");return;}
+  if(!src||!it.animate||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){it.classList.add("spawn");return;}
   const tr=cell.getBoundingClientRect();it.style.visibility="hidden";
   const f=document.createElement("div");f.className="jflyit";f.innerHTML=art(S.board[j]);document.body.appendChild(f);
   const sx=src.left+src.width/2,sy=src.top+src.height/2,tx=tr.left+tr.width/2,ty=tr.top+tr.height/2,sz=Math.min(56,tr.width*.92),hh=-Math.max(40,Math.abs(tx-sx)*.35+30);

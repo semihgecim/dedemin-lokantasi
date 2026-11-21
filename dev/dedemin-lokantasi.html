@@ -1675,7 +1675,7 @@ function openBox(i){
   save();renderBoard();boxFly(src,j);
 }
 function boxFly(src,j){const cell=boardEl.children[j],it=cell&&cell.firstElementChild;if(!it)return;
-  if(!src||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){it.classList.add("spawn");return;}
+  if(!src||!it.animate||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){it.classList.add("spawn");return;}
   const tr=cell.getBoundingClientRect();it.style.visibility="hidden";
   const f=document.createElement("div");f.className="jflyit";f.innerHTML=art(S.board[j]);document.body.appendChild(f);
   const sx=src.left+src.width/2,sy=src.top+src.height/2,tx=tr.left+tr.width/2,ty=tr.top+tr.height/2,sz=Math.min(56,tr.width*.92),hh=-Math.max(40,Math.abs(tx-sx)*.35+30);
