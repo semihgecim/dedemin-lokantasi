@@ -26,7 +26,7 @@ for k,t in enumerate(spec['tasks']):
         if 'box' in p:
             x1,y1,x2,y2=p['box'];c=np.zeros_like(m);c[max(0,y1-12):y2+12,max(0,x1-12):x2+12]=1;m&=c.astype(bool)
         M|=m
-    if 'poly' in t:
-        im=Image.new('L',(1200,900),0);ImageDraw.Draw(im).polygon([tuple(v) for v in t['poly']],fill=255);M|=np.array(im)>128
+    for pg in ([t['poly']] if 'poly' in t else [])+t.get('polys',[]):
+        im=Image.new('L',(1200,900),0);ImageDraw.Draw(im).polygon([tuple(v) for v in pg],fill=255);M|=np.array(im)>128
     Image.fromarray((M*255).astype(np.uint8)).save(f"masks/{spec['id']}_{k}.png")
     print(k,t['name'],round(M.mean(),3),flush=True)

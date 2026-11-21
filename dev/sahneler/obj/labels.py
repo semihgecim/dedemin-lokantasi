@@ -6,7 +6,7 @@ L=np.zeros((900,1200),np.uint8);ms={}
 for k,t in enumerate(T):
     if t.get('final'):continue
     ms[k]=np.array(Image.open(f'masks/{sid}_{k}.png'))>128
-regions=[k for k in ms if 'poly' in T[k] and 'sam' not in T[k]]
+regions=[k for k in ms if T[k].get('kind',('r' if ('poly' in T[k] and 'sam' not in T[k]) else 'o'))=='r']
 objs=[k for k in ms if k not in regions]
 for k in sorted(regions,key=lambda k:-ms[k].sum()): L[ms[k]]=k+1
 for k in sorted(objs,key=lambda k:-ms[k].sum()): L[ms[k]]=k+1

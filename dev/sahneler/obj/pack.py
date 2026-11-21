@@ -5,7 +5,7 @@ spec=json.load(open(sys.argv[1]));sid=spec['id'];T=spec['tasks']
 L=np.array(Image.open(f'masks/{sid}_label.png'))
 out={'names':[],'pos':[],'masks':[],'k':''}
 for k,t in enumerate(T):
-    out['names'].append(t['name']);isr=('poly' in t and 'sam' not in t);out['k']+=('r' if isr else 'o')
+    out['names'].append(t['name']);isr=(t.get('kind',('r' if ('poly' in t and 'sam' not in t) else 'o'))=='r');out['k']+=('r' if isr else 'o')
     if t.get('final'):out['pos'].append([600,450]);out['masks'].append("");continue
     m=((np.array(Image.open(f'masks/{sid}_{k}.png'))>128) if isr else (L==k+1)).astype(np.uint8)*255
     ys,xs=np.nonzero(m)
