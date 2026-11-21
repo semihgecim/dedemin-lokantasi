@@ -1557,7 +1557,7 @@ function renderBoard(){
   const b=$("board"); let h="";const fast=b.children.length===N&&b.__h&&b.__h.length===N;const H=[];
   for(let i=0;i<N;i++){
     const x=S.board[i];
-    h=`<div class="cell${(i%7+Math.floor(i/7))%2?" alt":""}" data-i="${i}">${x?`<div class="item ${x.x?"gen box bx-"+x.x:x.g?"gen"+(x.gl>1?" gl"+x.gl:""):"c-"+x.c}${x.lk?" locked":""}${i===sel?" sel":""}${fx[i]?" "+fx[i]:""}" data-i="${i}">${art(x)}${x.g&&x.gl>1?`<span class="lv glv">Sv${x.gl}</span>`:(x.g||x.x)?"":`<span class="lv">${x.l}</span>`}</div>`:""}</div>`;H.push(h);
+    h=`<div class="cell${(i%7+Math.floor(i/7))%2?" alt":""}" data-i="${i}">${x?`<div class="item ${x.x?"gen box bx-"+x.x:x.g?"gen"+(x.gl>1?" gl"+x.gl:""):"c-"+x.c}${x.lk?" locked":""}${i===sel?" sel":""}${fx[i]?" "+fx[i]:""}" data-i="${i}">${art(x)}${x.g&&x.gl>1?`<span class="lv glv">Sv${x.gl}</span>`:(x.x==="box"&&x.n!=null)?`<span class="lv">${x.n}</span>`:(x.g||x.x)?"":`<span class="lv">${x.l}</span>`}</div>`:""}</div>`;H.push(h);
   }
   if(fast){for(let i=0;i<N;i++){const c=b.children[i];if(b.__h[i]!==H[i]||c.__it!==c.firstElementChild||c.childElementCount>1||(c.__it&&c.__it.className!==c.__cn)){c.outerHTML=H[i];const n=b.children[i];n.__it=n.firstElementChild;n.__cn=n.__it&&n.__it.className;}}}else{b.innerHTML=H.join("");for(const n of b.children){n.__it=n.firstElementChild;n.__cn=n.__it&&n.__it.className;}}
   b.__h=H; fx={};
@@ -1667,11 +1667,23 @@ function nearestEmpty(from){
 }
 function placeItem(item,near){const i=nearestEmpty(near==null?24:near);if(i<0)return false;S.board[i]=item;fx[i]="spawn";return true;}
 function openBox(i){
-  S.board[i]=null;const ch=CHAINS[S.chapter];let n=0;
-  for(let k=0;k<4;k++){if(placeItem({c:pick(ch),l:Math.random()<0.4?2:1},i))n++;}
-  if(n<4)S.energy+=(4-n)*2;
-  SFX("box");toast("Sandık açıldı!"); save(); renderBoard();
+  const B=S.board[i];if(!B)return;if(B.n==null)B.n=4;const ch=CHAINS[S.chapter];
+  const j=nearestEmpty(i);if(j<0){toast("Tahtada yer aç, sandıktan malzeme çıksın.");return;}
+  const src=boardEl.children[i]&&boardEl.children[i].getBoundingClientRect();
+  S.board[j]={c:pick(ch),l:Math.random()<0.4?2:1};B.n--;SFX("box");
+  if(B.n<=0){S.board[i]=null;fx[i]="";toast("Sandık boşaldı!");}else fx[i]="boxshake";
+  save();renderBoard();boxFly(src,j);
 }
+function boxFly(src,j){const cell=boardEl.children[j],it=cell&&cell.firstElementChild;if(!it)return;
+  if(!src||(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)){it.classList.add("spawn");return;}
+  const tr=cell.getBoundingClientRect();it.style.visibility="hidden";
+  const f=document.createElement("div");f.className="jflyit";f.innerHTML=art(S.board[j]);document.body.appendChild(f);
+  const sx=src.left+src.width/2,sy=src.top+src.height/2,tx=tr.left+tr.width/2,ty=tr.top+tr.height/2,sz=Math.min(56,tr.width*.92),hh=-Math.max(40,Math.abs(tx-sx)*.35+30);
+  f.style.cssText+=`position:fixed;left:0;top:0;z-index:90;pointer-events:none;width:${sz}px;height:${sz}px`;
+  const P=t=>`translate(${sx+(tx-sx)*t-sz/2}px,${sy+(ty-sy)*t+hh*4*t*(1-t)-sz/2}px) scale(${.4+.6*t}) rotate(${(1-t)*-30}deg)`;
+  const an=f.animate([0,.25,.5,.75,1].map(t=>({transform:P(t)})),{duration:420,easing:"cubic-bezier(.3,.6,.5,1)"});
+  const done=()=>{f.remove();const c2=boardEl.children[j],it2=c2&&c2.firstElementChild;if(it2){it2.style.visibility="";it2.classList.add("jland");setTimeout(()=>it2.classList.remove("jland"),450);}};
+  an.onfinish=done;an.oncancel=done;}
 
 // ---------- repairs & scene
 function renderTop(){
@@ -2870,6 +2882,7 @@ const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);try{const
 .homescr .scenebox{aspect-ratio:auto!important;flex:1 1 auto;min-height:calc((min(100vw,460px) - 32px)*1.024);max-height:calc((min(100vw,460px) - 32px)*1.5)}
 .homescr .scenebox>svg.over{height:100%!important}
 #board .item.bx-gold img,#board .item.bx-gold svg{transform:scale(.72)!important}
+#board .item.boxshake{animation:boxshake .35s ease-in-out}@keyframes boxshake{0%,100%{transform:none}25%{transform:rotate(-8deg) scale(1.08)}60%{transform:rotate(6deg) scale(1.05)}}
 `;document.head.appendChild(st);})();
 // ---------- BODY v1: half-body customers standing on the scene strip
 const BODY={};
@@ -2884,8 +2897,12 @@ const BODY={};
 .custhead .cust.body.ready .pface img{filter:drop-shadow(0 0 5px #35c46a)}
 .custhead .cust.body .bub{position:relative;z-index:3;margin-bottom:-6px}
 .custhead .cust.body .hearts{bottom:6px}
-.boardscr.rectc .custhead .cust.body .pface{width:var(--bw,86px)!important;height:var(--bh,86px)!important;margin-bottom:-16px;flex-shrink:0}
-.boardscr.rectc .custhead .cust.body{align-items:flex-end!important}
+.boardscr.rectc .custhead .cust.body .pface{width:58px!important;height:var(--bh,88px)!important;margin-bottom:-16px;flex-shrink:0;object-position:0 100%}
+.boardscr.rectc .custhead .cust.body .pface img{object-fit:cover!important;object-position:40% 0!important}
+.boardscr.rectc .custhead .cust.body .bub .need{width:30px!important;height:30px!important}
+.boardscr.rectc .custhead .cust.body{position:relative;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-end!important}
+.boardscr.rectc .custhead .cust.body .bub{position:absolute!important;right:-6px;top:auto;bottom:4px;margin:0!important;width:auto!important;max-width:none!important;min-width:0!important;flex-shrink:0!important;display:flex!important;flex-wrap:nowrap;z-index:4}
+.boardscr.rectc .custhead .cust.body .bub .need{flex-shrink:0}
 @keyframes bsway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg) translateY(-2px)}}
 @keyframes bhop{0%,100%{transform:translateY(0)}40%{transform:translateY(-8px) scale(1.03,.98)}}
 @media (prefers-reduced-motion:reduce){.custhead .cust.body .pface{animation:none!important}}`;document.head.appendChild(st);})();
