@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795289114";</script>
+<script>window.__BUILD="1795289760";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1872,9 +1872,9 @@ function renderOrders(){{const ch=document.getElementById("custhead");if(ch){con
     if(!o)return `<div class="cust leaving" data-i="${i}"></div>`;
     if(o.stars==null)withReward(o,S.chapter);
     const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
-    return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
+    return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?" body":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
       <div class="bub">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" data-k="${x.c}${x.l}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}<span class="st">${ok?"Ver ":""}${P.pet?"⚡":"★"+o.stars}</span>${o.vip?`<span class="vipb">👑 Özel</span>`:""}</div>
-      <div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}${regHearts(o.p)}</div>
+      ${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?`<div class="pface"><img src="${BODY["body:"+o.p]}" alt="" decoding="async">${regHearts(o.p)}</div>`:`<div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}${regHearts(o.p)}</div>`}
     </div>`;}).join("");
 }
 $("orders").addEventListener("click",e=>{
@@ -2862,7 +2862,7 @@ body{background:linear-gradient(180deg,#56c6e6 0%,#8ad9ee 24%,#bdeaf3 48%,#f7e6c
 #board .cell{background:#eaf7f5!important;border-radius:0}
 #board .cell.alt{background:#d8efea!important}
 #board .cell.target{background:#b9ecd9!important}
-#board .item img{transform:translateY(-3%) scale(1.2)!important;filter:saturate(1.3) contrast(1.06) drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff) drop-shadow(0 3px 2px rgba(20,60,70,.3))!important}
+#board .item img{transform:translateY(-3%) scale(1.2)!important;filter:saturate(1.3) drop-shadow(0 3px 2px rgba(20,60,70,.3))!important}
 #board .item svg{transform:scale(1.1)!important;filter:saturate(1.2) drop-shadow(0 3px 2px rgba(20,60,70,.25))}
 #board .item .lv{background:#ff8a3d!important;color:#fff!important;border-radius:7px;box-shadow:0 0 0 1.5px #fff}
 #board .item.want:before{content:"✓";position:absolute;right:-2px;top:-2px;z-index:7;width:15px;height:15px;border-radius:50%;background:#35c46a;color:#fff;font:800 10px/15px system-ui;text-align:center;box-shadow:0 0 0 2px #fff,0 2px 3px rgba(0,0,0,.25)}
@@ -2871,7 +2871,7 @@ body{background:linear-gradient(180deg,#56c6e6 0%,#8ad9ee 24%,#bdeaf3 48%,#f7e6c
 .bub{background:#fff!important;border:3px solid #ffd76a!important;border-radius:16px!important;box-shadow:0 5px 12px rgba(20,60,80,.25)!important}
 .cust.ready .bub{border-color:#35c46a!important}
 .need.ok:after{background:#35c46a!important}
-#scenewrap img,#custhead{filter:saturate(1.15) contrast(1.03)}
+#scenewrap img{filter:saturate(1.15) contrast(1.03)}
 `;document.head.appendChild(css);
 const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);try{const W=new Set();(S.orders||[]).forEach(o=>o&&o.items.forEach(x=>W.add(x.c+"|"+x.l)));
   boardEl.querySelectorAll(".item").forEach(el=>{const x=S.board[+el.dataset.i];if(x&&x.c&&!x.g&&!x.x&&!x.lk&&W.has(x.c+"|"+x.l))el.classList.add("want");});}catch(e){}};
@@ -2881,13 +2881,13 @@ const _rb=renderBoard;renderBoard=function(){_rb.apply(this,arguments);try{const
 const BODY={};
 /*BODYART*/Object.assign(BODY,{"body:pehlivan": "img/cfaeae83a25235e4.webp", "body:cigerci": "img/da1338005c378b3c.webp", "body:ezmeci": "img/01261d6001ea0da1.webp", "body:nuri": "img/70bc878a8d74223b.webp", "body:elif": "img/8d7192d48624c093.webp", "body:hasan": "img/fadfd0bd943391cf.webp", "body:aynur": "img/2cfd8631511be028.webp", "body:pamuk": "img/858eccb36323d10b.webp", "body:torun": "img/f656fe3cd76f23e3.webp", "body:kebapci": "img/b8d0c5b6b8b6c81f.webp", "body:cirak": "img/3c3f7ad0303067a6.webp", "body:nine": "img/cf9c243e0d0d309d.webp", "body:kopek": "img/ea12765b86ff8927.webp", "body:hala": "img/8d4a0f242eb215be.webp", "body:balikci": "img/ade979ef56889983.webp", "body:ogrenci": "img/53a0fa1bc4889ef9.webp", "body:vapurcu": "img/3afd3df807c16f38.webp", "body:kordonkedi": "img/35da7c244f72a450.webp", "body:dost": "img/ce1f1538a3460446.webp", "body:yayla": "img/7eeaefa13d059ab2.webp", "body:kemence": "img/c68c8db692065e19.webp", "body:sofor": "img/3c678dccf72625aa.webp", "body:kedi4": "img/43dc9608ee791c0b.webp", "body:kunefeci": "img/06b7d6ed6af21112.webp", "body:esnaf": "img/d5ecd24590a469c0.webp", "body:kilise": "img/3fe612c51dfd89f4.webp", "body:muzisyen": "img/d30a0aa4592ddaf5.webp", "body:kedi5": "img/764adeef0eea9912.webp", "body:firinci": "img/49300c9c06213d6b.webp", "body:semazen": "img/1ada80a36e1b3597.webp", "body:ciftci": "img/b80769476bfd17b7.webp", "body:ogretmen": "img/04afc30cbfefb06a.webp", "body:kedi6": "img/66ca2004671d2c1d.webp", "body:comlekci": "img/26b4889e410b853d.webp", "body:pilot": "img/b6b0713263dee3cb.webp", "body:bagci": "img/12d916c137c4fb00.webp", "body:rehber": "img/17e54ceebd097f12.webp", "body:kedi7": "img/b2a3c2b3b12f9658.webp", "body:salon": "img/256d92c370bbf62b.webp", "body:arici": "img/14cc68b0d077a0df.webp", "body:kayikci": "img/e08548d0b5e7ef83.webp", "body:kizlar": "img/98e7e70894e980c9.webp", "body:vankedi": "img/ffa27c1293d90b42.webp", "body:telkari": "img/e103049111d1e3cb.webp", "body:dokumaci": "img/3283b8437ae84ee7.webp", "body:sabuncu": "img/89ec90285d298dea.webp", "body:cocuk": "img/16272517b9639cdb.webp", "body:kedi9": "img/11412d93d3c1a423.webp", "body:asena": "img/70319afa3ae4f508.webp", "body:can": "img/719e50aea6a28d23.webp", "body:galatali": "img/733c7411a2f98357.webp", "body:vapur10": "img/473929d509f3a566.webp", "body:hanim": "img/df7c207e7b42cb6b.webp", "body:muzik": "img/04a86ec43a8ea577.webp", "body:galatakedi": "img/07eeca98e62d71ac.webp", "body:leylek": "img/5685c8cfc3c99a35.webp", "body:bakirci": "img/e2e3c6944a4a0954.webp", "body:lokumcu": "img/9f75a64df684e8fc.webp", "body:tarihci": "img/a9f4bfc0553b837b.webp", "body:damkedi": "img/b148178366c90564.webp", "body:kayikci3": "img/b0c9bb331d5aca75.webp", "body:keskekci": "img/fde2c77a135f030b.webp", "body:amasyaogretmen": "img/e230d998cb64a230.webp", "body:turuncukedi": "img/bc6c3bb85e07c9fe.webp", "body:cagci": "img/18e3433673f025f8.webp", "body:hamamci": "img/42352959761c7a62.webp", "body:kayakci": "img/3b0308aced330200.webp", "body:ankara": "img/1a9b421e9e37f9c3.webp", "body:peynirci": "img/e80d1958a089918f.webp", "body:kazci": "img/7e76fdd42bfb0a42.webp", "body:arici2": "img/f652d21244f663b3.webp", "body:kangal": "img/2aa2241ee451f4de.webp", "body:cigkofteci": "img/253a275e28f4f573.webp", "body:baglamaci": "img/80b60dda7a730491.webp", "body:siraci": "img/3eb6289983b110bb.webp", "body:gollukedi": "img/56426b3901e3d968.webp", "body:kebapci2": "img/a354b3821e6e5370.webp", "body:salgamci": "img/c077973b927ae8ed.webp", "body:bicibicici": "img/4a93ec62ba42648e.webp", "body:kopek2": "img/47075960f5b839f2.webp", "body:yagci": "img/e251f4f2cb5cf4e7.webp", "body:tostcu": "img/73eec1755154ff30.webp", "body:kaptan": "img/d3ada89e1bbb3af1.webp", "body:adakedi": "img/e53df78765be8cc4.webp", "body:kaymakci": "img/4df684069bff20b6.webp", "body:sucukcu": "img/78cabc23946640b4.webp", "body:kaplicaci": "img/ffa32990cb52ceaa.webp", "body:manda": "img/68188753f15db1b0.webp", "body:muhtar": "img/af58b4b3bd7d1125.webp", "body:rizatorun": "img/891d067f75c2c522.webp", "body:cirak2": "img/66ac4ff79018c40d.webp", "body:ormankopek": "img/4c1f3c4d5f275e53.webp"});
 (function(){const st=document.createElement("style");st.textContent=`
-.custhead .cust.body .pface,.boardscr .custhead .cust.body .pface{width:var(--bw,100px)!important;height:var(--bh,98px)!important;min-width:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;overflow:visible!important;animation:bsway 3.2s ease-in-out infinite;transform-origin:50% 100%;margin-bottom:-10px}
+.custhead .cust.body .pface,.boardscr .custhead .cust.body .pface{width:var(--bw,100px)!important;height:var(--bh,98px)!important;min-width:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;overflow:visible!important;animation:bsway 3.2s ease-in-out infinite;transform-origin:50% 100%;margin-bottom:-10px;will-change:transform}
 .custhead .cust.body:nth-child(2) .pface{animation-delay:-1.1s}.custhead .cust.body:nth-child(3) .pface{animation-delay:-2.2s}
-.custhead .cust.body .pface img{width:100%!important;height:100%!important;border-radius:0!important;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 4px 4px rgba(0,0,0,.35)) drop-shadow(0 0 2px #fff)}
+.custhead .cust.body .pface img{width:100%!important;height:100%!important;border-radius:0!important;object-fit:contain;object-position:50% 100%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
 .custhead .cust.body .pface:after,.custhead .cust.body .pface:before{display:none!important}
 .custhead .cust.body{gap:0!important;position:relative}
 .custhead .cust.body.ready .pface{animation:bhop .9s ease-in-out infinite}
-.custhead .cust.body.ready .pface img{filter:drop-shadow(0 0 6px #35c46a) drop-shadow(0 0 3px #fff)}
+.custhead .cust.body.ready .pface img{filter:drop-shadow(0 0 5px #35c46a)}
 .custhead .cust.body .bub{position:relative;z-index:3;margin-bottom:-6px}
 .custhead .cust.body .hearts{bottom:6px}
 .boardscr.rectc .custhead .cust.body .pface{width:var(--bw,86px)!important;height:var(--bh,86px)!important;margin-bottom:-16px;flex-shrink:0}
@@ -2895,9 +2895,6 @@ const BODY={};
 @keyframes bsway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg) translateY(-2px)}}
 @keyframes bhop{0%,100%{transform:translateY(0)}40%{transform:translateY(-8px) scale(1.03,.98)}}
 @media (prefers-reduced-motion:reduce){.custhead .cust.body .pface{animation:none!important}}`;document.head.appendChild(st);})();
-{const _ro=renderOrders;renderOrders=function(){_ro.apply(this,arguments);const box=document.getElementById("orders");if(!box)return;
- box.querySelectorAll(".cust[data-i]").forEach(c=>{const o=S.orders[+c.dataset.i];if(!o)return;const b=BODY["body:"+o.p],f=c.querySelector(".pface");if(!b||!f)return;
-  let im=f.querySelector("img");if(!im){f.textContent="";im=document.createElement("img");im.alt="";f.insertBefore(im,f.firstChild);}im.src=b;c.classList.add("body");});};}
 function renderAll(){renderTop();renderRepair();renderScene();renderBoard();timeFx();renderRush();
 }
 for(const k in CHAPTERS)(CHAPTERS[k].levels||[]).forEach(L=>{L.need=L.tasks.length*TASK_COST;});
