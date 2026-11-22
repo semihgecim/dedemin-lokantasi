@@ -76,8 +76,7 @@ Yeni sohbette Claude'a şunu söyle: **"semihgecim/dedemin-lokantasi reposunu ek
 
 ## SAHNE YENİLEME (2026-11-22 gece) — devam planı
 Amaç: 1-20 tüm bölüm sahnelerinde görev eşyaları önce YOK, görev yapılınca tam yerinde belirsin (kullanıcı isteği).
-Bitti ve canlı: 1 (Bursa, OBJC keyed), 2 (Antep, OBJC keyed), 5 (Hatay a+c sahneleri). 3c paketlendi+inject edildi ama henüz yayınlanmadı (3a temiz resmi ikinci geçişte: clean3x/once3x).
-Kalan: 3a, 4a, 4c, 6a,6c, 7a,7c, 8a,8c, 9a,9c, 10a,10c, 11-20 (a ve c).
+DURUM (22 Kasım gece): 1-20 TÜM BÖLÜMLER yeni sistemle canlı (bölüm 1-2 OBJC/inject_keys, 3-20 OBJ1/OBJ2/inject_obj, a+c sahneleri). Tümünü yeniden paketlemek: obj/repack.sh. Bölge maskeleri yumuşak kenarlı (pack.py sigma 22).
 Araçlar: scratchpad/obj/ (kopyası dev/sahneler/obj/):
  - grid.py src.jpg out.jpg  → koordinat ızgarası
  - specN.json / specNc.json → görev listesi (sayı = JOB[n].t uzunluğu (33 veya 27 vb) / JOB2[n].t uzunluğu (27)); "poly" bölge (r: temiz resmi açar), "sam":[{"box":[x1,y1,x2,y2]}] eşya (A'dan), "kind","polys","diff":true (ışık dizisi gibi ince şeyler)
