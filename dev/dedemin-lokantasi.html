@@ -1951,7 +1951,7 @@ function renderOrders(){{const ch=document.getElementById("custhead");if(ch){con
     if(!o)return `<div class="cust leaving" data-i="${i}"></div>`;
     if(o.stars==null)withReward(o,S.chapter);
     const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
-    return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?" body":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
+    return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?" body":""}${P.pet?" pet":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
       <div class="bub">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" data-k="${x.c}${x.l}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}<span class="st">${ok?"Ver ":""}${P.pet?"⚡":"★"+o.stars}</span>${o.vip?`<span class="vipb">👑 Özel</span>`:""}</div>
       ${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?`<div class="pface"><img src="${BODY["body:"+o.p]}" alt="" decoding="async">${regHearts(o.p)}</div>`:`<div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}${regHearts(o.p)}</div>`}
     </div>`;}).join("");if(box.__h!==OH||!box.children.length){box.innerHTML=OH;box.__h=OH;}
@@ -2057,22 +2057,21 @@ function fitBoard(){
   const vh=(window.visualViewport?visualViewport.height:innerHeight),vw=(window.visualViewport?visualViewport.width:innerWidth);
   const ios=/iPhone|iPad/.test(navigator.userAgent),reserve=standalone?10:(ios?70:10);
   // standard layout for every phone: the customer strip always takes the same share of the screen
-  const setStrip=bh=>{bh=Math.round(bh);root.style.setProperty("--bh",bh+"px");root.style.setProperty("--bw",Math.round(Math.min(bh*1.02,(Math.min(vw,460)-24)/3*.62))+"px");
-    root.style.setProperty("--nd",Math.round(Math.max(36,Math.min(58,bh*.36)))+"px");root.style.setProperty("--pf",Math.round(Math.max(64,Math.min(104,bh*.8)))+"px");};
-  let bh=Math.max(112,Math.min(190,vh*.18));setStrip(bh);
+  const setStrip=bh=>{bh=Math.round(bh);root.style.setProperty("--bh",bh+"px");
+    root.style.setProperty("--nd",Math.round(Math.max(34,Math.min(58,bh*.4)))+"px");root.style.setProperty("--pf",Math.round(Math.max(64,Math.min(104,bh*.8)))+"px");};
+  let bh=72;setStrip(bh);
   const pw=bd.parentElement.clientWidth,rows=N/7,cw=pw/7;bd.style.maxWidth=pw+"px";
   const under=document.querySelector(".under"),uh=under?under.getBoundingClientRect().height:40,gh=$("goHome").getBoundingClientRect().height+8;
   const availFor=()=>Math.floor(vh-(bd.getBoundingClientRect().top+window.scrollY)-uh-(ios&&!standalone?0:gh)-reserve-14);
   let ch=Math.min(cw,Math.floor(availFor()/rows));
-  if(ch<cw*.72){const need=(cw*.72-ch)*rows;const nb=Math.max(100,bh-need);if(nb<bh){bh=nb;setStrip(bh);ch=Math.min(cw,Math.floor(availFor()/rows));}}
   ch=Math.max(34,ch);
   root.style.setProperty("--cellh",ch+"px");root.classList.toggle("fitc",ch<cw-1);root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,ch*1.06))+"px");
   // spare height under the button goes to the customers
   const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
-  if(spare>8){bh=Math.min(220,bh+spare*.7);setStrip(bh);root.style.setProperty("--chx",Math.min(40,spare*.2)+"px");}
+  if(spare>8){bh=Math.min(230,bh+spare-4);setStrip(bh);}
   for(let k=0;k<(ios&&!standalone?0:3);k++){const ov=Math.ceil($("goHome").getBoundingClientRect().bottom+window.scrollY-(vh-reserve));
     if(ov<=0)break;root.style.removeProperty("--chx");
-    if(bh>104){bh=Math.max(100,bh-ov);setStrip(bh);continue;}
+    if(bh>72){bh=Math.max(72,bh-ov);setStrip(bh);continue;}
     const cur=bd.querySelector(".cell")?bd.querySelector(".cell").getBoundingClientRect().height:cw;
     const nc=Math.max(34,Math.floor(cur-ov/rows)-1);root.style.setProperty("--cellh",nc+"px");root.classList.toggle("fitc",nc<cw-1);
     root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,nc*1.06))+"px");}
@@ -2983,6 +2982,15 @@ const BODY={};
 .boardscr.rectc .custhead .cust.body{position:relative;flex-direction:column!important;align-items:flex-start!important;justify-content:flex-end!important}
 .boardscr.rectc .custhead .cust.body .bub{position:absolute!important;right:-6px;top:auto;bottom:4px;margin:0!important;width:auto!important;max-width:none!important;min-width:0!important;flex-shrink:0!important;display:flex!important;flex-wrap:nowrap;z-index:4}
 .boardscr.rectc .custhead .cust.body .bub .need{flex-shrink:0}
+.boardscr .custhead .custs{align-items:end}
+.boardscr .custhead .cust.body{display:block!important;height:var(--bh,98px);position:relative;padding:0!important}
+.boardscr .custhead .cust.body .pface{position:absolute!important;left:0;right:0;bottom:-10px;margin:0 auto!important;width:100%!important;height:calc(var(--bh,98px) + 4px)!important}
+.boardscr .custhead .cust.body .pface img{object-fit:contain!important;object-position:50% 100%!important}
+.boardscr .custhead .cust.body.pet .pface img{transform:scale(.86);transform-origin:50% 100%}
+.boardscr .custhead .cust.body .bub{position:absolute!important;top:-4px;right:-2px;left:auto;bottom:auto;margin:0!important;width:auto!important;max-width:none!important;display:flex!important;flex-wrap:nowrap;z-index:4;padding:3px!important}
+.boardscr .custhead .cust.body:nth-child(1) .bub{right:auto;left:-2px}
+.boardscr .custhead .cust.body .bub:after{display:none!important}
+.boardscr .custhead .cust.body .bub .need{flex-shrink:0}
 @keyframes bsway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg) translateY(-2px)}}
 @keyframes bhop{0%,100%{transform:translateY(0)}40%{transform:translateY(-8px) scale(1.03,.98)}}
 @media (prefers-reduced-motion:reduce){.custhead .cust.body .pface{animation:none!important}}`;document.head.appendChild(st);})();
