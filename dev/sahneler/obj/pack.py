@@ -17,7 +17,7 @@ for k,t in enumerate(T):
     if t.get('diff'):
         Aa=np.array(Image.open(spec['after']).convert('RGB').resize((1200,900))).astype(int);Cc=np.array(Image.open(sys.argv[3]).convert('RGB').resize((1200,900))).astype(int)
         dd=(np.abs(Aa-Cc).sum(2)>60).astype(np.uint8);dd=cv2.dilate(dd,np.ones((5,5),np.uint8));m=(m>0)&(dd>0);m=m.astype(np.uint8)*255
-    m=cv2.dilate(m,np.ones((5,5),np.uint8));m=cv2.GaussianBlur(m,(0,0),1.5)
+    m=cv2.dilate(m,np.ones((5,5),np.uint8));m=cv2.GaussianBlur(m,(0,0),(22 if isr else 1.5))
     m=cv2.resize(m,(600,450),interpolation=cv2.INTER_AREA)
     b=io.BytesIO();im=Image.new('LA',(600,450),(255,0));im.putalpha(Image.fromarray(m));im.save(b,'PNG',optimize=True);out['masks'].append('data:image/png;base64,'+base64.b64encode(b.getvalue()).decode())
 B=Image.open(sys.argv[2]).convert('RGB').resize((1200,900));b=io.BytesIO();B.save(b,'WEBP',quality=82)
