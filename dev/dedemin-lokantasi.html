@@ -1209,7 +1209,7 @@ CITY.forEach(city=>{
  `.wheelbox{position:relative;width:240px;height:240px;margin:14px auto;flex:none}.wheel{width:100%;height:100%;border-radius:50%;box-shadow:0 0 0 6px #8a5a2a,0 0 0 9px #ffd166,0 10px 20px rgba(0,0,0,.35);position:relative}.wheel span{position:absolute;left:50%;top:50%;width:64px;margin:-9px 0 0 -32px;text-align:center;font:800 .74rem var(--display);color:#fff;-webkit-text-stroke:.6px #3b2414;text-shadow:0 1px 0 #3b2414}.wheel i{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px;border-radius:50%;background:#ffd166;box-shadow:0 0 0 4px #8a5a2a}.wptr{position:absolute;left:50%;top:-14px;margin-left:-14px;width:0;height:0;border:14px solid transparent;border-top:26px solid #c0392b;z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.4))}`+
  `.awnpick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0;flex:none}.awnpick button{border:0;border-radius:12px;background:#fbf4e4;padding:8px;box-shadow:inset 0 0 0 2px #e0d0b0;cursor:pointer;display:flex;flex-direction:column;gap:4px;align-items:center;font:700 .74rem var(--display);color:#3b2414}.awnpick svg{width:100%}`+
  `.tuthand{position:fixed;z-index:85;font-size:40px;pointer-events:none;transform:translate(-30%,-10%);animation:tuth 1s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}@keyframes tuth{50%{transform:translate(-30%,-10%) translate(6px,10px) scale(.92)}}.tuttip{position:fixed;z-index:84;left:50%;top:calc(54px + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(92vw,420px);background:#fbf4e4;color:#2a2620;border-radius:16px;padding:10px 14px;font:600 .92rem/1.35 var(--body);box-shadow:0 0 0 3px #ffd166,0 8px 20px rgba(0,0,0,.45);pointer-events:none;text-align:center}`+
- `.daily{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:10px 0}.daily div{border-radius:10px;background:#efe6d6;padding:6px 2px;text-align:center;font:700 11px/1.2 var(--body,system-ui)}.daily div b{display:block;font-size:15px;margin-top:2px}.daily div.on{background:#ffd166;outline:3px solid #c98a2a}.daily div.got{opacity:.5}`;
+ `.daily{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:10px 0}.daily div{border-radius:10px;background:#efe6d6;padding:6px 2px;text-align:center;font:700 11px/1.2 var(--body,system-ui)}.daily div b{display:block;font-size:15px;margin-top:2px}.daily div.on{background:#ffd166;outline:3px solid #c98a2a}.daily div.got{opacity:.5}.mcal{background:#fff7e6;border-radius:12px;padding:8px 10px 6px;margin:8px 0 10px;border:2px solid #e8c98a}.mcal .mt{font:800 13px/1.2 var(--body,system-ui);display:flex;justify-content:space-between}.mbar{position:relative;height:12px;background:#e9dcc3;border-radius:8px;margin:22px 20px 26px 10px}.mbar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#f6b93b,#e58e26);border-radius:8px}.mbar span{position:absolute;top:50%;transform:translate(-50%,-50%);text-align:center}.mbar span em{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#fff;border:2px solid #d8b97a;font-style:normal;font-size:17px}.mbar span.on em{background:#ffd166;border-color:#c98a2a}.mbar span.got em{background:#d9f2d0;border-color:#7cb66b}.mbar span small{position:absolute;top:34px;left:50%;transform:translateX(-50%);white-space:nowrap;font:700 10px var(--body,system-ui);color:#8a6a3a}.mcal .mnote{font:600 11.5px/1.35 var(--body,system-ui);color:#6b5434}`;
  document.head.appendChild(st);})();
 
 // ===== simple drawn portraits for new characters (placeholder until Gemini portraits) =====
@@ -2446,7 +2446,7 @@ function renderRails(){
   $("rMap").onclick=openMap;
   $("rEv").onclick=openEvent;$("rWh").onclick=openWheel;$("rAl").onclick=()=>openAlbum(S.chapter);
   $("rPet").onclick=()=>{const P=petLove();toast(`${Pp.name}: sevgi ${P.lv}. seviye · ${P.x}/${3+P.lv*2} mama. Doyurdukça ödül verir.`);};
-  $("rGift").onclick=()=>{if((S.daily||{}).d===dayKey(Date.now())&&openLetter())return;if((S.daily||{}).d===dayKey(Date.now()))toast(`Yeni günlük hediye ${fmtLeft(mid-Date.now())} sonra`);else dailyCheck();};
+  $("rGift").onclick=()=>{if((S.daily||{}).d===dayKey(Date.now())&&openLetter())return;if((S.daily||{}).d===dayKey(Date.now()))dailyView();else dailyCheck();};
   const B=$("evBadge");if(B){B.style.setProperty("--rc",E.c);B.innerHTML=`<span class="rimg">${ART.ic_event}</span><b>${S.ev.pts}/${nextEv}</b>`;}
 }
 setInterval(()=>{if(VIEW==="home"&&$("sheet").hidden)renderRails();},30000);
@@ -2620,16 +2620,31 @@ setInterval(tutTick,350);
 // ---------- daily gift
 const DAILY=[{e:15,t:"15 ⚡"},{e:20,t:"20 ⚡"},{s:15,t:"★15"},{e:25,t:"25 ⚡"},{s:24,t:"★24"},{e:30,t:"30 ⚡"},{s:30,box:1,g:3,t:"★30 + sandık + 3 🪙"}];
 const dayKey=t=>{const d=new Date(t);return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();};
+const MONTHLY=[{n:7,e:40,box:2,t:"40 ⚡ + 2 sandık",i:"🎁"},{n:14,s:50,g:5,t:"★50 + 5 🪙",i:"💰"},{n:21,e:60,box:2,g:5,t:"60 ⚡ + 2 sandık + 5 🪙",i:"🧺"},{n:28,s:100,box:3,g:15,t:"★100 + 3 sandık + 15 🪙",i:"👑"}];
+const monKey=t=>{const d=new Date(t);return d.getFullYear()+"-"+(d.getMonth()+1);};
+function monState(){const k=monKey(Date.now());if(!S.mon||S.mon.m!==k)S.mon={m:k,n:0,got:[]};return S.mon;}
+function monHTML(M){const max=28,pc=Math.min(100,M.n/max*100);
+  return `<div class="mcal"><div class="mt">📅 Bu ayın takvimi <b>${M.n}/${max} gün</b></div><div class="mbar"><i style="width:${pc}%"></i>${MONTHLY.map(x=>`<span class="${M.got.includes(x.n)?"got":M.n>=x.n?"on":""}" style="left:${x.n/max*100}%"><em>${M.got.includes(x.n)?"✅":x.i}</em><small>${x.n}. gün</small></span>`).join("")}</div>
+  <div class="mnote">Gün kaçırsan da ay boyunca uğradığın her gün sayılır. ${(()=>{const td=MONTHLY.find(x=>x.n===M.n&&!M.got.includes(x.n));if(td)return `🎉 Bugün büyük ödül de senin: <b>${td.t}</b>`;const nx=MONTHLY.find(x=>x.n>M.n);return nx?`Sıradaki büyük ödül (${nx.n}. gün): <b>${nx.t}</b>`:"Bu ayın bütün büyük ödüllerini aldın!";})()}</div></div>`;}
+function giveR(R){if(R.e)S.energy+=R.e;if(R.s)S.stars+=R.s;if(R.g)S.gold+=R.g;for(let i=0;i<(R.box||0);i++)if(!placeItem({x:"box"}))S.energy+=10;}
+function dailyView(){const M=monState(),mid=new Date();mid.setHours(24,0,0,0);
+  $("paper").innerHTML=`<h3>Günlük hediye</h3><div class="note">Bugünkü hediyeni aldın. Yenisi ${fmtLeft(mid-Date.now())} sonra.</div>${monHTML(M)}<button class="btn" type="button" id="closeDaily">Tamam</button>`;
+  $("sheet").hidden=false;$("closeDaily").onclick=()=>{$("sheet").hidden=true;};}
 function dailyCheck(){
   if(window.__FAST||!$("sheet").hidden||!$("dlg").hidden||busy||!seen(S.chapter))return;
   const today=dayKey(Date.now());S.daily=S.daily||{d:"",streak:0};if(S.daily.d===today)return;
   const st=(S.daily.d===dayKey(Date.now()-864e5)?S.daily.streak%7:0)+1, R=DAILY[st-1];
+  const M=monState(),M2={m:M.m,n:M.n+1,got:M.got};
   $("paper").innerHTML=`<h3>Günlük hediye</h3><div class="note">Her gün uğra, hediyen büyüsün. ${st}. gün!</div>
     <div class="daily">${DAILY.map((x,i)=>`<div class="${i+1===st?"on":i+1<st?"got":""}">${i+1}. gün<b>${x.t}</b></div>`).join("")}</div>
+    ${monHTML(M2)}
     <button class="btn" type="button" id="takeDaily">Hediyeni al: ${R.t}</button>`;
   $("sheet").hidden=false;
-  $("takeDaily").onclick=()=>{S.daily={d:today,streak:st};if(R.e)S.energy+=R.e;if(R.s)S.stars+=R.s;if(R.g)S.gold+=R.g;if(R.box&&!placeItem({x:"box"}))S.energy+=10;
-    save();$("sheet").hidden=true;renderTop();renderRepair();renderBoard();renderRails();toast(`Günlük hediye: ${R.t}`);setTimeout(openLetter,900);};
+  $("takeDaily").onclick=()=>{S.daily={d:today,streak:st};giveR(R);
+    const M=monState();M.n++;const big=MONTHLY.find(x=>x.n===M.n&&!M.got.includes(x.n));if(big){M.got.push(big.n);giveR(big);}
+    save();$("sheet").hidden=true;renderTop();renderRepair();renderBoard();renderRails();toast(`Günlük hediye: ${R.t}`);
+    if(big)setTimeout(()=>toast(`${big.i} Aylık büyük ödül (${big.n}. gün): ${big.t}`),1500);
+    setTimeout(openLetter,big?3200:900);};
 }
 // ================= v5: dedenin adı, müdavimler, mektup kutusu, yaşayan harita, gerçek saat/mevsim =================
 // ---------- dedenin adı (display-time replacement; story data stays untouched)
