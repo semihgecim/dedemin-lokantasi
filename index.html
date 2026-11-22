@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795332439";</script>
+<script>window.__BUILD="1795333183";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -2071,20 +2071,21 @@ function fitBoard(){
   bd.style.maxWidth="";
   const standalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone;
   const vh=(window.visualViewport?visualViewport.height:innerHeight),vw=(window.visualViewport?visualViewport.width:innerWidth);
-  const ios=/iPhone|iPad/.test(navigator.userAgent),reserve=standalone?10:(ios?70:10);
+  const ios=/iPhone|iPad/.test(navigator.userAgent),reserve=standalone?4:(ios?70:6);
   // standard layout for every phone: the customer strip always takes the same share of the screen
   const setStrip=bh=>{bh=Math.round(bh);root.style.setProperty("--bh",bh+"px");
-    root.style.setProperty("--nd",Math.round(Math.max(30,Math.min(58,bh*.42,(Math.min(vw,460)-24)/3*.37)))+"px");root.style.setProperty("--pf",Math.round(Math.max(64,Math.min(104,bh*.8)))+"px");};
+    root.style.setProperty("--nd",Math.round(Math.max(36,Math.min(64,bh*.52,(Math.min(vw,460)-24)/3*.46)))+"px");root.style.setProperty("--pf",Math.round(Math.max(64,Math.min(104,bh*.8)))+"px");};
   let bh=72;setStrip(bh);
   const pw=bd.parentElement.clientWidth,rows=N/7,cw=pw/7;bd.style.maxWidth=pw+"px";
   const under=document.querySelector(".under"),uh=under?under.getBoundingClientRect().height:40,gh=$("goHome").getBoundingClientRect().height+8;
-  const availFor=()=>Math.floor(vh-(bd.getBoundingClientRect().top+window.scrollY)-uh-(ios&&!standalone?0:gh)-reserve-14);
-  let ch=Math.min(cw,Math.floor(availFor()/rows));
+  const availFor=()=>Math.floor(vh-(bd.getBoundingClientRect().top+window.scrollY)-uh-(ios&&!standalone?0:gh)-reserve-4);
+  let ch=Math.min(cw,Math.floor(availFor()/rows));const colw=(Math.min(vw,460)-24)/3,bmax=colw*1.3;
+  {const sp0=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);const want=Math.min(bmax,colw*.95)-(bh+Math.max(0,sp0));if(want>0)ch=Math.max(Math.round(cw*.88),ch-Math.ceil(want/rows));}
   ch=Math.max(34,ch);
   root.style.setProperty("--cellh",ch+"px");root.classList.toggle("fitc",ch<cw-1);root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,ch*1.06))+"px");
   // spare height under the button goes to the customers
   const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
-  if(spare>8){bh=Math.min(230,bh+spare-4);setStrip(bh);}
+  if(spare>8){bh=Math.min(bmax,bh+spare-4);setStrip(bh);}
   for(let k=0;k<(ios&&!standalone?0:3);k++){const ov=Math.ceil($("goHome").getBoundingClientRect().bottom+window.scrollY-(vh-reserve));
     if(ov<=0)break;root.style.removeProperty("--chx");
     if(bh>72){bh=Math.max(72,bh-ov);setStrip(bh);continue;}
@@ -3000,13 +3001,17 @@ const BODY={};
 .boardscr.rectc .custhead .cust.body .bub .need{flex-shrink:0}
 .boardscr .custhead .custs{align-items:end}
 #custhead .cust.body{display:block!important;height:var(--bh,98px);position:relative;padding:0!important;overflow:visible}
-#custhead .cust.body .pface{position:absolute!important;left:0;bottom:-10px;margin:0!important;width:64%!important;height:calc(var(--bh,98px) + 10px)!important;overflow:hidden!important;border-radius:0 0 4px 4px!important}
+#custhead .cust.body .pface{position:absolute!important;left:0;bottom:-10px;margin:0!important;width:min(60%,calc(var(--bh,98px)*.72))!important;height:calc(var(--bh,98px) + 10px)!important;overflow:hidden!important;border-radius:0 0 4px 4px!important}
 #custhead .cust.body .pface img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:50% 6%!important}
 #custhead .cust.body.pet .pface img{object-fit:contain!important;object-position:50% 100%!important;transform:scale(.88);transform-origin:50% 100%}
-#custhead .cust.body .bub{position:absolute!important;top:auto;right:-2px;left:auto;bottom:2px;transform:none;margin:0!important;width:auto!important;max-width:none!important;z-index:4;padding:3px!important}
+#custhead .cust.body .bub{position:absolute!important;top:0;right:-6px;left:auto;bottom:auto;transform:none;margin:0!important;width:auto!important;max-width:none!important;z-index:4;padding:3px!important}
 #custhead .cust.body .bub:after{display:none!important}
-#custhead .cust.body .bub .need{flex-shrink:0;width:min(var(--nd,42px),calc(var(--bh,98px)*.42))!important;height:min(var(--nd,42px),calc(var(--bh,98px)*.42))!important}
-#custhead .cust.body .bub .need:only-child{width:min(var(--nd,42px),calc(var(--bh,98px)*.6))!important;height:min(var(--nd,42px),calc(var(--bh,98px)*.6))!important}
+#boardScr #custhead{padding-top:6px!important;padding-bottom:4px!important}
+#boardScr .boardwrap{margin-top:-4px}
+#boardScr #goHome{padding:3px 12px!important;min-height:0}
+#boardScr .under{padding-top:2px}
+#custhead .cust.body .bub .need{flex-shrink:0;width:var(--nd,42px)!important;height:var(--nd,42px)!important}
+
 @keyframes bsway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg) translateY(-2px)}}
 @keyframes bhop{0%,100%{transform:translateY(0)}40%{transform:translateY(-8px) scale(1.03,.98)}}
 @media (prefers-reduced-motion:reduce){.custhead .cust.body .pface{animation:none!important}}`;document.head.appendChild(st);})();
