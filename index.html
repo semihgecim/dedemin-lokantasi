@@ -12,7 +12,7 @@
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<script>window.__BUILD="1795354286";</script>
+<script>window.__BUILD="1795357920";</script>
 <title>Dedemin Lokantası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&family=Caveat:wght@600&display=swap">
@@ -1968,7 +1968,7 @@ function renderOrders(){{const ch=document.getElementById("custhead");if(ch){con
     if(o.stars==null)withReward(o,S.chapter);
     const P=PEOPLE[o.p], st=orderStatus(o), ok=st.every(Boolean);
     return `<div class="cust${ok?" ready":""}${o.vip?" vip":""}${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?" body":""}${P.pet?" pet":""}" data-i="${i}" role="button" tabindex="0" aria-label="${P.name}${ok?", hazır, vermek için dokun":""}">
-      <div class="bub">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" data-k="${x.c}${x.l}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}<span class="st">${ok?"Ver ":""}${P.pet?"⚡":"★"+o.stars}</span>${o.vip?`<span class="vipb">👑 Özel</span>`:""}</div>
+      <div class="bub${o.items.length>1?" n2":""}">${o.items.map((x,k)=>`<span class="need c-${x.c}${st[k]?" ok":""}" data-k="${x.c}${x.l}" title="${nm(x.c,x.l)}">${icon(x.c,x.l)}</span>`).join("")}<span class="st">${ok?"Ver ":""}${P.pet?"⚡":"★"+o.stars}</span>${o.vip?`<span class="vipb">👑 Özel</span>`:""}</div>
       ${(typeof BODY!=="undefined"&&BODY["body:"+o.p])?`<div class="pface"><img src="${BODY["body:"+o.p]}" alt="" decoding="async">${regHearts(o.p)}</div>`:`<div class="pface" style="background:${P.col}">${P.img?`<img src="${P.img}" alt="">`:P.init}${regHearts(o.p)}</div>`}
     </div>`;}).join("");if(box.__h!==OH||!box.children.length){box.innerHTML=OH;box.__h=OH;}
 }
@@ -3020,7 +3020,7 @@ const BODY={};
 #custhead .cust.body .pface img{width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:50% 6%!important}
 #custhead .cust.body.pet .pface img{object-fit:contain!important;object-position:50% 100%!important;transform:scale(.88);transform-origin:50% 100%}
 #custhead .cust.body .bub{position:absolute!important;top:0;right:-6px;left:auto;bottom:auto;transform:none;margin:0!important;width:auto!important;max-width:none!important;z-index:4;padding:3px!important}
-#custhead .cust.body .bub:after{display:none!important}
+#custhead .cust.body .bub:after{display:none!important}#custhead .cust.body:last-child .bub{right:9px!important}#custhead .cust.body .bub.n2 .need{width:calc(var(--nd,42px)*.8)!important;height:calc(var(--nd,42px)*.8)!important}#custhead .cust.body .bub.n2{right:-2px}#custhead .cust.body .bub{top:5px!important}
 #boardScr #custhead{padding-top:6px!important;padding-bottom:4px!important}
 #boardScr .boardwrap{margin-top:-4px}
 #boardScr #goHome{padding:3px 12px!important;min-height:0}
