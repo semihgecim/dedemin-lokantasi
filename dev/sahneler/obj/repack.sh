@@ -29,3 +29,6 @@ python3 pack.py spec15.json once15.jpg clean15.jpg && python3 inject_obj.py 15 a
 python3 pack.py spec15c.json once15c.jpg clean15c.jpg && python3 inject_obj.py 15 c obj_15c.json
 python3 pack.py spec16.json once16.jpg clean16.jpg && python3 inject_obj.py 16 a obj_16.json
 python3 pack.py spec16c.json once16c.jpg clean16c.jpg && python3 inject_obj.py 16 c obj_16c.json
+python3 pack.py spec17.json once17.jpg clean17.jpg && python3 inject_obj.py 17 a obj_17.json
+python3 pack.py spec17c.json once17c.jpg clean17c.jpg && python3 inject_obj.py 17 c obj_17c.json
+python3 pack.py spec18.json once18.jpg clean18.jpg && python3 inject_obj.py 18 a obj_18.json
