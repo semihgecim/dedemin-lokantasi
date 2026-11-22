@@ -23,9 +23,14 @@ hole={};need=set()
 for i,k in enumerate(objs):
     if not M[k].any():continue
     am,hull=amodal(M[k]);later=np.zeros_like(am)
+    near=cv2.dilate(M[k].astype(np.uint8),cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(61,61)))>0
+    LU=np.zeros_like(am)
+    for j2 in objs[i+1:]:LU|=M[j2]
     for j in objs[i+1:]:
-        x=am&M[j]
-        if M[j].sum()>0 and (hull&M[j]).sum()/M[j].sum()>0.6:x=x|(hull&M[j])
+        x=am&M[j]&near
+        if M[j].sum()>0 and (hull&M[j]).sum()/M[j].sum()>0.6:
+            ring=(cv2.dilate(M[j].astype(np.uint8),np.ones((11,11),np.uint8))>0)&~M[j]
+            if (ring&(M[k]|LU)).sum()/max(1,ring.sum())>=0.5:x=x|(hull&M[j])
         if x.sum()>30:later|=x;need.add(j)
     if later.sum()>60:hole[k]=later
 model=torch.jit.load('/tmp/big-lama.pt',map_location='cpu');model.eval()

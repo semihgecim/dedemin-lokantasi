@@ -49,6 +49,21 @@ for k in objs:
     good=keep[cc]
     good=(_cv.dilate(good.astype(np.uint8),np.ones((7,7),np.uint8))>0)&(m>0)
     L[(m>0)&~good]=0
+# per-box hull fill: region/unassigned pixels inside an object's own hull that differ from clean belong to it
+if SC:
+    for k in objs:
+        for p in T[k].get('sam',[]):
+            if 'box' not in p:continue
+            x1,y1,x2,y2=p['box'];x1=max(0,x1);y1=max(0,y1)
+            sub=(L[y1:y2,x1:x2]==k+1).astype(np.uint8)
+            if sub.sum()<300:continue
+            cs,_=_c2.findContours(sub,_c2.RETR_EXTERNAL,_c2.CHAIN_APPROX_SIMPLE)
+            cs=[c for c in cs if _c2.contourArea(c)>150]
+            if not cs:continue
+            hl=np.zeros_like(sub);_c2.fillPoly(hl,[_c2.convexHull(np.concatenate(cs))],1)
+            Ls=L[y1:y2,x1:x2];fr=(Ls==0)|np.isin(Ls,list(regl))
+            add=(hl>0)&fr&(dd[y1:y2,x1:x2]>0)
+            Ls[add]=k+1
 # fill unassigned pixels inside object boxes (smallest box wins)
 bx=[]
 for k in objs:
