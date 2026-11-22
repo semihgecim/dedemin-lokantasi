@@ -1,0 +1,192 @@
+{
+"1": {
+"spec": "spec1.json",
+"before": "once1.jpg",
+"clean": "clean1.jpg"
+},
+"2": {
+"spec": "spec2.json",
+"before": "once2b.jpg",
+"clean": "clean2b.jpg"
+},
+"3": {
+"spec": "spec3.json",
+"before": "once3a.jpg",
+"clean": "clean3m.jpg"
+},
+"3c": {
+"spec": "spec3c.json",
+"before": "once3c.jpg",
+"clean": "clean3c.jpg"
+},
+"4": {
+"spec": "spec4.json",
+"before": "once4.jpg",
+"clean": "clean4.jpg"
+},
+"4c": {
+"spec": "spec4c.json",
+"before": "once4c.jpg",
+"clean": "clean4c.jpg"
+},
+"5": {
+"spec": "spec5.json",
+"before": "5once.jpg",
+"clean": "5clean.jpg"
+},
+"5c": {
+"spec": "spec5c.json",
+"before": "once5c.jpg",
+"clean": "clean5c.jpg"
+},
+"6": {
+"spec": "spec6.json",
+"before": "once6a.jpg",
+"clean": "clean6m.jpg"
+},
+"6c": {
+"spec": "spec6c.json",
+"before": "once6c.jpg",
+"clean": "clean6c.jpg"
+},
+"7": {
+"spec": "spec7.json",
+"before": "once7.jpg",
+"clean": "clean7.jpg"
+},
+"7c": {
+"spec": "spec7c.json",
+"before": "once7c.jpg",
+"clean": "clean7c.jpg"
+},
+"8": {
+"spec": "spec8.json",
+"before": "once8.jpg",
+"clean": "clean8.jpg"
+},
+"8c": {
+"spec": "spec8c.json",
+"before": "once8c.jpg",
+"clean": "clean8c.jpg"
+},
+"9c": {
+"spec": "spec9c.json",
+"before": "once9c.jpg",
+"clean": "clean9c.jpg"
+},
+"10": {
+"spec": "spec10.json",
+"before": "once10.jpg",
+"clean": "clean10.jpg"
+},
+"11": {
+"spec": "spec11.json",
+"before": "once11.jpg",
+"clean": "clean11.jpg"
+},
+"11c": {
+"spec": "spec11c.json",
+"before": "once11c.jpg",
+"clean": "clean11c.jpg"
+},
+"9": {
+"spec": "spec9.json",
+"before": "once9x.jpg",
+"clean": "clean9x.jpg"
+},
+"10c": {
+"spec": "spec10c.json",
+"before": "once10x.jpg",
+"clean": "clean10x.jpg"
+},
+"12": {
+"spec": "spec12.json",
+"before": "once12.jpg",
+"clean": "clean12.jpg"
+},
+"12c": {
+"spec": "spec12c.json",
+"before": "once12c.jpg",
+"clean": "clean12c.jpg"
+},
+"13": {
+"spec": "spec13.json",
+"before": "once13.jpg",
+"clean": "clean13.jpg"
+},
+"13c": {
+"spec": "spec13c.json",
+"before": "once13c.jpg",
+"clean": "clean13c.jpg"
+},
+"14": {
+"spec": "spec14.json",
+"before": "once14.jpg",
+"clean": "clean14.jpg"
+},
+"14c": {
+"spec": "spec14c.json",
+"before": "once14c.jpg",
+"clean": "clean14c.jpg"
+},
+"15": {
+"spec": "spec15.json",
+"before": "once15.jpg",
+"clean": "clean15.jpg"
+},
+"15c": {
+"spec": "spec15c.json",
+"before": "once15c.jpg",
+"clean": "clean15c.jpg"
+},
+"16": {
+"spec": "spec16.json",
+"before": "once16.jpg",
+"clean": "clean16.jpg"
+},
+"16c": {
+"spec": "spec16c.json",
+"before": "once16c.jpg",
+"clean": "clean16c.jpg"
+},
+"17": {
+"spec": "spec17.json",
+"before": "once17.jpg",
+"clean": "clean17.jpg"
+},
+"17c": {
+"spec": "spec17c.json",
+"before": "once17c.jpg",
+"clean": "clean17c.jpg"
+},
+"18": {
+"spec": "spec18.json",
+"before": "once18.jpg",
+"clean": "clean18.jpg"
+},
+"18c": {
+"spec": "spec18c.json",
+"before": "once18c.jpg",
+"clean": "clean18c.jpg"
+},
+"19": {
+"spec": "spec19.json",
+"before": "once19.jpg",
+"clean": "clean19.jpg"
+},
+"19c": {
+"spec": "spec19c.json",
+"before": "once19c.jpg",
+"clean": "clean19c.jpg"
+},
+"20": {
+"spec": "spec20.json",
+"before": "once20.jpg",
+"clean": "clean20.jpg"
+},
+"20c": {
+"spec": "spec20c.json",
+"before": "once20c.jpg",
+"clean": "clean20c.jpg"
+}
+}
