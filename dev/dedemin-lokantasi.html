@@ -2127,7 +2127,7 @@ function fitBoard(){
   let ch=Math.min(cw,Math.floor(availFor()/rows));const colw=(Math.min(vw,460)-24)/3,bmax=colw*1.3;
   {const sp0=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);const want=Math.min(bmax,colw*.95)-(bh+Math.max(0,sp0));if(want>0)ch=Math.max(Math.round(cw*.88),ch-Math.ceil(want/rows));}
   ch=Math.max(34,ch);
-  root.style.setProperty("--cellh",ch+"px");root.classList.toggle("fitc",ch<cw-1);root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,ch*1.06))+"px");
+  root.style.setProperty("--cellh",ch+"px");root.classList.toggle("fitc",ch<cw-1);root.style.setProperty("--isz",Math.floor(Math.min(cw*.7,ch*.78))+"px");
   // spare height under the button goes to the customers
   const spare=Math.floor(vh-reserve-($("goHome").getBoundingClientRect().bottom+window.scrollY)-6);
   if(spare>8){bh=Math.min(bmax,bh+spare-4);setStrip(bh);}
@@ -2136,7 +2136,7 @@ function fitBoard(){
     if(bh>72){bh=Math.max(72,bh-ov);setStrip(bh);continue;}
     const cur=bd.querySelector(".cell")?bd.querySelector(".cell").getBoundingClientRect().height:cw;
     const nc=Math.max(34,Math.floor(cur-ov/rows)-1);root.style.setProperty("--cellh",nc+"px");root.classList.toggle("fitc",nc<cw-1);
-    root.style.setProperty("--isz",Math.floor(Math.min(cw*.86,nc*1.06))+"px");}
+    root.style.setProperty("--isz",Math.floor(Math.min(cw*.7,nc*.78))+"px");}
 }
 window.addEventListener("resize",fitBoard);
 if(window.visualViewport)visualViewport.addEventListener("resize",fitBoard);
